@@ -4,6 +4,9 @@ version = "0.1.0"
 description = "Manual de referencias sobre IA generativa"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = [
+dependencies = []
 
+[dependency-groups]
+dev = [
+    "pre-commit>=4.5.1",
 ]
