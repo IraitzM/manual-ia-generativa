@@ -1,0 +1,5 @@
+# Introducción {.unnumbered}
+
+Este manual pretende cubrir aspectos clave del uso de los modelos generativos. Muchos relacionados con la construcción de agentes, pero no todos.
+
+La inteligencia artificial generativa tiene multitud de aplicaciones más allá de la mera generación de contenido y es bueno conocer estas aplicaciones así como las técnicas que lo habilitan. Conocer a fondo los modelos que hay detrás nos permite entender mejor las limitaciones que presentan y hacer así una adopción sensata de cara a ofrecer un impacto productivo.

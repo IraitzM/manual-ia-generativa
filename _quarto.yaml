@@ -1,0 +1,72 @@
+project:
+  type: book
+
+book:
+  title: "Manual de IA Generativa"
+  cover-image: logo-noback.png
+  favicon: cover-removebg-preview.png
+  site-url: https://iraitzm.github.io/manual-ia-generativa/
+  repo-url: https://github.com/IraitzM/manual-ia-generativa
+  author: "Iraitz Montalbán"
+  date: "2/25/2026"
+  page-navigation: true
+  search: true
+  sharing: [linkedin]
+  sidebar:
+    collapse-level: 1
+    content: auto
+    pinned: false
+    style: docked
+    background: light
+  page-footer: 
+    left: "Copyright 2026, Iraitz Montalbán" 
+    right: 
+      - icon: github
+        href: https://github.com/IraitzM
+      - icon: linkedin 
+        href: https://www.linkedin.com/in/iraitzmontalban/
+    border: false
+    background: light
+  chapters:
+    - index.qmd
+    - parts/intro.qmd
+
+    - part: "Modelos generativos"
+      chapters:
+      - parts/modelos/mlgenerativa.md
+
+    - part: "Agentes"
+      chapters:
+      - parts/agentes/queesunagente.md
+
+    - part: "Producción"
+      chapters:
+      - parts/produccion/ecosistema.md
+      - parts/produccion/gateways.md
+
+    - part: "Normativa y seguridad"
+      chapters:
+      - parts/seguridad/retos.md
+      - parts/normativa/leyes.md
+
+    - parts/referencias.qmd
+
+bibliography: parts/references.bib
+bibliographystyle: american-physics-society
+# More on: https://typst.app/docs/reference/model/bibliography/#parameters-style
+
+format:
+  html:
+    number-depth: 2
+    theme: 
+     - cosmo
+    code-link: true
+
+# Some SEO
+metadata:
+  lang: en
+  twitter-card: false
+  open-graph: true
+
+resources:
+  - robots.txt
