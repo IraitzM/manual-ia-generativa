@@ -5,4 +5,4 @@ repos:
     # uv version.
     rev: 0.10.6
     hooks:
-      - id: uv-export --no-hashes
+      - id: uv-export
