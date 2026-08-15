@@ -1,0 +1,110 @@
+# Herramientas y MCP
+
+Un modelo sin herramientas solo puede escribir. Con herramientas puede consultar el ERP, buscar en la web, ejecutar código o abrir un ticket. Es el paso de un sistema que opina a un sistema que actúa, y es también donde empiezan todos los problemas interesantes.
+
+## Cómo funciona en realidad
+
+Una herramienta es, para el modelo, tres cosas: un nombre, una descripción y un esquema de argumentos. Nada más. El modelo nunca ve el código.
+
+```json
+{
+    "name": "consultar_expediente",
+    "description": "Devuelve el estado de un expediente académico a partir de su número.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "numero": {"type": "string", "description": "Número de expediente, formato EXP-0000"}
+        },
+        "required": ["numero"]
+    }
+}
+```
+
+El modelo lee eso y decide si encaja con lo que le han pedido. Si decide que sí, emite una petición con los argumentos rellenos, **nuestro** código la ejecuta y el resultado vuelve al contexto.
+
+De ahí se sigue algo que en la práctica cuesta interiorizar: **la descripción es el contrato**, y es lo único que el modelo tiene para elegir bien. La mitad de los fallos de un agente que "elige mal la herramienta" son fallos de redacción, no de modelo. Descripciones vagas, dos herramientas que se solapan, nombres crípticos heredados del sistema interno.
+
+:::{.callout-tip}
+# Escribid las herramientas como si fueran para un compañero nuevo
+
+Alguien competente, que acaba de llegar, que no conoce vuestros acrónimos y que solo dispone del nombre, la descripción y los tipos. Si esa persona no sabría cuándo usarla, el modelo tampoco.
+
+Lo que más rinde, por orden:
+
+* **Nombres que digan lo que hacen** y no cómo se llama el endpoint interno.
+* **Decir cuándo NO usarla**, si hay confusión posible con otra.
+* **Ejemplos de argumentos válidos** en la descripción, sobre todo si hay formatos.
+* **Errores que enseñen**: `"El expediente EXP-9 no existe. El formato correcto es EXP-0000"` permite al modelo corregirse. `"Error 400"` no.
+
+Esa última es la que más multiplica la fiabilidad y la que más se descuida. Un mensaje de error es contexto: aprovechadlo.
+:::
+
+## Menos herramientas de las que pensáis
+
+La tentación es exponer todo lo que se pueda. Es un error por dos vías: cada definición ocupa espacio en la [ventana de contexto](../modelos/inferencia.qmd#la-ventana-de-contexto) antes de que empiece el trabajo, y la precisión de elección cae conforme la lista crece y las opciones se solapan.
+
+Una regla de bolsillo razonable: por encima de diez o quince herramientas conviene replantear. Las salidas habituales son agrupar varias operaciones relacionadas en una sola herramienta con un parámetro de operación, o repartir el trabajo entre [varios agentes especializados](orquestacion.qmd) que lleven cada uno su juego corto.
+
+Y una idea que ahorra mucho: **la mejor herramienta suele ser la más gruesa**. En lugar de dar tres herramientas para leer tablas y que el agente componga el cruce, dar una que responda la pregunta de negocio directamente. Menos pasos, menos tokens, menos formas de equivocarse.
+
+## MCP: el conector estándar
+
+Hasta 2024, cada framework definía sus herramientas a su manera y conectar un sistema interno a un agente significaba escribir un adaptador por framework. El **Model Context Protocol** (MCP), publicado por Anthropic y adoptado después por prácticamente todo el sector, estandariza esa conexión: un servidor MCP expone herramientas, recursos y plantillas de prompt, y cualquier cliente compatible las consume.
+
+```{mermaid}
+flowchart LR
+    a["Agente<br/>(cliente MCP)"] --> s1["Servidor MCP<br/>ERP"]
+    a --> s2["Servidor MCP<br/>documentos"]
+    a --> s3["Servidor MCP<br/>tickets"]
+    s1 --> e1[("ERP")]
+    s2 --> e2[("Gestor documental")]
+    s3 --> e3[("Sistema de tickets")]
+
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    classDef herramienta fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef externo fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    class a modelo
+    class s1,s2,s3 herramienta
+    class e1,e2,e3 externo
+```
+
+Lo valioso no es el protocolo en sí, es el efecto de red: exponer el sistema interno una vez y que sirva para cualquier cliente presente y futuro. Para una empresa con muchos sistemas y varios equipos montando agentes, eso convierte un problema cuadrático en uno lineal.
+
+Un matiz que se pasa por alto: MCP resuelve **la conexión**, no la calidad. Un servidor MCP con veinte herramientas mal descritas es igual de inservible que veinte funciones mal descritas. Todo lo dicho más arriba sigue aplicando.
+
+:::{.callout-warning}
+# Un servidor MCP de terceros es código de terceros
+
+Instalar un servidor MCP que alguien publicó es, en términos de riesgo, equivalente a instalar una dependencia con permisos sobre vuestros datos. Con un agravante: **sus descripciones de herramientas entran en el contexto del modelo**, así que un servidor malicioso puede intentar dirigir el comportamiento del agente con solo describirse de cierta manera.
+
+Se han documentado ataques por esta vía, incluida la modificación silenciosa de una descripción después de la instalación inicial. Mínimos: fijar versiones, revisar lo que se instala y no dar a un servidor MCP más permisos de los que daríais a la persona que lo publicó. Volveremos sobre esto en [seguridad](../seguridad/retos.qmd).
+:::
+
+## Permisos: el diseño que importa
+
+Aquí se decide si un agente es una herramienta útil o un incidente pendiente, y la decisión es de arquitectura, no de prompt.
+
+**La identidad no es la del agente, es la del usuario.** Un agente que consulta expedientes debe consultar los que puede ver **quien pregunta**. Si el agente tiene una cuenta de servicio con acceso a todo y confiamos en que se porte bien, hemos construido un sistema de escalada de privilegios con interfaz conversacional.
+
+**Cada herramienta con el mínimo alcance.** Lectura donde baste lectura. Y si hace falta escritura, acotada: no "modificar expediente" sino "añadir una anotación al expediente".
+
+**Lo irreversible pide confirmación.** La frontera útil no es leer/escribir sino reversible/irreversible, y ahí conviene ser explícito: quién confirma, con qué información delante y qué pasa si no contesta.
+
+| Nivel | Ejemplo | Control |
+|---|---|---|
+| Lectura acotada | Consultar un expediente propio | Filtrado por identidad |
+| Escritura reversible | Añadir un borrador | Traza y posibilidad de deshacer |
+| Escritura irreversible | Enviar un correo al alumno | Aprobación humana |
+| Efecto externo | Ejecutar un pago | Aprobación y segundo control |
+
+: Cuatro niveles que conviene distinguir desde el diseño
+
+:::{.callout-important}
+# La regla de dos
+
+Una heurística que ha ganado tracción y que resume bien el asunto: un agente que funcione sin supervisión debería tener **como mucho dos** de estas tres capacidades a la vez: acceso a datos privados, exposición a contenido no confiable y capacidad de comunicarse hacia fuera. Las tres juntas son la [_trifecta letal_](../seguridad/retos.qmd#la-trifecta-letal) y convierten cualquier inyección de prompt en una fuga de datos.
+
+Cuando el caso de uso exige las tres, la respuesta correcta no es un prompt más cuidadoso: es una persona aprobando la acción de salida.
+:::
+
+Un agente con buenas herramientas ya resuelve mucho. Cuando no basta, la pregunta es cómo repartir el trabajo: [orquestación](orquestacion.qmd).

@@ -1,5 +1,10 @@
 project:
   type: book
+  # Sin esto, Quarto renderizaría también los .ipynb de notebooks/, que son
+  # cuadernos para Colab y no capítulos del libro.
+  render:
+    - "*.qmd"
+    - "parts/**/*.qmd"
 
 book:
   title: "Manual de IA Generativa"
@@ -30,6 +35,11 @@ book:
   chapters:
     - index.qmd
     - parts/intro.qmd
+
+    - part: parts/fundamentos/intro.qmd
+      chapters:
+      - parts/fundamentos/nlp.qmd
+      - parts/fundamentos/redes.qmd
 
     - part: "Modelos generativos"
       chapters:

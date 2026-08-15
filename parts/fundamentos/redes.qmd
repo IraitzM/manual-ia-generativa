@@ -1,0 +1,169 @@
+---
+# Igual que el capítulo anterior: el código está para leerse. Ponedlo a
+# `true` si queréis que el libro lo ejecute al construirse.
+execute:
+  enabled: false
+---
+
+# De la convolución a la atención
+
+La atención suele contarse como una idea genial que apareció en 2017 y lo cambió todo. Contada así no se entiende, porque una idea solo se entiende contra el problema que resolvía. Este capítulo cuenta ese problema, y para hacerlo hay que pasar por las redes convolucionales, que son el mejor contraejemplo disponible: la arquitectura que triunfó **precisamente por suponer cosas** sobre sus datos, justo lo contrario de lo que hace un transformer.
+
+## Por qué no vale con apilar capas
+
+Una red neuronal corriente conecta cada entrada con cada neurona de la siguiente capa. Con una imagen pequeña, de 224 por 224 píxeles en color, la entrada son 150.528 números. Una sola capa oculta de mil neuronas ya son 150 millones de pesos, y eso antes de empezar a hacer nada útil.
+
+El problema no es solo el tamaño. Es que esa red **no sabe que la entrada es una imagen**. Para ella, el píxel de la esquina superior izquierda y el de su lado son dos entradas cualesquiera sin relación, y tendría que aprender de los datos que están juntos. Peor aún: un gato desplazado veinte píxeles a la derecha activa un conjunto de pesos completamente distinto, así que hay que aprender "gato" otra vez para cada posición posible.
+
+## Las dos suposiciones de la convolución
+
+Una red convolucional [@lecun1998gradient] resuelve las dos cosas metiendo en la arquitectura dos suposiciones sobre el mundo:
+
+* **Localidad**: lo que hace informativo a un píxel está en sus vecinos, no al otro lado de la imagen.
+* **Invarianza a la traslación**: un borde es un borde en cualquier sitio, así que el mismo detector sirve para toda la imagen.
+
+En la práctica eso significa una ventanita de pesos, el **filtro**, que se pasea por la imagen entera. En lugar de 150 millones de pesos, nueve.
+
+```{python}
+import numpy as np
+from scipy.signal import convolve2d
+
+# Un detector de bordes verticales: tres números por columna y ya está
+filtro = np.array([[-1, 0, 1],
+                   [-2, 0, 2],
+                   [-1, 0, 1]])
+
+bordes = convolve2d(imagen_gris, filtro, mode="same")
+bordes.shape
+```
+
+Ese filtro de nueve números detecta bordes verticales en cualquier punto de la imagen. Lo relevante es que en una red no se escribe a mano: se aprende. Y al apilar capas aparece una jerarquía que se ha comprobado una y otra vez: los primeros filtros detectan bordes, los siguientes combinan bordes en texturas y esquinas, los siguientes texturas en partes, y los últimos partes en objetos.
+
+```{mermaid}
+flowchart LR
+    p["Píxeles"] --> c1["Bordes"]
+    c1 --> c2["Texturas"]
+    c2 --> c3["Partes"]
+    c3 --> c4["Objetos"]
+
+    classDef externo fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class p externo
+    class c1,c2,c3,c4 modelo
+```
+
+Esa jerarquía tiene un precio que resulta central para el resto del capítulo. Cada capa mira solo una ventanita, así que **el trozo de imagen que influye en una neurona, su campo receptivo, crece despacio**: capa a capa, unos pocos píxeles cada vez. Para que una neurona pueda relacionar la esquina superior izquierda con la inferior derecha hacen falta muchas capas.
+
+Con esas dos suposiciones y datos suficientes, en 2012 AlexNet ganó el concurso de ImageNet por un margen que dejó claro que el debate se había acabado [@krizhevsky2012imagenet]. Durante los cinco años siguientes, visión por computador y red convolucional fueron casi sinónimos.
+
+:::{.callout-note}
+# Un sesgo inductivo es una apuesta
+
+"Sesgo inductivo" suena a defecto y no lo es: es lo que el modelo da por sabido antes de ver un solo dato. La convolución apuesta a que el mundo es local y homogéneo, y como para las imágenes naturales esa apuesta es buena, **acierta con muchos menos datos** de los que necesitaría una red sin suposiciones.
+
+La regla general que sale de aquí y explica media década de arquitecturas: cuanto más supone un modelo, menos datos necesita y menos flexible es. Cuanto menos supone, más datos necesita y más lejos puede llegar.
+:::
+
+## Donde la localidad se queda corta
+
+La suposición de localidad falla en cuanto lo importante es una relación a distancia. Y en texto falla siempre, porque el sujeto de una frase puede estar veinte palabras antes del verbo que lo necesita.
+
+La arquitectura que dominó el texto hasta 2017 fue la **red recurrente**, y en particular la LSTM [@hochreiter1997long]. Su idea es procesar la secuencia palabra a palabra manteniendo un estado interno que arrastra lo visto hasta ahora. Para traducir, se ponían dos: una que leía la frase de origen y la comprimía en un vector, y otra que escribía la traducción a partir de él.
+
+```{mermaid}
+flowchart LR
+    e1["El"] --> e2["alumno"]
+    e2 --> e3["anuló"]
+    e3 --> e4["la matrícula"]
+    e4 --> v["Un vector<br/>de tamaño fijo"]
+    v --> d["Decodificador"]
+
+    classDef contexto fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef riesgo fill:#f7d7d7,stroke:#b34b4b,stroke-width:1.5px,color:#5c1f1f
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class e1,e2,e3,e4 contexto
+    class v riesgo
+    class d modelo
+```
+
+En rojo, el problema. **Toda la frase de origen tiene que caber en un vector de tamaño fijo**, tenga cinco palabras o cincuenta. Es un cuello de botella literal, y se notaba: la calidad de la traducción se desplomaba con la longitud.
+
+Y había un segundo problema, menos discutido entonces y decisivo después: procesar palabra a palabra es **inherentemente secuencial**. No se puede paralelizar el entrenamiento sobre la longitud de la frase, y en una época en la que el cómputo empezaba a ser abundante, eso era dejar de aprovechar la máquina.
+
+## La atención, primero como parche
+
+La atención no nació como arquitectura sino como remiendo de ese cuello de botella [@bahdanau2015neural]. La idea: en lugar de obligar al decodificador a trabajar con un único vector, **dejarle mirar todos los estados del codificador y decidir en cada paso a cuáles hacer caso**.
+
+Es una media ponderada, y los pesos los calcula el propio modelo según lo que esté escribiendo en ese momento. Al traducir el verbo, mira sobre todo al verbo; al traducir el sujeto, al sujeto. Nadie le dijo qué alinear con qué: sale de entrenar.
+
+Dos años después llegó la observación que da título al artículo más citado de la década: si la atención ya hace el trabajo de relacionar posiciones, **la recurrencia sobra** [@vaswani2017attention]. Se quita, y lo que queda es un transformer.
+
+Lo que se gana con esa amputación:
+
+| | Recurrencia | Atención |
+|---|---|---|
+| Distancia entre dos posiciones | Tantos pasos como palabras las separen | Uno, siempre |
+| Entrenamiento | Secuencial en la longitud | Paralelizable entero |
+| Coste con la longitud | Lineal | Cuadrático |
+| Noción del orden | Implícita, viene de recorrer | Ninguna, hay que inyectarla |
+
+: Lo que cambia al sustituir recurrencia por atención
+
+Las dos primeras filas son la victoria. Las dos últimas son la factura, y las dos siguen pagándose hoy. El coste cuadrático es el que aparece en [inferencia](../modelos/inferencia.qmd) cada vez que se habla de contextos largos. Y la falta de noción del orden es la razón de que haya que meter la posición a mano, un detalle que parece menor y que resultó ser una de las piezas que más ha evolucionado.
+
+## Una imagen es una secuencia de trozos
+
+Si la atención relaciona posiciones sin suponer nada sobre ellas, nada obliga a que esas posiciones sean palabras. El _Vision Transformer_ hizo justo eso: partir la imagen en cuadraditos de 16 por 16 píxeles, tratar cada cuadradito como si fuera un token y meterlos por el mismo transformer [@dosovitskiy2021image].
+
+Suena a provocación y funcionó, con una condición que confirma lo que decía el aviso sobre sesgos inductivos: **hizo falta muchísimo más dato**. Entrenado con conjuntos del tamaño de ImageNet, el transformer perdía contra una convolucional. Con conjuntos cien veces mayores, ganaba. Al no suponer que la imagen es local, tiene que aprender esa localidad de los datos, y aprenderla cuesta ejemplos.
+
+La consecuencia práctica es la que sostiene buena parte del manual: desde entonces **texto, imagen, audio y vídeo se procesan con la misma arquitectura**. No hace falta un modelo de texto y otro de visión pegados con cinta adhesiva, basta con proyectar todo a la misma clase de representación. De ahí salen los modelos multimodales de los que habla [el capítulo siguiente](../modelos/mlgenerativa.qmd#más-allá-del-texto), y de ahí sale también que una instrucción pueda venir escondida en una imagen, que es un problema de [seguridad](../seguridad/retos.qmd).
+
+## El gato con plumas
+
+Hay un experimento que enseña la diferencia entre las dos familias mejor que cualquier tabla, y es el que monta [el cuaderno de visión](../apendices/cuadernos.qmd). Consiste en fabricar una imagen quimérica, un gato con plumaje de periquito, y pedirle a las dos arquitecturas que la clasifiquen.
+
+```{python}
+from transformers import AutoImageProcessor, AutoModelForImageClassification
+
+for nombre in ["microsoft/resnet-50", "google/vit-base-patch16-224"]:
+    procesador = AutoImageProcessor.from_pretrained(nombre)
+    modelo = AutoModelForImageClassification.from_pretrained(nombre)
+
+    logits = modelo(**procesador(imagen, return_tensors="pt")).logits
+    print(nombre, "→", modelo.config.id2label[logits.argmax(-1).item()])
+```
+
+La convolucional tiende a irse detrás de la textura: ve plumas, y las plumas son de pájaro. El transformer, cuyo campo receptivo abarca la imagen entera desde la primera capa, tiene más facilidad para juzgar por la silueta y quedarse con el gato. No es una regla infalible y depende de la imagen concreta, pero la tendencia está documentada: las redes convolucionales entrenadas con ImageNet muestran un sesgo claro hacia la textura frente a la forma [@geirhos2019imagenet].
+
+La lectura de fondo no es que una arquitectura sea mejor. Es que **cada una se equivoca de una manera distinta y predecible a partir de lo que supone**, que es exactamente lo que uno querría saber antes de elegir.
+
+## Qué queda del transformer original
+
+Casi todo lo que se cuenta sobre transformers describe el artículo de 2017. Un modelo de 2026 se le parece en el esqueleto y en poco más, y conviene saberlo porque las diferencias son justo las que explican el consumo de memoria y la velocidad.
+
+| Pieza | 2017 | Hoy | Para qué |
+|---|---|---|---|
+| Normalización | LayerNorm | RMSNorm [@zhang2019root] | Lo mismo, más barato |
+| Posición | Sumada a la entrada | Rotatoria, en cada capa [@su2024roformer] | Generaliza mejor a contextos largos |
+| Atención | Una clave y un valor por cabeza | Agrupada, varias cabezas comparten [@ainslie2023gqa] | Reduce la caché KV, que es lo que llena la memoria |
+| Red intermedia | Densa, siempre activa | Mezcla de expertos [@shazeer2017outrageously] | Muchos parámetros, pocos activos por token |
+| Inferencia | Recalcular todo | Caché KV | Evita repetir el trabajo en cada token |
+
+: Las cinco piezas que cambiaron, y por qué
+
+De las cinco, la que más consecuencias tiene en la práctica es la tercera. La **caché KV** guarda los cálculos intermedios de los tokens ya vistos para no rehacerlos, y su tamaño crece con la longitud del contexto, con el número de capas y con el número de cabezas. En un modelo grande con contexto largo esa caché puede ocupar más memoria que los propios pesos, y ahí es donde la atención agrupada cambia las cosas: hacer que ocho cabezas compartan una sola clave y un solo valor divide esa memoria por ocho casi sin perder calidad.
+
+La quinta, la mezcla de expertos, es la que explica una cifra que confunde a mucha gente. Cuando un proveedor anuncia un modelo de 235.000 millones de parámetros de los que solo se activan 22.000 millones por token, no está haciendo trampa: hay muchas redes intermedias especializadas y un enrutador que elige dos o tres para cada token. Se paga la memoria del modelo entero y el cómputo de una fracción.
+
+Conviene saber que la lista no se cierra ahí. Las cinco piezas de la tabla siguen dando por buena la atención del artículo original, y desde 2025 hay modelos que ni eso: sustituyen la mayoría de sus capas de atención por un estado recurrente de tamaño fijo para que la caché deje de crecer. Eso ya no es historia sino presente, así que se cuenta donde toca, en [esquivar el cuadrado](../modelos/transformers.qmd#esquivar-el-cuadrado).
+
+[El cuaderno de arquitectura](../apendices/cuadernos.qmd) monta esas cinco piezas en unas doscientas líneas de PyTorch, sin entrenar nada, y mide lo que ocupa cada una. Ver la caché KV crecer en pantalla al alargar el contexto explica el resto del manual mejor que cualquier párrafo.
+
+:::{.callout-tip}
+# La comparación que merece la pena hacer
+
+Si solo hacéis un experimento de este capítulo, que sea calcular el tamaño de la caché KV con atención normal y con atención agrupada para el mismo modelo y el mismo contexto. Es una división, cabe en tres líneas, y es la razón por la que hoy se puede servir un contexto de 128.000 tokens sin arruinarse.
+:::
+
+Con esto ya está el terreno preparado. Sabemos cómo se representa el texto y por qué la arquitectura es la que es; toca ver qué ocurre cuando esa arquitectura se entrena para generar, que es [donde empieza la parte de modelos generativos](../modelos/mlgenerativa.qmd).

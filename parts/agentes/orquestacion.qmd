@@ -1,0 +1,108 @@
+# Orquestación y frameworks
+
+Cuando un solo agente con su lista de herramientas se queda corto, la respuesta habitual es multiplicar agentes. A veces es la correcta. Muchas veces es una forma elegante de multiplicar los problemas, así que conviene saber qué compra cada patrón y qué cuesta.
+
+## Los patrones que se repiten
+
+**Encadenado.** Salida de uno, entrada del siguiente. No es un sistema multiagente, es un flujo de trabajo, y es la opción correcta muchas más veces de las que se admite. Predecible, barato y depurable.
+
+**Enrutado.** Un clasificador decide a qué especialista va cada petición. Rinde mucho cuando el tráfico es heterogéneo y los casos son distinguibles: cada especialista lleva su prompt corto y su juego reducido de herramientas, en lugar de un prompt gigante que lo intenta todo. El clasificador puede ser un modelo pequeño y barato.
+
+**Paralelo.** Varias llamadas simultáneas cuyos resultados se agregan. Sirve para trocear (analizar veinte documentos a la vez) y para votar (tres opiniones sobre lo mismo y mayoría). Corta latencia a cambio de coste.
+
+**Orquestador y trabajadores.** Un agente central descompone la tarea, reparte a subagentes y monta el resultado. Es el patrón que la gente tiene en la cabeza cuando dice "multiagente".
+
+```{mermaid}
+flowchart TD
+    o["Orquestador"] --> w1["Trabajador 1"]
+    o --> w2["Trabajador 2"]
+    o --> w3["Trabajador 3"]
+    w1 --> s["Síntesis"]
+    w2 --> s
+    w3 --> s
+
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    classDef control fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    class o,s modelo
+    class w1,w2,w3 control
+```
+
+**Evaluador y generador.** Uno produce, otro critica con criterios explícitos, el primero corrige. Funciona bien cuando el criterio de calidad se puede escribir; se convierte en una discusión estéril y cara cuando no.
+
+## Lo que compra el reparto: contexto limpio
+
+La razón de fondo para partir el trabajo no es "especialización" en abstracto. Es la cuarta operación sobre el contexto: **aislar**.
+
+Un agente que investiga veinte fuentes acumula veinte respuestas de herramienta en su ventana, y para cuando llega a la última ya ha perdido de vista la primera. Si cada subagente investiga una fuente y devuelve **solo su conclusión**, el orquestador trabaja con veinte párrafos en lugar de con veinte documentos. El sistema multiagente es, en el fondo, un mecanismo de compresión de contexto.
+
+Esa es también la forma de saber si merece la pena: si los subagentes van a devolver casi todo lo que recibieron, no habéis aislado nada y solo habéis añadido latencia y llamadas.
+
+:::{.callout-warning}
+# Lo que cuesta de verdad
+
+Antes de dibujar la arquitectura con seis agentes conviene tener presente el precio:
+
+* **Los tokens se multiplican.** Cada subagente arrastra su propio prompt de sistema y su propio historial. Un sistema multiagente puede consumir un orden de magnitud más que una sola llamada bien planteada.
+* **Los errores se propagan y no se anulan.** Cinco pasos al 90% de fiabilidad dan un 59%. La intuición de que "entre varios se corrigen" es falsa salvo que exista un verificador objetivo.
+* **Depurar se vuelve arqueología.** Sin [trazas](../produccion/observabilidad.qmd), averiguar en qué eslabón se torció algo es desesperante.
+* **La latencia se acumula**, salvo en las ramas paralelas.
+
+La regla que aplico: **un agente bien construido antes que tres mal repartidos**. La complejidad se añade cuando se ha demostrado que hace falta, no cuando se sospecha.
+:::
+
+## Frameworks
+
+El mercado se ha estabilizado en unas pocas familias con filosofías distintas. Lo importante no es cuál gana, es entender qué asume cada una y cuánto acoplamiento acepta uno a cambio.
+
+| Familia | Idea central | Encaja cuando |
+|---|---|---|
+| **De grafo** (LangGraph y similares) | El flujo es un grafo explícito con estado | Hace falta control fino, ciclos y persistencia |
+| **De los proveedores** (Agents SDK de OpenAI, ADK de Google, Claude Agent SDK de Anthropic) | Abstracción ligera sobre el bucle | Se va a usar ese proveedor y se quiere lo mínimo |
+| **Tipada** (Pydantic AI y similares) | Contratos y validación en la frontera | El equipo viene de Python con tipos y quiere probar |
+| **De roles** (CrewAI, AutoGen) | Agentes con rol que conversan | Prototipos rápidos, demostraciones |
+| **Sin framework** | El bucle a mano, unas 100 líneas | Se quiere entender qué pasa y no depender de nadie |
+
+: Cinco enfoques, no cinco productos
+
+La última fila merece defensa, porque suele descartarse por prejuicio. El bucle de un agente es corto: llamar al modelo, mirar si pide una herramienta, ejecutarla, devolver el resultado, repetir. Escribirlo una vez enseña más sobre el sistema que cualquier tutorial y deja el control completo sobre lo que entra en el contexto, que es justo lo que más importa. Para casos sencillos es, a menudo, la mejor decisión de ingeniería.
+
+Lo que sí conviene no reescribir: reintentos con criterio, persistencia del estado, [trazas](../produccion/observabilidad.qmd) y ejecución duradera de procesos largos. Ahí un framework maduro ahorra semanas.
+
+:::{.callout-tip}
+# Elegid pensando en la salida
+
+El coste real de un framework no es aprenderlo, es abandonarlo. Antes de comprometerse, tres preguntas:
+
+1. **¿Puedo ver y modificar el contexto exacto que se envía?** Si la respuesta es no, tarde o temprano vais a estar depurando a ciegas.
+2. **¿Emite trazas en un formato estándar?** Las convenciones de OpenTelemetry para IA generativa son hoy el mínimo exigible.
+3. **¿Cuánto código habría que reescribir para cambiar de modelo o de framework?** Si la lógica de negocio vive dentro de las abstracciones del framework, la respuesta es "todo".
+:::
+
+## Cuando los agentes son de otros: A2A
+
+MCP resuelve cómo un agente habla con **herramientas**. Queda la otra mitad: cómo un agente habla con **otro agente** que no controlamos, hecho por otro equipo o por otra empresa, con otro framework.
+
+Ese es el hueco que ocupa **A2A** (_Agent2Agent_), donado a la Linux Foundation y con adopción amplia. Su pieza central es la _agent card_: un documento donde un agente declara qué sabe hacer, cómo se le invoca y cómo se autentica. Con eso, un agente puede descubrir a otro y delegarle una tarea sin que ninguno sepa nada de las tripas del otro.
+
+```{mermaid}
+flowchart LR
+    a1["Nuestro agente"] -->|MCP| t["Herramientas<br/>internas"]
+    a1 -->|A2A| a2["Agente<br/>de un tercero"]
+
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    classDef herramienta fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef externo fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    class a1 modelo
+    class t herramienta
+    class a2 externo
+```
+
+En 2026 esto es más promesa que realidad cotidiana: la interoperabilidad entre organizaciones tropieza con la identidad, la responsabilidad y la facturación mucho antes que con el protocolo. Vale la pena seguirlo de cerca sin construir sobre ello lo que hay que entregar este trimestre.
+
+:::{.callout-important}
+# Delegar en un agente ajeno es confiar en un extraño
+
+Nótese el color del diagrama: el agente de un tercero es **gris**. No controlamos su modelo, ni sus instrucciones, ni lo que le hayan inyectado. Todo lo que devuelva es contenido no confiable que entra en nuestro contexto, con las implicaciones que veremos en [seguridad](../seguridad/retos.qmd).
+:::
+
+Con esto se cierra la parte de construcción. Lo siguiente es lo que hace falta para que esto viva en una empresa: [producción](../produccion/ecosistema.qmd).

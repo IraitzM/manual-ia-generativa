@@ -1,0 +1,56 @@
+# Fundamentos
+
+Un manual sobre IA generativa podría empezar directamente por el modelo generativo. Este no lo hace, y conviene explicar por qué antes de pedir paciencia al lector que ya sabe lo que es un transformer.
+
+La razón es que casi todas las decisiones sensatas que se toman en un proyecto real vienen de entender **qué problema resolvía cada pieza cuando apareció**. Sin ese recorrido, un sistema generativo parece una tecnología sin genealogía que apareció en noviembre de 2022, y eso lleva a dos errores caros: usar un modelo de mil millones de parámetros para una tarea que un clasificador resolvía en 2018 por céntimos, y no saber qué hacer cuando el modelo falla, porque no se sabe de dónde viene el fallo.
+
+## Dos preguntas que esta parte responde
+
+La primera es **cómo se convierte el lenguaje en algo que una máquina pueda operar**. Contar palabras, pesarlas por rareza, colocarlas en un espacio donde la cercanía significa parecido: todo eso lleva décadas funcionando y sigue vivo dentro de los sistemas actuales. El buscador vectorial del que vive [RAG](../contexto/rag.qmd) es, literalmente, una idea de los años setenta con un modelo mejor calculando los vectores.
+
+La segunda es **por qué la arquitectura que ganó es la que ganó**. La atención no surgió de la nada ni de una intuición feliz: es la respuesta a un cuello de botella muy concreto que las redes recurrentes no conseguían esquivar. Y las redes convolucionales, que hoy suenan a otra rama del árbol, son el mejor contraejemplo disponible para entender qué gana y qué pierde un modelo cuando se le quitan las suposiciones sobre sus datos.
+
+| Capítulo | La pregunta que responde |
+|---|---|
+| [Del texto a los vectores](nlp.qmd) | Cómo se representa el lenguaje y qué se gana en cada salto |
+| [De la convolución a la atención](redes.qmd) | Por qué la arquitectura acabó siendo esta y no otra |
+
+: Los dos capítulos de esta parte
+
+## El hilo que las une
+
+Las dos historias son la misma contada desde dos sitios, y el hilo es este: **cada avance consistió en quitar una suposición hecha a mano y dejar que el modelo la aprendiera de los datos**.
+
+```{mermaid}
+flowchart LR
+    r["Reglas<br/>escritas a mano"] --> c["Rasgos<br/>contados"]
+    c --> a["Representaciones<br/>aprendidas"]
+    a --> g["Representaciones<br/>contextuales"]
+
+    classDef externo fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef contexto fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class r externo
+    class c,a contexto
+    class g modelo
+```
+
+Se empezó escribiendo gramáticas a mano. Después se dejó de escribir reglas y se pasó a contar: qué palabras aparecen y con qué frecuencia, dejando que un algoritmo estadístico decidiera qué importaba. Luego se dejó de decidir a mano incluso los rasgos, y las representaciones pasaron a aprenderse. Y por último se quitó la suposición de que una palabra tiene un único significado, que es lo que hacen los modelos contextuales.
+
+En el lado de las redes ocurre lo mismo. Una convolución **da por supuesto** que lo importante de un píxel está cerca de él. Es una suposición excelente para imágenes y por eso funcionó tan bien durante quince años. La atención no supone nada: deja que el modelo aprenda qué mira, lo cual sale mucho más caro en datos y en cómputo, y por eso solo ganó cuando hubo datos y cómputo de sobra.
+
+:::{.callout-note}
+# Si esto ya lo sabéis
+
+Quien venga de haber trabajado con modelos de lenguaje puede saltar directamente a [Modelos generativos](../modelos/mlgenerativa.qmd) sin perderse nada imprescindible, y volver aquí cuando aparezca un término que chirríe.
+
+Aun así, hay dos secciones que merecen una lectura aunque el resto sobre: [cuándo sigue ganando lo clásico](nlp.qmd#lo-que-no-ha-muerto), porque es la que más dinero ahorra, y [qué queda del transformer de 2017](redes.qmd#qué-queda-del-transformer-original), porque casi todo lo que uno cree saber de la arquitectura describe una versión que ya no se usa.
+:::
+
+## Con las manos
+
+Esta es la parte del manual con más código, y no por casualidad: son conceptos que se entienden ejecutándolos. Los tres cuadernos que la acompañan viven en [`notebooks/`](https://github.com/IraitzM/manual-ia-generativa/tree/main/notebooks) y están descritos en [el apéndice correspondiente](../apendices/cuadernos.qmd).
+
+Los fragmentos que aparecen en los capítulos no se ejecutan al construir el libro, para que renderizarlo no exija descargar media biblioteca de aprendizaje profundo. Están ahí para leerse, y sus salidas están pegadas a mano tal como salieron. Si queréis verlos correr, ese es el sitio de los cuadernos.
+
+Empecemos por el texto, que es donde empezó todo: [del texto a los vectores](nlp.qmd).

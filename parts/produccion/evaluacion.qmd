@@ -1,0 +1,108 @@
+# Evaluación
+
+Este es el capítulo que más se salta y el que más determina si un proyecto llega a algún sitio. La razón por la que se salta es comprensible: es el trabajo menos agradecido de todos. No hay demo que enseñar, no hay nada que se vea, y consiste en buena medida en leer respuestas y decidir a mano si están bien.
+
+La razón por la que determina el resultado también es simple. Sin evaluación, no se puede responder a ninguna de las preguntas que importan: si el sistema funciona, si el cambio de ayer lo mejoró, si el modelo barato basta, si se puede desplegar. Todas se acaban respondiendo con la impresión de quien hizo cuatro pruebas a mano, y esa impresión es sistemáticamente optimista.
+
+## Por qué no vale lo de siempre
+
+En software clásico, una prueba compara la salida con la esperada. Aquí eso no funciona por tres razones acumuladas: la salida es texto libre y hay muchas formas correctas de decir lo mismo; el sistema [no es determinista](../modelos/inferencia.qmd#los-parámetros-de-muestreo) ni siquiera con temperatura 0; y lo que se mide muchas veces es subjetivo.
+
+Lo cual no significa que no se pueda medir. Significa que hay que **construir** el criterio en lugar de darlo por supuesto, y esa construcción es trabajo de dominio, no de ingeniería.
+
+## El conjunto de evaluación
+
+La pieza central, y en realidad la única imprescindible, es una colección de casos representativos con lo que se espera de cada uno.
+
+Sobre cómo hacerlo, tres cosas que se aprenden por las malas:
+
+**Empezad pequeño y real.** Veinte casos tomados de peticiones reales valen infinitamente más que doscientos inventados por el equipo técnico, porque los inventados se parecen sospechosamente a lo que el sistema ya hace bien.
+
+**Incluid lo que sabéis que falla.** Un conjunto donde todo pasa no sirve para nada. Los casos límite, los ambiguos y los que el sistema falló ayer son los que aportan señal.
+
+**Que lo escriba quien sabe.** La persona del dominio define qué es una respuesta correcta. Si eso lo decide el equipo técnico, se está midiendo el criterio del equipo técnico.
+
+Y una advertencia sobre el formato: para muchas tareas no hay una respuesta única, pero sí hay **afirmaciones que deben aparecer** y **afirmaciones que no deben aparecer**. Formularlo así lo hace evaluable sin exigir una comparación literal.
+
+:::{.callout-tip}
+# La regla de las tres capas
+
+No todo se evalúa igual y confundirlo es lo que hace que la evaluación parezca imposible:
+
+1. **Determinista** donde se pueda. ¿El JSON es válido? ¿La categoría está entre las permitidas? ¿Aparece la cifra correcta? Es barato, rápido y cubre más de lo que parece. Empezad siempre aquí.
+2. **Con modelo juez** para lo que no se puede comparar literalmente. ¿La respuesta se apoya en el documento aportado? ¿Contesta a lo que se preguntaba?
+3. **Humana** para lo dudoso y para calibrar las dos capas anteriores. Poca cantidad, alta calidad.
+
+El error habitual es saltar directo a la capa 2 porque parece la moderna. La capa 1 pilla la mayor parte de las regresiones reales por una fracción del coste.
+:::
+
+## El modelo como juez
+
+Usar un modelo para puntuar la salida de otro es la técnica que ha hecho práctica la evaluación a escala, y funciona razonablemente bien si se acepta lo que es: un evaluador barato, rápido y sesgado, que hay que calibrar como se calibra cualquier instrumento.
+
+Sus sesgos conocidos y qué hacer con ellos:
+
+| Sesgo | En qué consiste | Mitigación |
+|---|---|---|
+| De posición | Prefiere la primera opción presentada | Alternar el orden |
+| De longitud | Prefiere respuestas largas | Decirlo explícitamente en el criterio |
+| De familia | Prefiere lo que suena a lo que él escribiría | Juez de una familia distinta a la del evaluado |
+| De autocomplacencia | Se puntúa alto a sí mismo | No usar el mismo modelo como juez |
+
+: Cuatro sesgos documentados y cómo acotarlos
+
+Lo que más mejora un juez, con diferencia, es pedirle **criterios binarios y concretos** en lugar de una nota. "Del 1 al 10, ¿qué tal esta respuesta?" produce ruido con apariencia de dato. "¿Toda afirmación de la respuesta está respaldada por el documento aportado? Sí o no" produce algo utilizable.
+
+Y una comprobación que casi nadie hace y que debería ser obligatoria: **evaluar al juez**. Coged cincuenta casos puntuados por una persona, pasadlos por el juez y mirad si coinciden. Si no coinciden, las métricas que estáis generando son decorativas.
+
+## Qué medir en un agente
+
+En un sistema de un solo paso basta con mirar la respuesta. En un [agente](../agentes/queesunagente.qmd) hay que mirar también el camino, porque un agente puede llegar a la respuesta correcta por un camino carísimo, o dar una respuesta plausible sin haber consultado nada.
+
+```{mermaid}
+flowchart LR
+    inp["Caso"] --> ag["Agente"]
+    ag --> r["Resultado"]
+    ag --> tr["Traza"]
+    r --> mr["¿Correcto?"]
+    tr --> mp["¿Herramientas<br/>adecuadas?"]
+    tr --> mc["¿Coste y pasos?"]
+
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    classDef control fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef contexto fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    class ag,r modelo
+    class tr contexto
+    class mr,mp,mc control
+```
+
+Cuatro familias de métricas que conviene tener siempre:
+
+* **Resultado**: ¿resolvió la tarea?
+* **Camino**: ¿eligió las herramientas correctas y con los argumentos correctos?
+* **Eficiencia**: pasos, tokens, coste y latencia por tarea resuelta.
+* **Seguridad**: ¿intentó algo fuera de su alcance? ¿se salió del tema?
+
+La tercera es la que suele faltar y la que explica la mayoría de las sorpresas en la factura. Un agente al que solo se le mide el acierto tenderá, si alguien lo optimiza, a dar más vueltas.
+
+Y para sistemas [RAG](../contexto/rag.qmd#medir-la-recuperación-aparte), la insistencia de siempre: medir la recuperación por separado, porque un fallo de recuperación y un fallo de generación se arreglan en sitios distintos.
+
+## Cuándo se ejecuta
+
+La evaluación sirve de poco si es un acto puntual. Tres momentos, con costes muy distintos:
+
+**Al cambiar algo.** Prompt, modelo, herramientas o parámetros. Automático y rápido: si tarda una hora, nadie lo ejecutará. Este es el que convierte el desarrollo en algo distinto de una apuesta.
+
+**Antes de desplegar.** El conjunto completo, con umbrales acordados de antemano. Y acordados de verdad: si el criterio se negocia después de ver el resultado, no era un criterio.
+
+**En producción, sobre muestra.** Puntuar una fracción del tráfico real. Es lo único que detecta que el mundo ha cambiado: usuarios preguntando cosas nuevas, documentos actualizados, un modelo del proveedor que se movió bajo el mismo nombre.
+
+:::{.callout-important}
+# La deriva no avisa
+
+En software clásico, si nadie toca el código, el comportamiento no cambia. Aquí sí: el proveedor actualiza el modelo, los usuarios cambian lo que preguntan y los documentos que alimentan la recuperación se editan.
+
+Un sistema que funcionaba en marzo puede haber empeorado en junio sin que nadie haya hecho nada. La única forma de enterarse antes que el usuario es medir de forma continua, y para eso hacen falta [trazas](observabilidad.qmd).
+:::
+
+Que es exactamente el [siguiente capítulo](observabilidad.qmd).

@@ -1,0 +1,107 @@
+# Ecosistema productivo
+
+Cuando hablamos de agentes debemos entender que estos se enmarcan en un contexto empresarial, y esto tiene muchas implicaciones sobre cómo y dónde nuestros agentes verán la luz.
+
+La distancia entre un prototipo que funciona y un sistema que vive en una organización no la mide la calidad del modelo. La miden cosas que en la demo no existían: quién es el usuario, qué pasa cuando el proveedor falla, quién paga la factura, quién responde cuando el sistema se equivoca y cómo se sabe que se ha equivocado.
+
+## Lo que hay que resolver de todas formas
+
+Cualquier despliegue serio acaba necesitando las mismas piezas, se llamen como se llamen y las compre o las construya uno.
+
+```{mermaid}
+flowchart TD
+    app["Aplicación / agente"] --> gw["Gateway"]
+    gw --> p1["Proveedor A"]
+    gw --> p2["Proveedor B"]
+    gw --> p3["Modelo propio"]
+    app --> obs["Observabilidad"]
+    app --> ev["Evaluación"]
+    id["Identidad y permisos"] -.-> app
+    sec["Guardarraíles"] -.-> gw
+
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    classDef control fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef externo fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef contexto fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    class app modelo
+    class gw,obs,ev,sec,id control
+    class p1,p2 externo
+    class p3 modelo
+```
+
+Cinco piezas de apoyo, y ninguna de ellas es específica de vuestro caso de uso: lo único específico es la propia aplicación.
+
+| Pieza | Qué resuelve | Dónde se trata |
+|---|---|---|
+| **Gateway** | Un único punto de acceso a los modelos | [Gateways](gateways.qmd) |
+| **Observabilidad** | Saber qué pasó y cuánto costó | [Observabilidad](observabilidad.qmd) |
+| **Evaluación** | Saber si funciona y si ha empeorado | [Evaluación](evaluacion.qmd) |
+| **Identidad y permisos** | Quién puede hacer qué a través del agente | [Defensas](../seguridad/defensas.qmd) |
+| **Guardarraíles** | Qué no debe entrar ni salir | [Defensas](../seguridad/defensas.qmd) |
+
+: Lo que hay que tener, aunque el caso de uso sea trivial
+
+La tentación es dejarlas todas para después. El problema es que las tres primeras son mucho más caras de añadir a posteriori: instrumentar trazas en un sistema que ya está en producción significa tocar todo el código, y construir un conjunto de evaluación cuando ya hay usuarios significa hacerlo con prisa y con presión.
+
+## Dónde vive esto
+
+La decisión de despliegue rara vez es técnica del todo. Suele venir dada por dónde puede estar el dato, y conviene plantearla en esos términos desde el principio para no rehacer el trabajo.
+
+**API pública del proveedor.** Lo más rápido, lo más capaz, lo menos controlable. Vale para casos internos con datos poco sensibles y para prototipar cualquier cosa.
+
+**Nube propia con servicio gestionado.** Los grandes proveedores cloud ofrecen los modelos dentro del perímetro del cliente, con las garantías contractuales de la nube que ya se tiene contratada. Es la opción por defecto de la mayoría de empresas medianas y grandes en Europa, porque resuelve la conversación con cumplimiento sin montar infraestructura.
+
+**Modelo propio, en la nube o en casa.** Control total y coste fijo. Se justifica por soberanía del dato, por requisitos de auditoría o por volumen muy alto y sostenido. Trae consigo la necesidad de un equipo que lo mantenga.
+
+Lo habitual acaba siendo una mezcla, y por eso el [gateway](gateways.qmd) aparece tan pronto: es la pieza que permite que la aplicación no sepa cuál de las tres está usando.
+
+:::{.callout-note}
+# La pregunta que ordena la conversación
+
+Antes de discutir modelos, la pregunta útil es: **¿qué categoría de dato va a entrar en el contexto?**
+
+Datos públicos, datos internos, datos personales, datos especialmente protegidos. Cada escalón cierra opciones de despliegue y abre obligaciones. Responderla al principio evita el escenario clásico de construir tres meses y descubrir en la revisión de seguridad que el caso de uso no puede salir de casa.
+:::
+
+## Comprar o construir
+
+En 2026 hay producto para casi todo lo de la lista de arriba, y también librerías abiertas para casi todo. Un criterio que envejece bien: **construid lo que os diferencia, comprad lo que no**.
+
+Vuestro conocimiento del dominio, vuestras herramientas internas y vuestro conjunto de evaluación son vuestros y no los va a hacer nadie mejor. El enrutado de modelos, la recogida de trazas o el almacenamiento vectorial son infraestructura, y ahí lo sensato es tomar algo maduro y estándar.
+
+Con una condición: que lo que se compre no se lleve los datos que hacen falta para decidir. Un producto que no permite exportar las trazas ni los resultados de evaluación os deja sin la materia prima de todas las decisiones posteriores.
+
+## El equipo y el proceso
+
+Dos observaciones sobre la parte humana, que es donde más pilotos se atascan.
+
+La primera es que estos sistemas necesitan **una persona del dominio metida en el bucle**, no consultada al principio y al final. Quien sabe distinguir una respuesta correcta de una plausible es quien lleva quince años haciendo ese trabajo, y su criterio es literalmente el conjunto de evaluación. Un proyecto donde el dominio no participa en la evaluación acaba optimizando lo que le parece bien al equipo técnico.
+
+La segunda es que el ciclo de vida no es el del software clásico ni el del machine learning clásico, aunque se parezca más al segundo. Lo que cambia sin avisar no es solo vuestro código: es el modelo del proveedor, son las preguntas de los usuarios y son los documentos que alimentan la recuperación.
+
+```{mermaid}
+flowchart LR
+    c["Caso de uso"] --> ev["Conjunto de<br/>evaluación"]
+    ev --> pr["Prototipo"]
+    pr --> med["Medir"]
+    med --> prod["Producción"]
+    prod --> obs["Trazas reales"]
+    obs --> ev
+
+    classDef control fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class c,pr,prod modelo
+    class ev,med,obs control
+```
+
+El bucle importante es el de abajo: las trazas de producción alimentan el conjunto de evaluación. Los casos que fallan en real son los mejores casos de prueba que vais a conseguir, y son gratis si alguien se molesta en recogerlos.
+
+:::{.callout-tip}
+# Empezad por el caso aburrido
+
+La presión suele empujar al caso de uso vistoso y de cara al cliente. Casi siempre sale mejor empezar por uno interno, acotado y con usuarios que perdonan: resumir actas, clasificar tickets, buscar en la normativa interna.
+
+Sirve para montar las cinco piezas de la tabla con riesgo bajo y para aprender lo que no sale en ningún tutorial: qué preguntan de verdad los usuarios. Cuando llegue el caso vistoso, la infraestructura ya estará y el equipo sabrá lo que hace.
+:::
+
+La primera pieza de esa infraestructura, y la que más pronto se echa de menos, es [el gateway](gateways.qmd).

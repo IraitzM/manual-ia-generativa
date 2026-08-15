@@ -1,0 +1,91 @@
+# Prompting
+
+Hay algo incómodo en dedicar un capítulo a esto. El _prompt engineering_ nació con aires de disciplina, se llenó de listas de trucos y de vendedores de cursos, y una parte considerable de aquellos trucos ha ido caducando conforme los modelos mejoraban. Ofrecer una propina imaginaria al modelo, por ejemplo, tuvo su momento de gloria y hoy no hace nada.
+
+Lo que no ha caducado es lo aburrido: ser específico, dar contexto, decir en qué formato queremos la respuesta y enseñar ejemplos cuando la tarea es sutil. Eso sigue funcionando y probablemente seguirá, porque no explota ninguna rareza del modelo sino que reduce la ambigüedad de la petición.
+
+## Lo que de verdad se sostiene
+
+**Especificidad sobre cortesía.** "Resume esto" deja al modelo elegir longitud, tono, destinatario y qué es importante. "Resume esto en tres viñetas para un comité de dirección, centrándote en el riesgo económico" no deja nada de eso al azar. La mayoría de respuestas decepcionantes lo son porque la petición admitía muchas respuestas y la que salió no era la que teníamos en la cabeza.
+
+**Contexto antes que instrucción.** El modelo no sabe que "el proyecto" es un despliegue de SAP ni que "la norma" es una circular interna. Lo que en una conversación humana se sobreentiende, aquí hay que escribirlo.
+
+**Formato explícito.** Si la salida va a leerla un programa, hay que usar [salida estructurada](../modelos/inferencia.qmd#salida-estructurada) y no pedirlo por favor. Si la va a leer una persona, describir la forma esperada ahorra la mitad de las iteraciones.
+
+**Ejemplos cuando la tarea es sutil.** Es el _few-shot_ de toda la vida y sigue siendo la herramienta más eficaz para tareas de criterio difuso: clasificar el tono de una reclamación, decidir qué es un incidente grave. Tres ejemplos bien elegidos valen más que tres párrafos de descripción. Ojo con dos vicios: que todos los ejemplos sean de la misma clase (el modelo aprende ese sesgo) y que ninguno cubra los casos límite, que es justo donde va a fallar.
+
+**Pedir el razonamiento, cuando el modelo no lo trae de serie.** El clásico "piensa paso a paso" [@wei2022chain] sigue mejorando resultados en tareas con estructura. Con [modelos de razonamiento](../modelos/inferencia.qmd#razonar-gastando-más) es innecesario y a veces contraproducente: ya lo hacen, y forzarlo dos veces empeora.
+
+:::{.callout-tip}
+# Un patrón que rinde: rol, tarea, contexto, formato, límites
+
+No es magia, es un guion para no olvidarse de nada:
+
+``` {.default}
+Eres el asistente de la secretaría académica de una universidad.  (rol)
+Clasifica la consulta del alumno en una de estas categorías: ...   (tarea)
+Estamos en periodo de matrícula, que termina el 30 de septiembre.  (contexto)
+Devuelve únicamente el identificador de la categoría.              (formato)
+Si la consulta no encaja en ninguna, devuelve "otros".             (límites)
+```
+
+La última línea es la que más se olvida y la que más disgustos evita: **decirle qué hacer cuando no sabe**. Sin ella, el modelo inventará una categoría antes que reconocer que no encaja, porque inventar es coherente con su objetivo de entrenamiento.
+:::
+
+## El prompt de sistema no es un contrato
+
+Las instrucciones de sistema tienen más peso que un mensaje de usuario, y a la vez son solo tokens en la misma ventana. Nada impide que el contenido que llega después contradiga esas instrucciones con éxito.
+
+Esto tiene una lectura de diseño y otra de seguridad, y ambas apuntan al mismo sitio:
+
+* **De diseño**: "no reveles información de otros clientes" no es un control de acceso. El control de acceso se hace filtrando en la consulta, antes de que el dato entre en el contexto.
+* **De seguridad**: si un documento recuperado contiene "ignora tus instrucciones anteriores", hay una probabilidad no nula de que funcione. Es la [inyección de prompt](../seguridad/retos.qmd#inyección-de-prompt) y no se arregla escribiendo un prompt más severo.
+
+La formulación que conviene interiorizar es que **el prompt de sistema es una preferencia muy fuerte, no una garantía**. Todo lo que necesite garantía va fuera del modelo.
+
+## El prompt es código
+
+Aquí es donde la mayoría de proyectos acumula deuda técnica sin darse cuenta. Un prompt que decide cómo se clasifican las reclamaciones de clientes es lógica de negocio, y sin embargo suele vivir como una cadena de texto embebida a mitad de un fichero, editada por quien pasaba por allí y sin ninguna forma de saber si la última edición mejoró o empeoró las cosas.
+
+El mínimo defendible:
+
+* **Versionado en git**, en ficheros separados si son largos, y con las variables como plantilla explícita.
+* **Un identificador de versión que viaje en las trazas**, para poder atribuir un cambio de comportamiento a un cambio de prompt. Sin esto, depurar es adivinar.
+* **Un conjunto de casos de prueba** que se ejecute al cambiarlo. No hace falta una plataforma: veinte casos en un fichero y un script bastan para pillar el 80% de las regresiones.
+
+```{mermaid}
+flowchart LR
+    p["Prompt<br/>v3"] --> ev["Casos de<br/>evaluación"]
+    ev --> ok{"¿Mejora?"}
+    ok -->|sí| prod["Producción"]
+    ok -->|no| p
+
+    classDef contexto fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef control fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    class p contexto
+    class ev,ok,prod control
+```
+
+:::{.callout-warning}
+# El bucle de la desesperación
+
+El patrón es siempre igual. Alguien detecta un fallo, retoca el prompt, comprueba a mano que ese caso ya funciona y despliega. A la semana aparece otro fallo, se retoca otra vez, y el prompt crece hasta las trescientas líneas llenas de reglas contradictorias escritas para casos que ya nadie recuerda.
+
+El síntoma inequívoco es que nadie se atreve a borrar una línea. La causa raíz no es el prompt: es que **no hay conjunto de evaluación**. Sin él, cada arreglo es una apuesta a ciegas sobre todo lo demás, y por eso [la evaluación](../produccion/evaluacion.qmd) es el capítulo que sostiene todos los demás.
+:::
+
+## Cuándo el prompt ya no da más de sí
+
+Vale la pena reconocer el techo. Un prompt, por bueno que sea, no puede aportar información que el modelo no tiene ni garantizar un comportamiento que el modelo no puede cumplir.
+
+| Síntoma | No lo arregla el prompt | Lo arregla |
+|---|---|---|
+| Se inventa datos de vuestra empresa | Ninguna redacción | [RAG](rag.qmd) |
+| Da información desactualizada | Ninguna redacción | [Herramientas](../agentes/herramientas.qmd) |
+| Falla en cálculos | "Ten cuidado con las cuentas" | Una calculadora como herramienta |
+| Necesita varios pasos con decisiones | Un prompt gigantesco | Un [agente](../agentes/queesunagente.qmd) |
+| Formato inconsistente | "Devuelve JSON, por favor" | [Salida estructurada](../modelos/inferencia.qmd#salida-estructurada) |
+
+: Cuándo dejar de retocar y cambiar de herramienta
+
+La primera fila es la más común con diferencia, y lleva directamente al [siguiente capítulo](rag.qmd).

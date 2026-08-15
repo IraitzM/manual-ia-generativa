@@ -1,0 +1,76 @@
+# Copilotos y método
+
+De todos los usos de la IA generativa, el de asistencia a la programación es el que más lejos ha llegado y el único con adopción realmente masiva. Merece un apéndice propio por una razón poco romántica: es el caso de uso donde **el resultado se verifica solo**. El código compila o no compila, los tests pasan o no pasan. Esa señal objetiva es justo lo que le falta a casi todo lo demás, y explica buena parte de la diferencia de madurez.
+
+## Tres formas de trabajar
+
+La evolución ha sido rápida y conviene distinguir los modos, porque no se usan igual ni fallan igual.
+
+**Autocompletado.** Sugerencias en línea mientras se escribe. Bajo riesgo, ganancia constante en lo repetitivo. El peligro es la aceptación por inercia: sugerencias plausibles que nadie lee y que arrastran una suposición equivocada.
+
+**Conversación con contexto.** Preguntar sobre el código abierto, pedir una refactorización, explicar un error. Aquí la calidad depende casi por completo de [qué contexto ve](../contexto/intro.qmd), no del modelo.
+
+**Agente.** Se le da una tarea y ejecuta: lee ficheros, escribe cambios, lanza pruebas, itera. Es [el bucle](../agentes/queesunagente.qmd#el-bucle) aplicado a un repositorio, con la ventaja de que las pruebas son el verificador.
+
+El tercero es el que ha cambiado el oficio, y también el que más disciplina exige. Un agente que trabaja veinte minutos puede producir un cambio de setecientas líneas que nadie va a revisar con el cuidado que merece.
+
+:::{.callout-important}
+# La revisión sigue siendo vuestra
+
+Hay un desplazamiento del esfuerzo que conviene nombrar: se escribe menos código y se **revisa mucho más**. El cuello de botella se mueve de producir a comprender.
+
+Y la responsabilidad no se mueve. Un cambio generado que nadie entiende y que llega a producción es un cambio del que responde quien lo aprobó. Que lo haya escrito una máquina no aparece en ningún análisis posterior como circunstancia atenuante.
+:::
+
+## Lo que hace que funcione
+
+La diferencia entre un copiloto que ayuda y uno que estorba casi nunca está en el modelo. Está en cuatro cosas:
+
+**Un fichero de contexto del proyecto.** Prácticamente todas las herramientas leen un fichero de instrucciones en la raíz del repositorio con las convenciones, los comandos de construcción y prueba, y lo que no hay que hacer. Es el prompt de sistema del proyecto y es la inversión con mejor retorno de todas: escribirlo una vez mejora todas las interacciones posteriores.
+
+**Tareas acotadas.** "Refactoriza el módulo de facturación" produce un desastre. "Extrae la validación de IBAN de `facturas.py` a su propio módulo con sus tests" produce algo revisable. La regla es la de siempre: si no cabe en una revisión de código cómoda, no cabe en una tarea.
+
+**Un verificador rápido.** Tests, tipos y linter. Sin ellos, el agente no tiene señal y vosotros tampoco. En un proyecto con buena cobertura de pruebas es mucho más agradable trabajar con agentes, lo cual es un argumento nuevo a favor de algo que ya convenía hacer.
+
+**Empezar en verde.** Sobre un repositorio con cambios sin confirmar y pruebas rotas, es imposible saber qué rompió el agente.
+
+## Desarrollo dirigido por especificación
+
+El método que ha ganado tracción en 2026 lleva esta idea al extremo: si el código lo puede generar un agente, lo valioso pasa a ser **la especificación**, y esa es la que se versiona y se revisa.
+
+```{mermaid}
+flowchart LR
+    e["Especificación"] --> p["Plan"]
+    p --> t["Tareas"]
+    t --> i["Implementación"]
+    i --> v["Verificación"]
+    v -->|falla| e
+
+    classDef control fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class e,p,t control
+    class i,v modelo
+```
+
+Existen herramientas que estructuran este flujo con plantillas y comandos, y una pieza que aparece en varias de ellas es la **constitución** del proyecto: un documento con las reglas que no se negocian (qué lenguaje, qué se prohíbe, qué debe cumplir cualquier cambio) y que acompaña a todas las tareas.
+
+La crítica razonable es que esto se parece bastante al análisis funcional de toda la vida, y no le falta razón. La diferencia es que ahora el documento tiene un consumidor que lo lee entero, lo aplica literalmente y no rellena huecos con sentido común. Eso premia la precisión de una forma que antes no se premiaba y castiga la ambigüedad de forma inmediata.
+
+Funciona bien en proyectos nuevos y en cambios acotados. Encaja peor sobre sistemas grandes con veinte años de historia, donde la especificación real está en el código y en la cabeza de la gente.
+
+:::{.callout-warning}
+# Lo que se pierde por el camino
+
+Dos efectos que ya se observan y que conviene vigilar:
+
+* **Erosión del conocimiento.** Si nadie escribió el código, nadie tiene el modelo mental de por qué es así. Se nota a los seis meses, cuando hay que cambiarlo.
+* **Deuda acelerada.** Es tan barato añadir que se añade más de lo necesario. El coste de mantener no ha bajado en la misma proporción que el de producir, y esa asimetría se paga después.
+
+El antídoto es el de siempre y no es tecnológico: revisar de verdad, borrar sin pena y exigir que alguien sepa explicar lo que se ha metido.
+:::
+
+## Y una nota sobre los datos
+
+Un copiloto envía código a un tercero. Si ese código es propiedad de un cliente o contiene secretos, la conversación es la misma que en [ecosistema productivo](../produccion/ecosistema.qmd) y hay que tenerla antes: qué se envía, qué se retiene, si se usa para entrenar y qué dice el contrato con el cliente.
+
+Los agentes que ejecutan comandos añaden un vector más. Trabajar en un contenedor y no dar credenciales de producción a la sesión de desarrollo son medidas baratas que evitan sustos caros. Y todo lo dicho sobre la [trifecta letal](../seguridad/retos.qmd#la-trifecta-letal) aplica en su versión más literal: un agente con acceso al repositorio, a internet y a una terminal las reúne las tres a la vez.

@@ -15,6 +15,7 @@ El contenido vive en [`parts/`](parts/) y el índice de capítulos está en [`_q
 
 | Parte | Directorio | De qué va |
 |---|---|---|
+| Fundamentos | [`parts/fundamentos/`](parts/fundamentos/) | Del NLP clásico a los embeddings, y de la convolución a la atención |
 | Modelos generativos | [`parts/modelos/`](parts/modelos/) | Qué es un modelo generativo, transformers, inferencia y panorama de modelos |
 | Contexto | [`parts/contexto/`](parts/contexto/) | Ingeniería de contexto, prompting y recuperación |
 | Agentes | [`parts/agentes/`](parts/agentes/) | Bucle de agente, herramientas y MCP, orquestación y frameworks |
@@ -30,6 +31,10 @@ Dos cosas que conviene respetar al escribir un capítulo nuevo:
 
 **Las citas van al `.bib`.** Los trabajos citados están en [`parts/references.bib`](parts/references.bib) y se referencian con `[@clave]`. Los estándares y marcos que cambian de versión (OWASP, MCP, AI Act) se enlazan a su documentación, no se citan.
 
+**Los cuadernos se versionan sin salidas.** Los `.ipynb` de [`notebooks/`](notebooks/) se confirman con las celdas sin ejecutar, para que no crezcan hasta pesar megabytes ni ensucien los diffs. Cada uno se abre en Colab desde el badge del [apéndice de cuadernos](parts/apendices/cuadernos.qmd).
+
+**El código de los capítulos no se ejecuta.** Los dos capítulos con código llevan `execute: enabled: false` en su cabecera y sus salidas están pegadas a mano, para que renderizar el libro no exija descargar `torch` ni modelos. Lo ejecutable vive en los cuadernos.
+
 ## Renderizarlo en local
 
 ```bash
@@ -37,7 +42,7 @@ uv sync
 quarto preview
 ```
 
-El resultado se deja en `_book/`, que no se versiona. Los capítulos no ejecutan código por ahora, así que el render es rápido y no necesita intérprete de Python configurado.
+El resultado se deja en `_book/`, que no se versiona. Los capítulos no ejecutan código, así que el render es rápido y no necesita intérprete de Python configurado. [`notebooks/`](notebooks/) queda fuera de la lista `render` de [`_quarto.yaml`](_quarto.yaml) a propósito: Quarto también sabe renderizar `.ipynb` y esos cuadernos no son capítulos del libro.
 
 ## Revisión automática
 

@@ -1,0 +1,59 @@
+# Contexto
+
+Un modelo no tiene estado. No recuerda la conversación de ayer, no sabe quién pregunta y no ha visto vuestra base de datos. Todo lo que sabe de vuestro problema en el instante de responder es **lo que le habéis puesto en la ventana de contexto en esa llamada**, y nada más.
+
+Dicho así suena a limitación. Visto de otro modo es la única superficie de control que tenemos: los pesos no se tocan, pero el contexto lo escribimos nosotros, entero, en cada llamada.
+
+## De escribir prompts a gestionar un presupuesto
+
+Durante un par de años la disciplina se llamó _prompt engineering_ y consistía, básicamente, en encontrar la forma de pedir las cosas. Funcionaba porque el contexto era corto y lo escribía una persona.
+
+Hoy el contexto de un sistema real no lo escribe nadie: se **ensambla** en tiempo de ejecución con piezas de muchas procedencias.
+
+```{mermaid}
+flowchart LR
+    sp["Instrucciones<br/>del sistema"] --> ctx["Ventana de<br/>contexto"]
+    hist["Historial"] --> ctx
+    doc["Documentos<br/>recuperados"] --> ctx
+    tool["Definiciones y<br/>respuestas de<br/>herramientas"] --> ctx
+    usr["Petición<br/>del usuario"] --> ctx
+    ctx --> m["Modelo"]
+
+    classDef contexto fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    classDef externo fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef herramienta fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    class sp,hist,doc,ctx contexto
+    class tool herramienta
+    class usr externo
+    class m modelo
+```
+
+De ahí que el nombre que se ha impuesto sea **ingeniería de contexto**: la pregunta ya no es cómo se redacta la instrucción, sino qué entra, con qué prioridad y qué se tira cuando no cabe. Es un problema de asignación de un recurso escaso, más parecido a gestionar memoria que a escribir.
+
+Y es un recurso escaso por partida doble. Escaso porque tiene un límite duro de tokens. Y escaso porque, aunque quepa, [la calidad se degrada mucho antes de llegar al límite](../modelos/transformers.qmd#lo-que-el-contexto-no-arregla).
+
+:::{.callout-important}
+# La regla que resume la parte
+
+Meter más contexto no mejora la respuesta. Meter **el contexto adecuado** mejora la respuesta.
+
+Suena a perogrullada hasta que uno ve la cantidad de sistemas que recuperan veinte fragmentos "por si acaso", arrastran cuarenta turnos de conversación irrelevante y declaran quince herramientas de las que se usan dos. Todo eso compite por la atención del modelo con la única línea que contenía la respuesta.
+:::
+
+## Las cuatro operaciones
+
+Casi todo lo que se hace con el contexto cae en una de estas cuatro categorías, y viene bien tenerlas nombradas porque estructuran los dos capítulos siguientes y buena parte de [la parte de agentes](../agentes/queesunagente.qmd):
+
+| Operación | En qué consiste | Dónde se trata |
+|---|---|---|
+| **Escribir** | Redactar instrucciones, formato y ejemplos | [Prompting](prompting.qmd) |
+| **Seleccionar** | Traer de fuera solo lo pertinente | [RAG](rag.qmd) |
+| **Comprimir** | Resumir o descartar lo que ya no aporta | [RAG](rag.qmd#la-memoria-como-caso-particular) |
+| **Aislar** | Repartir el trabajo para que cada parte lleve su propio contexto | [Orquestación](../agentes/orquestacion.qmd) |
+
+: Las cuatro cosas que se pueden hacer con una ventana de contexto
+
+Las dos primeras son las que todo el mundo conoce. Las dos últimas son las que separan un prototipo que funciona en la demo de un sistema que aguanta una conversación de cuarenta turnos, y son también las que más se descubren tarde.
+
+Empecemos por lo que se escribe a mano, que sigue siendo la base de todo: [el prompt](prompting.qmd).

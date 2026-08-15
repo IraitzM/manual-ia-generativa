@@ -8,10 +8,11 @@ La inteligencia artificial generativa tiene multitud de aplicaciones más allá 
 
 Hay una asimetría curiosa en la literatura sobre IA generativa. Sobra material sobre cómo escribir un buen _prompt_ y sobre cómo montar un chatbot en veinte líneas, y escasea el que explica por qué ese chatbot se comporta de forma distinta el martes, cuánto cuesta al mes o quién responde si dice una barbaridad. Este manual se inclina deliberadamente hacia lo segundo.
 
-Eso condiciona el recorrido, que va de dentro hacia fuera en cinco partes:
+Eso condiciona el recorrido, que va de dentro hacia fuera en seis partes:
 
 | Parte | La pregunta que responde |
 |---|---|
+| [Fundamentos](fundamentos/intro.qmd) | De dónde sale todo esto y por qué la arquitectura es la que es |
 | [Modelos generativos](modelos/mlgenerativa.qmd) | Qué hay dentro de la caja y por qué falla como falla |
 | [Contexto](contexto/intro.qmd) | Qué le damos de comer en cada llamada |
 | [Agentes](agentes/queesunagente.qmd) | Qué pasa cuando le dejamos actuar y no solo hablar |
@@ -59,6 +60,8 @@ Ese esquema de cinco piezas es, en el fondo, el índice del libro. Y el orden en
 
 ## Por dónde empezar
 
-Si venís del mundo del dato o del desarrollo y lo que queréis es construir, la ruta corta es [qué es un agente](agentes/queesunagente.qmd), [herramientas](agentes/herramientas.qmd) y [evaluación](produccion/evaluacion.qmd), volviendo a la primera parte cuando algo no cuadre. Si lo que os toca es decidir si esto entra en vuestra organización, la ruta es [el ecosistema productivo](produccion/ecosistema.qmd), [los retos de seguridad](seguridad/retos.qmd) y [la normativa](normativa/leyes.qmd).
+Si venís del mundo del dato o del desarrollo y lo que queréis es construir, la ruta corta es [qué es un agente](agentes/queesunagente.qmd), [herramientas](agentes/herramientas.qmd) y [evaluación](produccion/evaluacion.qmd), volviendo hacia atrás cuando algo no cuadre. Si lo que os toca es decidir si esto entra en vuestra organización, la ruta es [el ecosistema productivo](produccion/ecosistema.qmd), [los retos de seguridad](seguridad/retos.qmd) y [la normativa](normativa/leyes.qmd).
 
-Y si el interés es entender de verdad qué está pasando, entonces sí: empezad por [el principio](modelos/mlgenerativa.qmd), que es donde se explica por qué un sistema que no sabe nada de nada resulta ser tan útil.
+Y si el interés es entender de verdad qué está pasando, entonces sí: empezad por [los fundamentos](fundamentos/intro.qmd), que es donde se cuenta de dónde viene cada pieza, y seguid por [los modelos generativos](modelos/mlgenerativa.qmd), donde se explica por qué un sistema que no sabe nada de nada resulta ser tan útil.
+
+La primera parte es además la única con [cuadernos](apendices/cuadernos.qmd) pensados para ejecutarse de principio a fin. Quien prefiera empezar tocando puede ir directamente a ellos y volver al texto cuando algo no encaje.
