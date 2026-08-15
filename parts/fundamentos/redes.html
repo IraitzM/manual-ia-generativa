@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; De la convolución a la atención – Manual de IA Generativa</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../parts/modelos/mlgenerativa.html" rel="next">
+<link href="../../parts/fundamentos/nlp.html" rel="prev">
+<link href="../../cover-removebg-preview.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-72d5e295085caa41dbd09726fd5aa80c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No se han encontrado resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<meta property="og:title" content="2&nbsp; De la convolución a la atención – Manual de IA Generativa">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://iraitzm.github.io/manual-ia-generativa/logo-noback.png">
+<meta property="og:site_name" content="Manual de IA Generativa">
+<meta property="og:image:height" content="500">
+<meta property="og:image:width" content="500">
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/fundamentos/intro.html">Fundamentos</a></li><li class="breadcrumb-item"><a href="../../parts/fundamentos/redes.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">De la convolución a la atención</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Manual de IA Generativa</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/IraitzM/manual-ia-generativa" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url=|url|" title="LinkedIn" class="quarto-navigation-tool px-1" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Buscar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prólogo</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introducción</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../parts/fundamentos/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fundamentos</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/fundamentos/nlp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Del texto a los vectores</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/fundamentos/redes.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">De la convolución a la atención</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Modelos generativos</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/modelos/mlgenerativa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Inteligencia Artificial</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/modelos/transformers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Qué hay dentro</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/modelos/inferencia.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Inferencia: los mandos y la factura</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/modelos/panorama.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">El panorama y la elección</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../parts/contexto/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Contexto</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/contexto/prompting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Prompting</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/contexto/rag.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Recuperación</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Agentes</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/agentes/queesunagente.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Qué es un agente</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/agentes/herramientas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Herramientas y MCP</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/agentes/orquestacion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Orquestación y frameworks</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Producción</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/produccion/ecosistema.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Ecosistema productivo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/produccion/gateways.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Gateways</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/produccion/evaluacion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Evaluación</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/produccion/observabilidad.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Observabilidad y coste</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Normativa y seguridad</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/seguridad/retos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Seguridad</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/seguridad/defensas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Defensas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/normativa/leyes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normativa</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/referencias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referencias</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Apéndices</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/apendices/cuadernos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Cuadernos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/apendices/copilotos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Copilotos y método</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/apendices/glosario.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Glosario</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#por-qué-no-vale-con-apilar-capas" id="toc-por-qué-no-vale-con-apilar-capas" class="nav-link active" data-scroll-target="#por-qué-no-vale-con-apilar-capas"><span class="header-section-number">2.1</span> Por qué no vale con apilar capas</a></li>
+  <li><a href="#las-dos-suposiciones-de-la-convolución" id="toc-las-dos-suposiciones-de-la-convolución" class="nav-link" data-scroll-target="#las-dos-suposiciones-de-la-convolución"><span class="header-section-number">2.2</span> Las dos suposiciones de la convolución</a></li>
+  <li><a href="#donde-la-localidad-se-queda-corta" id="toc-donde-la-localidad-se-queda-corta" class="nav-link" data-scroll-target="#donde-la-localidad-se-queda-corta"><span class="header-section-number">2.3</span> Donde la localidad se queda corta</a></li>
+  <li><a href="#la-atención-primero-como-parche" id="toc-la-atención-primero-como-parche" class="nav-link" data-scroll-target="#la-atención-primero-como-parche"><span class="header-section-number">2.4</span> La atención, primero como parche</a></li>
+  <li><a href="#una-imagen-es-una-secuencia-de-trozos" id="toc-una-imagen-es-una-secuencia-de-trozos" class="nav-link" data-scroll-target="#una-imagen-es-una-secuencia-de-trozos"><span class="header-section-number">2.5</span> Una imagen es una secuencia de trozos</a></li>
+  <li><a href="#el-gato-con-plumas" id="toc-el-gato-con-plumas" class="nav-link" data-scroll-target="#el-gato-con-plumas"><span class="header-section-number">2.6</span> El gato con plumas</a></li>
+  <li><a href="#qué-queda-del-transformer-original" id="toc-qué-queda-del-transformer-original" class="nav-link" data-scroll-target="#qué-queda-del-transformer-original"><span class="header-section-number">2.7</span> Qué queda del transformer original</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/fundamentos/intro.html">Fundamentos</a></li><li class="breadcrumb-item"><a href="../../parts/fundamentos/redes.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">De la convolución a la atención</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">De la convolución a la atención</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>La atención suele contarse como una idea genial que apareció en 2017 y lo cambió todo. Contada así no se entiende, porque una idea solo se entiende contra el problema que resolvía. Este capítulo cuenta ese problema, y para hacerlo hay que pasar por las redes convolucionales, que son el mejor contraejemplo disponible: la arquitectura que triunfó <strong>precisamente por suponer cosas</strong> sobre sus datos, justo lo contrario de lo que hace un transformer.</p>
+<section id="por-qué-no-vale-con-apilar-capas" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="por-qué-no-vale-con-apilar-capas"><span class="header-section-number">2.1</span> Por qué no vale con apilar capas</h2>
+<p>Una red neuronal corriente conecta cada entrada con cada neurona de la siguiente capa. Con una imagen pequeña, de 224 por 224 píxeles en color, la entrada son 150.528 números. Una sola capa oculta de mil neuronas ya son 150 millones de pesos, y eso antes de empezar a hacer nada útil.</p>
+<p>El problema no es solo el tamaño. Es que esa red <strong>no sabe que la entrada es una imagen</strong>. Para ella, el píxel de la esquina superior izquierda y el de su lado son dos entradas cualesquiera sin relación, y tendría que aprender de los datos que están juntos. Peor aún: un gato desplazado veinte píxeles a la derecha activa un conjunto de pesos completamente distinto, así que hay que aprender “gato” otra vez para cada posición posible.</p>
+</section>
+<section id="las-dos-suposiciones-de-la-convolución" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="las-dos-suposiciones-de-la-convolución"><span class="header-section-number">2.2</span> Las dos suposiciones de la convolución</h2>
+<p>Una red convolucional <span class="citation" data-cites="lecun1998gradient">(<a href="../referencias.html#ref-lecun1998gradient" role="doc-biblioref">LeCun et&nbsp;al. 1998</a>)</span> resuelve las dos cosas metiendo en la arquitectura dos suposiciones sobre el mundo:</p>
+<ul>
+<li><strong>Localidad</strong>: lo que hace informativo a un píxel está en sus vecinos, no al otro lado de la imagen.</li>
+<li><strong>Invarianza a la traslación</strong>: un borde es un borde en cualquier sitio, así que el mismo detector sirve para toda la imagen.</li>
+</ul>
+<p>En la práctica eso significa una ventanita de pesos, el <strong>filtro</strong>, que se pasea por la imagen entera. En lugar de 150 millones de pesos, nueve.</p>
+<div id="934be59e" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.signal <span class="im">import</span> convolve2d</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Un detector de bordes verticales: tres números por columna y ya está</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>filtro <span class="op">=</span> np.array([[<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>],</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                   [<span class="op">-</span><span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">2</span>],</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                   [<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>]])</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>bordes <span class="op">=</span> convolve2d(imagen_gris, filtro, mode<span class="op">=</span><span class="st">"same"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>bordes.shape</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Ese filtro de nueve números detecta bordes verticales en cualquier punto de la imagen. Lo relevante es que en una red no se escribe a mano: se aprende. Y al apilar capas aparece una jerarquía que se ha comprobado una y otra vez: los primeros filtros detectan bordes, los siguientes combinan bordes en texturas y esquinas, los siguientes texturas en partes, y los últimos partes en objetos.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    p["Píxeles"] --&gt; c1["Bordes"]
+    c1 --&gt; c2["Texturas"]
+    c2 --&gt; c3["Partes"]
+    c3 --&gt; c4["Objetos"]
+
+    classDef externo fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class p externo
+    class c1,c2,c3,c4 modelo
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Esa jerarquía tiene un precio que resulta central para el resto del capítulo. Cada capa mira solo una ventanita, así que <strong>el trozo de imagen que influye en una neurona, su campo receptivo, crece despacio</strong>: capa a capa, unos pocos píxeles cada vez. Para que una neurona pueda relacionar la esquina superior izquierda con la inferior derecha hacen falta muchas capas.</p>
+<p>Con esas dos suposiciones y datos suficientes, en 2012 AlexNet ganó el concurso de ImageNet por un margen que dejó claro que el debate se había acabado <span class="citation" data-cites="krizhevsky2012imagenet">(<a href="../referencias.html#ref-krizhevsky2012imagenet" role="doc-biblioref">Krizhevsky et&nbsp;al. 2012</a>)</span>. Durante los cinco años siguientes, visión por computador y red convolucional fueron casi sinónimos.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Un sesgo inductivo es una apuesta
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>“Sesgo inductivo” suena a defecto y no lo es: es lo que el modelo da por sabido antes de ver un solo dato. La convolución apuesta a que el mundo es local y homogéneo, y como para las imágenes naturales esa apuesta es buena, <strong>acierta con muchos menos datos</strong> de los que necesitaría una red sin suposiciones.</p>
+<p>La regla general que sale de aquí y explica media década de arquitecturas: cuanto más supone un modelo, menos datos necesita y menos flexible es. Cuanto menos supone, más datos necesita y más lejos puede llegar.</p>
+</div>
+</div>
+</section>
+<section id="donde-la-localidad-se-queda-corta" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="donde-la-localidad-se-queda-corta"><span class="header-section-number">2.3</span> Donde la localidad se queda corta</h2>
+<p>La suposición de localidad falla en cuanto lo importante es una relación a distancia. Y en texto falla siempre, porque el sujeto de una frase puede estar veinte palabras antes del verbo que lo necesita.</p>
+<p>La arquitectura que dominó el texto hasta 2017 fue la <strong>red recurrente</strong>, y en particular la LSTM <span class="citation" data-cites="hochreiter1997long">(<a href="../referencias.html#ref-hochreiter1997long" role="doc-biblioref">Hochreiter y Schmidhuber 1997</a>)</span>. Su idea es procesar la secuencia palabra a palabra manteniendo un estado interno que arrastra lo visto hasta ahora. Para traducir, se ponían dos: una que leía la frase de origen y la comprimía en un vector, y otra que escribía la traducción a partir de él.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    e1["El"] --&gt; e2["alumno"]
+    e2 --&gt; e3["anuló"]
+    e3 --&gt; e4["la matrícula"]
+    e4 --&gt; v["Un vector&lt;br/&gt;de tamaño fijo"]
+    v --&gt; d["Decodificador"]
+
+    classDef contexto fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef riesgo fill:#f7d7d7,stroke:#b34b4b,stroke-width:1.5px,color:#5c1f1f
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class e1,e2,e3,e4 contexto
+    class v riesgo
+    class d modelo
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>En rojo, el problema. <strong>Toda la frase de origen tiene que caber en un vector de tamaño fijo</strong>, tenga cinco palabras o cincuenta. Es un cuello de botella literal, y se notaba: la calidad de la traducción se desplomaba con la longitud.</p>
+<p>Y había un segundo problema, menos discutido entonces y decisivo después: procesar palabra a palabra es <strong>inherentemente secuencial</strong>. No se puede paralelizar el entrenamiento sobre la longitud de la frase, y en una época en la que el cómputo empezaba a ser abundante, eso era dejar de aprovechar la máquina.</p>
+</section>
+<section id="la-atención-primero-como-parche" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="la-atención-primero-como-parche"><span class="header-section-number">2.4</span> La atención, primero como parche</h2>
+<p>La atención no nació como arquitectura sino como remiendo de ese cuello de botella <span class="citation" data-cites="bahdanau2015neural">(<a href="../referencias.html#ref-bahdanau2015neural" role="doc-biblioref">Bahdanau et&nbsp;al. 2015</a>)</span>. La idea: en lugar de obligar al decodificador a trabajar con un único vector, <strong>dejarle mirar todos los estados del codificador y decidir en cada paso a cuáles hacer caso</strong>.</p>
+<p>Es una media ponderada, y los pesos los calcula el propio modelo según lo que esté escribiendo en ese momento. Al traducir el verbo, mira sobre todo al verbo; al traducir el sujeto, al sujeto. Nadie le dijo qué alinear con qué: sale de entrenar.</p>
+<p>Dos años después llegó la observación que da título al artículo más citado de la década: si la atención ya hace el trabajo de relacionar posiciones, <strong>la recurrencia sobra</strong> <span class="citation" data-cites="vaswani2017attention">(<a href="../referencias.html#ref-vaswani2017attention" role="doc-biblioref">Vaswani et&nbsp;al. 2017</a>)</span>. Se quita, y lo que queda es un transformer.</p>
+<p>Lo que se gana con esa amputación:</p>
+<table class="caption-top table">
+<caption>Lo que cambia al sustituir recurrencia por atención</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Recurrencia</th>
+<th>Atención</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Distancia entre dos posiciones</td>
+<td>Tantos pasos como palabras las separen</td>
+<td>Uno, siempre</td>
+</tr>
+<tr class="even">
+<td>Entrenamiento</td>
+<td>Secuencial en la longitud</td>
+<td>Paralelizable entero</td>
+</tr>
+<tr class="odd">
+<td>Coste con la longitud</td>
+<td>Lineal</td>
+<td>Cuadrático</td>
+</tr>
+<tr class="even">
+<td>Noción del orden</td>
+<td>Implícita, viene de recorrer</td>
+<td>Ninguna, hay que inyectarla</td>
+</tr>
+</tbody>
+</table>
+<p>Las dos primeras filas son la victoria. Las dos últimas son la factura, y las dos siguen pagándose hoy. El coste cuadrático es el que aparece en <a href="../../parts/modelos/inferencia.html">inferencia</a> cada vez que se habla de contextos largos. Y la falta de noción del orden es la razón de que haya que meter la posición a mano, un detalle que parece menor y que resultó ser una de las piezas que más ha evolucionado.</p>
+</section>
+<section id="una-imagen-es-una-secuencia-de-trozos" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="una-imagen-es-una-secuencia-de-trozos"><span class="header-section-number">2.5</span> Una imagen es una secuencia de trozos</h2>
+<p>Si la atención relaciona posiciones sin suponer nada sobre ellas, nada obliga a que esas posiciones sean palabras. El <em>Vision Transformer</em> hizo justo eso: partir la imagen en cuadraditos de 16 por 16 píxeles, tratar cada cuadradito como si fuera un token y meterlos por el mismo transformer <span class="citation" data-cites="dosovitskiy2021image">(<a href="../referencias.html#ref-dosovitskiy2021image" role="doc-biblioref">Dosovitskiy et&nbsp;al. 2021</a>)</span>.</p>
+<p>Suena a provocación y funcionó, con una condición que confirma lo que decía el aviso sobre sesgos inductivos: <strong>hizo falta muchísimo más dato</strong>. Entrenado con conjuntos del tamaño de ImageNet, el transformer perdía contra una convolucional. Con conjuntos cien veces mayores, ganaba. Al no suponer que la imagen es local, tiene que aprender esa localidad de los datos, y aprenderla cuesta ejemplos.</p>
+<p>La consecuencia práctica es la que sostiene buena parte del manual: desde entonces <strong>texto, imagen, audio y vídeo se procesan con la misma arquitectura</strong>. No hace falta un modelo de texto y otro de visión pegados con cinta adhesiva, basta con proyectar todo a la misma clase de representación. De ahí salen los modelos multimodales de los que habla <a href="../../parts/modelos/mlgenerativa.html#más-allá-del-texto">el capítulo siguiente</a>, y de ahí sale también que una instrucción pueda venir escondida en una imagen, que es un problema de <a href="../../parts/seguridad/retos.html">seguridad</a>.</p>
+</section>
+<section id="el-gato-con-plumas" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="el-gato-con-plumas"><span class="header-section-number">2.6</span> El gato con plumas</h2>
+<p>Hay un experimento que enseña la diferencia entre las dos familias mejor que cualquier tabla, y es el que monta <a href="../../parts/apendices/cuadernos.html">el cuaderno de visión</a>. Consiste en fabricar una imagen quimérica, un gato con plumaje de periquito, y pedirle a las dos arquitecturas que la clasifiquen.</p>
+<div id="4683d6c0" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> AutoImageProcessor, AutoModelForImageClassification</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nombre <span class="kw">in</span> [<span class="st">"microsoft/resnet-50"</span>, <span class="st">"google/vit-base-patch16-224"</span>]:</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    procesador <span class="op">=</span> AutoImageProcessor.from_pretrained(nombre)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    modelo <span class="op">=</span> AutoModelForImageClassification.from_pretrained(nombre)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    logits <span class="op">=</span> modelo(<span class="op">**</span>procesador(imagen, return_tensors<span class="op">=</span><span class="st">"pt"</span>)).logits</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(nombre, <span class="st">"→"</span>, modelo.config.id2label[logits.argmax(<span class="op">-</span><span class="dv">1</span>).item()])</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>La convolucional tiende a irse detrás de la textura: ve plumas, y las plumas son de pájaro. El transformer, cuyo campo receptivo abarca la imagen entera desde la primera capa, tiene más facilidad para juzgar por la silueta y quedarse con el gato. No es una regla infalible y depende de la imagen concreta, pero la tendencia está documentada: las redes convolucionales entrenadas con ImageNet muestran un sesgo claro hacia la textura frente a la forma <span class="citation" data-cites="geirhos2019imagenet">(<a href="../referencias.html#ref-geirhos2019imagenet" role="doc-biblioref">Geirhos et&nbsp;al. 2019</a>)</span>.</p>
+<p>La lectura de fondo no es que una arquitectura sea mejor. Es que <strong>cada una se equivoca de una manera distinta y predecible a partir de lo que supone</strong>, que es exactamente lo que uno querría saber antes de elegir.</p>
+</section>
+<section id="qué-queda-del-transformer-original" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="qué-queda-del-transformer-original"><span class="header-section-number">2.7</span> Qué queda del transformer original</h2>
+<p>Casi todo lo que se cuenta sobre transformers describe el artículo de 2017. Un modelo de 2026 se le parece en el esqueleto y en poco más, y conviene saberlo porque las diferencias son justo las que explican el consumo de memoria y la velocidad.</p>
+<table class="caption-top table">
+<caption>Las cinco piezas que cambiaron, y por qué</caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pieza</th>
+<th>2017</th>
+<th>Hoy</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Normalización</td>
+<td>LayerNorm</td>
+<td>RMSNorm <span class="citation" data-cites="zhang2019root">(<a href="../referencias.html#ref-zhang2019root" role="doc-biblioref">Zhang y Sennrich 2019</a>)</span></td>
+<td>Lo mismo, más barato</td>
+</tr>
+<tr class="even">
+<td>Posición</td>
+<td>Sumada a la entrada</td>
+<td>Rotatoria, en cada capa <span class="citation" data-cites="su2024roformer">(<a href="../referencias.html#ref-su2024roformer" role="doc-biblioref">Su et&nbsp;al. 2024</a>)</span></td>
+<td>Generaliza mejor a contextos largos</td>
+</tr>
+<tr class="odd">
+<td>Atención</td>
+<td>Una clave y un valor por cabeza</td>
+<td>Agrupada, varias cabezas comparten <span class="citation" data-cites="ainslie2023gqa">(<a href="../referencias.html#ref-ainslie2023gqa" role="doc-biblioref">Ainslie et&nbsp;al. 2023</a>)</span></td>
+<td>Reduce la caché KV, que es lo que llena la memoria</td>
+</tr>
+<tr class="even">
+<td>Red intermedia</td>
+<td>Densa, siempre activa</td>
+<td>Mezcla de expertos <span class="citation" data-cites="shazeer2017outrageously">(<a href="../referencias.html#ref-shazeer2017outrageously" role="doc-biblioref">Shazeer et&nbsp;al. 2017</a>)</span></td>
+<td>Muchos parámetros, pocos activos por token</td>
+</tr>
+<tr class="odd">
+<td>Inferencia</td>
+<td>Recalcular todo</td>
+<td>Caché KV</td>
+<td>Evita repetir el trabajo en cada token</td>
+</tr>
+</tbody>
+</table>
+<p>De las cinco, la que más consecuencias tiene en la práctica es la tercera. La <strong>caché KV</strong> guarda los cálculos intermedios de los tokens ya vistos para no rehacerlos, y su tamaño crece con la longitud del contexto, con el número de capas y con el número de cabezas. En un modelo grande con contexto largo esa caché puede ocupar más memoria que los propios pesos, y ahí es donde la atención agrupada cambia las cosas: hacer que ocho cabezas compartan una sola clave y un solo valor divide esa memoria por ocho casi sin perder calidad.</p>
+<p>La quinta, la mezcla de expertos, es la que explica una cifra que confunde a mucha gente. Cuando un proveedor anuncia un modelo de 235.000 millones de parámetros de los que solo se activan 22.000 millones por token, no está haciendo trampa: hay muchas redes intermedias especializadas y un enrutador que elige dos o tres para cada token. Se paga la memoria del modelo entero y el cómputo de una fracción.</p>
+<p>Conviene saber que la lista no se cierra ahí. Las cinco piezas de la tabla siguen dando por buena la atención del artículo original, y desde 2025 hay modelos que ni eso: sustituyen la mayoría de sus capas de atención por un estado recurrente de tamaño fijo para que la caché deje de crecer. Eso ya no es historia sino presente, así que se cuenta donde toca, en <a href="../../parts/modelos/transformers.html#esquivar-el-cuadrado">esquivar el cuadrado</a>.</p>
+<p><a href="../../parts/apendices/cuadernos.html">El cuaderno de arquitectura</a> monta esas cinco piezas en unas doscientas líneas de PyTorch, sin entrenar nada, y mide lo que ocupa cada una. Ver la caché KV crecer en pantalla al alargar el contexto explica el resto del manual mejor que cualquier párrafo.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>La comparación que merece la pena hacer
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Si solo hacéis un experimento de este capítulo, que sea calcular el tamaño de la caché KV con atención normal y con atención agrupada para el mismo modelo y el mismo contexto. Es una división, cabe en tres líneas, y es la razón por la que hoy se puede servir un contexto de 128.000 tokens sin arruinarse.</p>
+</div>
+</div>
+<p>Con esto ya está el terreno preparado. Sabemos cómo se representa el texto y por qué la arquitectura es la que es; toca ver qué ocurre cuando esa arquitectura se entrena para generar, que es <a href="../../parts/modelos/mlgenerativa.html">donde empieza la parte de modelos generativos</a>.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-ainslie2023gqa" class="csl-entry" role="listitem">
+Ainslie, Joshua, James Lee-Thorp, Michiel de Jong, Yury Zemlyanskiy, Federico Lebrón, y Sumit Sanghai. 2023. <span>«<span>GQA</span>: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints»</span>. <em>Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing</em>.
+</div>
+<div id="ref-bahdanau2015neural" class="csl-entry" role="listitem">
+Bahdanau, Dzmitry, Kyunghyun Cho, y Yoshua Bengio. 2015. <span>«Neural Machine Translation by Jointly Learning to Align and Translate»</span>. <em>International Conference on Learning Representations</em>.
+</div>
+<div id="ref-dosovitskiy2021image" class="csl-entry" role="listitem">
+Dosovitskiy, Alexey, Lucas Beyer, Alexander Kolesnikov, et&nbsp;al. 2021. <span>«An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale»</span>. <em>International Conference on Learning Representations</em>.
+</div>
+<div id="ref-geirhos2019imagenet" class="csl-entry" role="listitem">
+Geirhos, Robert, Patricia Rubisch, Claudio Michaelis, Matthias Bethge, Felix A. Wichmann, y Wieland Brendel. 2019. <span>«ImageNet-trained <span>CNN</span>s are Biased Towards Texture; Increasing Shape Bias Improves Accuracy and Robustness»</span>. <em>International Conference on Learning Representations</em>.
+</div>
+<div id="ref-hochreiter1997long" class="csl-entry" role="listitem">
+Hochreiter, Sepp, y Jürgen Schmidhuber. 1997. <span>«Long Short-Term Memory»</span>. <em>Neural Computation</em> 9 (8): 1735-80.
+</div>
+<div id="ref-krizhevsky2012imagenet" class="csl-entry" role="listitem">
+Krizhevsky, Alex, Ilya Sutskever, y Geoffrey E. Hinton. 2012. <span>«ImageNet Classification with Deep Convolutional Neural Networks»</span>. <em>Advances in Neural Information Processing Systems</em> 25.
+</div>
+<div id="ref-lecun1998gradient" class="csl-entry" role="listitem">
+LeCun, Yann, Léon Bottou, Yoshua Bengio, y Patrick Haffner. 1998. <span>«Gradient-Based Learning Applied to Document Recognition»</span>. <em>Proceedings of the IEEE</em> 86 (11): 2278-324.
+</div>
+<div id="ref-shazeer2017outrageously" class="csl-entry" role="listitem">
+Shazeer, Noam, Azalia Mirhoseini, Krzysztof Maziarz, et&nbsp;al. 2017. <span>«Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer»</span>. <em>International Conference on Learning Representations</em>.
+</div>
+<div id="ref-su2024roformer" class="csl-entry" role="listitem">
+Su, Jianlin, Murtadha Ahmed, Yu Lu, Shengfeng Pan, Wen Bo, y Yunfeng Liu. 2024. <span>«RoFormer: Enhanced Transformer with Rotary Position Embedding»</span>. <em>Neurocomputing</em> 568.
+</div>
+<div id="ref-vaswani2017attention" class="csl-entry" role="listitem">
+Vaswani, Ashish, Noam Shazeer, Niki Parmar, et&nbsp;al. 2017. <span>«Attention is All you Need»</span>. <em>Advances in Neural Information Processing Systems</em> 30.
+</div>
+<div id="ref-zhang2019root" class="csl-entry" role="listitem">
+Zhang, Biao, y Rico Sennrich. 2019. <span>«Root Mean Square Layer Normalization»</span>. <em>Advances in Neural Information Processing Systems</em> 32.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/iraitzm\.github\.io\/manual-ia-generativa\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../parts/fundamentos/nlp.html" class="pagination-link" aria-label="Del texto a los vectores">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Del texto a los vectores</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../parts/modelos/mlgenerativa.html" class="pagination-link" aria-label="Inteligencia Artificial">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Inteligencia Artificial</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2026, Iraitz Montalbán</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/IraitzM">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/iraitzmontalban/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
