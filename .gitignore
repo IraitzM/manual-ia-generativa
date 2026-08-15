@@ -1,3 +1,17 @@
 # Quarto
 /.quarto/
 _book
+_freeze/**/figure-*
+**/*.quarto_ipynb
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Descargas y material auxiliar
+*.zip
+
+# Secretos
+.env

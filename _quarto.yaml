@@ -8,7 +8,7 @@ book:
   site-url: https://iraitzm.github.io/manual-ia-generativa/
   repo-url: https://github.com/IraitzM/manual-ia-generativa
   author: "Iraitz Montalbán"
-  date: "2/25/2026"
+  date: today
   page-navigation: true
   search: true
   sharing: [linkedin]
@@ -18,12 +18,12 @@ book:
     pinned: false
     style: docked
     background: light
-  page-footer: 
-    left: "Copyright 2026, Iraitz Montalbán" 
-    right: 
+  page-footer:
+    left: "Copyright 2026, Iraitz Montalbán"
+    right:
       - icon: github
         href: https://github.com/IraitzM
-      - icon: linkedin 
+      - icon: linkedin
         href: https://www.linkedin.com/in/iraitzmontalban/
     border: false
     background: light
@@ -33,40 +33,62 @@ book:
 
     - part: "Modelos generativos"
       chapters:
-      - parts/modelos/mlgenerativa.md
+      - parts/modelos/mlgenerativa.qmd
+      - parts/modelos/transformers.qmd
+      - parts/modelos/inferencia.qmd
+      - parts/modelos/panorama.qmd
+
+    - part: parts/contexto/intro.qmd
+      chapters:
+      - parts/contexto/prompting.qmd
+      - parts/contexto/rag.qmd
 
     - part: "Agentes"
       chapters:
-      - parts/agentes/queesunagente.md
+      - parts/agentes/queesunagente.qmd
+      - parts/agentes/herramientas.qmd
+      - parts/agentes/orquestacion.qmd
 
     - part: "Producción"
       chapters:
-      - parts/produccion/ecosistema.md
-      - parts/produccion/gateways.md
+      - parts/produccion/ecosistema.qmd
+      - parts/produccion/gateways.qmd
+      - parts/produccion/evaluacion.qmd
+      - parts/produccion/observabilidad.qmd
 
     - part: "Normativa y seguridad"
       chapters:
-      - parts/seguridad/retos.md
-      - parts/normativa/leyes.md
+      - parts/seguridad/retos.qmd
+      - parts/seguridad/defensas.qmd
+      - parts/normativa/leyes.qmd
 
     - parts/referencias.qmd
 
+  appendices:
+    - parts/apendices/cuadernos.qmd
+    - parts/apendices/copilotos.qmd
+    - parts/apendices/glosario.qmd
+
 bibliography: parts/references.bib
-bibliographystyle: american-physics-society
-# More on: https://typst.app/docs/reference/model/bibliography/#parameters-style
+
+# Quarto no traduce esta etiqueta al español por defecto
+language:
+  section-title-appendices: "Apéndices"
 
 format:
   html:
     number-depth: 2
-    theme: 
+    theme:
      - cosmo
+     - style.scss
     code-link: true
 
 # Some SEO
 metadata:
-  lang: en
+  lang: es
   twitter-card: false
   open-graph: true
+  image: logo-noback.png
 
 resources:
   - robots.txt

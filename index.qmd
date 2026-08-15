@@ -2,9 +2,9 @@
 
 Cuesta separar el grano de la paja en todo lo que corresponde al mundo de la inteligencia artificial. Este pequeño manual es mi intento de registrar los aspectos que me resultan más relevantes y las referencias de gente que sabe más que yo.
 
-Cubriremos aspectos relativos a modelos generativos que van más allá de ChaGPT. Cómo podemos construir soluciones basadas en agentes mediante herramientas y frameworks de programación. Uso de copilotos y novedades sobre metodología. También veremos temas de plataforma, seguridad y adopción corporativa. Un aspecto complejo pero que casi siempre queda al margen de las formaciones de experto en IA.
+Cubriremos aspectos relativos a modelos generativos que van más allá de ChatGPT. Cómo podemos construir soluciones basadas en agentes mediante herramientas y frameworks de programación. Uso de copilotos y novedades sobre metodología. También veremos temas de plataforma, seguridad y adopción corporativa. Un aspecto complejo pero que casi siempre queda al margen de las formaciones de experto en IA.
 
-Ah, y un poco de normativa y seguridad. Que sería de este manual sin un apartado dedicada al tema más peñazo pero que marca la diferencia entre una solución responsable y una pesadilla en producción.
+Ah, y un poco de normativa y seguridad. Qué sería de este manual sin un apartado dedicado al tema más peñazo pero que marca la diferencia entre una solución responsable y una pesadilla en producción.
 
 ## Sobre mí
 

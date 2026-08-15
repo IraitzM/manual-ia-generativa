@@ -1,0 +1,7 @@
+---
+title: Page Not Found
+---
+
+Página no encontrada.
+
+[Vuelta al Home](index.qmd)

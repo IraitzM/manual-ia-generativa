@@ -5,4 +5,39 @@ repos:
     # uv version.
     rev: 0.10.6
     hooks:
+      # Sin --no-hashes el hook reescribe requirements.txt con hashes, que no
+      # es el formato que tiene el fichero versionado ni el que documenta el
+      # README. El CI instala desde aquí, así que conviene que no baile.
       - id: uv-export
+        args: ["--frozen", "--no-hashes", "--output-file=requirements.txt"]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        # Entre comillas: sin ellas, YAML parte el valor por la coma.
+        args: ["--markdown-linebreak-ext=md,qmd"]
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-merge-conflict
+
+  - repo: local
+    hooks:
+      # Comprueba que los enlaces entre capítulos resuelven, incluidas las
+      # anclas. Pilla el error clásico de enlazar al título de un callout,
+      # que en Quarto no genera ancla.
+      - id: enlaces-internos
+        name: enlaces internos entre capítulos
+        entry: python3 scripts/check_links.py
+        language: system
+        pass_filenames: false
+        files: \.qmd$
+
+      # Ortografía en español. Necesita aspell-es o hunspell-es en el
+      # sistema; si no están, avisa y deja pasar el commit.
+      - id: ortografia
+        name: ortografía en español
+        entry: python3 scripts/spellcheck.py
+        language: system
+        pass_filenames: false
+        files: \.qmd$

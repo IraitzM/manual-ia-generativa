@@ -1,4 +1,6 @@
 # Referencias {.unnumbered}
 
+Trabajos citados a lo largo del manual. Para los estándares y marcos que se mencionan sin cita (OWASP, OpenTelemetry, MCP, A2A, ISO/IEC 42001, NIST AI RMF y el propio Reglamento europeo de IA), la referencia útil es su documentación oficial, que además es la única versión que estará al día cuando leáis esto.
+
 ::: {#refs}
 :::

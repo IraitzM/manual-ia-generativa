@@ -10,3 +10,52 @@ dependencies = []
 dev = [
     "pre-commit>=4.5.1",
 ]
+
+[tool.spellcheck]
+sources = ["index.qmd", "parts/**/*.qmd"]
+
+# "todos" señala una palabra solo si NINGÚN diccionario instalado la
+# reconoce. Los dos tienen lagunas distintas y cruzarlos quita muchos
+# falsos positivos: aspell rechaza "tutorial" o "resiliencia", hunspell
+# rechaza "heurística" o "milisegundos". Fijar uno solo ("aspell" o
+# "hunspell") obliga a alargar la lista de abajo en unas treinta entradas.
+backend = "todos"
+
+# Términos que ningún diccionario reconoce y que aquí son correctos.
+# Las siglas en mayúscula (RAG, MCP, GPAI) y los nombres en CamelCase
+# (GraphRAG, OpenTelemetry, LiteLLM) los descarta el script por su cuenta,
+# así que no hace falta listarlos. La comparación ignora mayúsculas: basta
+# con declarar la forma en minúscula.
+words = [
+  # -- Términos en inglés y anglicismos del oficio ---------------------
+  "act", "agent", "agents", "augmented", "benchmarks", "card", "chatbot",
+  "chatbots", "chunking", "cloud", "context", "cpp", "decoder",
+  "decoders", "deepfakes", "deployer", "designing", "embedding",
+  "embeddings", "encoder", "encoders", "endpoint", "engineering",
+  "experts", "framework", "frameworks", "gateway", "gateways",
+  "generation", "info", "instruct", "judge", "learning", "linter",
+  "loop", "lost", "machine", "middle", "model", "omnibus", "open",
+  "prompt", "prompting", "prompts", "protocol", "proxy", "ranking",
+  "rankings", "reasoning", "recall", "reranker", "retrieval", "sandbox",
+  "schema", "script", "spam", "supervised", "system", "systems", "tests",
+  "the", "thinking", "ticket", "tickets", "tool", "transformer",
+  "trifecta", "workflow",
+
+  # -- Español correcto que no recoge ningún diccionario ---------------
+  "agéntico", "agénticas", "agregador", "auditable", "autocompletado",
+  "autocompletar", "autogestionado", "biometría", "carísimo",
+  "comprometible", "currículums", "depurable", "discriminativo",
+  "distractores", "enrutado", "enrutar", "exfiltración", "exfiltrar",
+  "explicabilidad", "guardarraíl", "guardarraíles", "indexables",
+  "infraentrenados", "interoperabilidad", "multiagente", "multimodal",
+  "multimodales", "percentil", "preentrenado", "preentrenamiento",
+  "prototipar", "reentrenar", "reevaluar", "refactoriza",
+  "refactorización", "reinstrumentar", "retropropagación", "rotable",
+  "subagente", "subagentes", "tipada", "tokenización", "tokenizadores",
+  "tokenizando", "triaje", "troceador",
+
+  # -- Nombres propios -------------------------------------------------
+  "anthropic", "apigee", "claude", "cloudflare", "colab", "face",
+  "foundation", "gemma", "git", "gradio", "hugging", "iraitz", "markdown",
+  "ollama", "portkey", "pydantic", "python", "qwen", "willison",
+]
