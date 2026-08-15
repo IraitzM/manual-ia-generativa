@@ -13,12 +13,6 @@ dev = [
 
 [tool.spellcheck]
 sources = ["index.qmd", "parts/**/*.qmd"]
-
-# "todos" señala una palabra solo si NINGÚN diccionario instalado la
-# reconoce. Los dos tienen lagunas distintas y cruzarlos quita muchos
-# falsos positivos: aspell rechaza "tutorial" o "resiliencia", hunspell
-# rechaza "heurística" o "milisegundos". Fijar uno solo ("aspell" o
-# "hunspell") obliga a alargar la lista de abajo en unas treinta entradas.
 backend = "todos"
 
 # Términos que ningún diccionario reconoce y que aquí son correctos.
