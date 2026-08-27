@@ -1,0 +1,119 @@
+# La interfaz del agente
+
+Hasta aquí hemos visto cómo un agente habla con sus [herramientas](herramientas.qmd) y cómo habla con [otros agentes](orquestacion.qmd#cuando-los-agentes-son-de-otros-a2a). Falta la conversación que decide si el sistema se usa o se abandona: la que tiene con **la persona**.
+
+Es un hueco curioso, porque es donde se juega casi todo. Un agente con una recuperación excelente y unas herramientas impecables no sirve de nada si el alumno no entiende de dónde sale la respuesta, no puede confirmar un trámite sin escribir tres frases o no sabe que está hablando con una máquina.
+
+## El chat es una interfaz, no *la* interfaz
+
+Que estos sistemas nacieran en una ventana de chat ha hecho que el chat parezca la forma natural de usarlos. No lo es: es la forma más barata de empezar y una de las peores para bastantes tareas.
+
+La conversación obliga a **serializar en texto** cosas que no son texto. Elegir entre dieciocho asignaturas, comparar dos calendarios, revisar una lista de solicitudes o confirmar un importe son tareas que en una pantalla se resuelven de un vistazo y en un chat se convierten en un interrogatorio por turnos.
+
+| La tarea es | En chat | Con interfaz |
+|---|---|---|
+| Contestar un dato puntual | Perfecto | Innecesario |
+| Elegir entre muchas opciones | Un interrogatorio | Un formulario |
+| Explorar datos | Imposible sin ver | Una tabla o un mapa |
+| Confirmar algo irreversible | Ambiguo | Un botón y sus consecuencias |
+| Corregir al agente a medias | Volver a empezar | Editar y seguir |
+
+: Cuándo el chat sobra y cuándo falta
+
+La cuarta fila es la que más importa y la que conecta con [los límites de un agente](queesunagente.qmd#los-límites-no-son-un-detalle). "¿Confirmas que quieres presentar la solicitud?" respondido con un "sí" en medio de una conversación es una base endeble para un acto administrativo. Un botón con el texto de la solicitud delante, no.
+
+## Los tres protocolos
+
+En 2026 el asunto se ha estandarizado en tres capas, y ayuda verlas juntas porque cada una resuelve una frontera distinta del mismo sistema.
+
+```{mermaid}
+flowchart LR
+    p["Persona"] -->|AG-UI| a["Agente"]
+    a -->|MCP| h["Herramientas"]
+    a -->|A2A| o["Agente<br/>de un tercero"]
+    h -->|MCP Apps| p
+
+    classDef externo fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef contexto fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    classDef herramienta fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    class p contexto
+    class a modelo
+    class h herramienta
+    class o externo
+```
+
+| Protocolo | Frontera | Quién lo lleva |
+|---|---|---|
+| [MCP](herramientas.qmd#mcp-el-conector-estándar) | Agente y herramientas | Anthropic, adoptado por el sector |
+| [A2A](orquestacion.qmd#cuando-los-agentes-son-de-otros-a2a) | Agente y otro agente | Linux Foundation |
+| **MCP Apps** | Herramienta y persona | Extensión oficial de MCP |
+| **AG-UI** | Agente y aplicación | CopilotKit y socios |
+
+: Las cuatro fronteras y quién las estandariza
+
+Las dos últimas son las nuevas y resuelven problemas distintos, aunque se confundan a menudo. **MCP Apps** deja que un servidor MCP entregue una interfaz junto con su herramienta. **AG-UI** estandariza el flujo continuo entre un agente y la aplicación que lo muestra. Se pueden usar juntas y ninguna implica la otra.
+
+## MCP Apps: la interfaz la sirve la herramienta
+
+La idea es tan simple como incómoda al principio: una herramienta MCP puede declarar, además de su esquema, **una interfaz propia** que el cliente renderiza en la conversación.
+
+El mecanismo son dos piezas. Un **recurso** con esquema `ui://` cuyo `mimeType` es `text/html;profile=mcp-app` y que devuelve una página HTML. Y una **herramienta** que apunta a ese recurso con `_meta.ui.resourceUri`. Cuando el modelo llama a la herramienta, el cliente busca el recurso, lo mete en un `iframe` aislado y le entrega el resultado.
+
+A partir de ahí, la interfaz y el cliente hablan por un dialecto de JSON-RPC sobre `postMessage`, con métodos propios del prefijo `ui/`. La interfaz puede pedir `ui/initialize` al arrancar, mandar `ui/message` a la conversación o `ui/update-model-context` para que el modelo se entere de lo que el usuario acaba de hacer con ella. El cliente le empuja `ui/notifications/tool-result` cuando hay datos nuevos.
+
+Lo interesante es lo que compra frente a la alternativa obvia, que sería servir una web aparte y mandar un enlace:
+
+* **No se pierde el contexto.** La interfaz vive dentro de la conversación que la ha provocado, en lugar de en una pestaña que el usuario tendrá que relacionar mentalmente con lo que estaba haciendo.
+* **Los datos van en los dos sentidos.** La interfaz puede llamar a las herramientas del servidor y el cliente le empuja resultados frescos, sin montar una API propia con su autenticación y su estado.
+* **Se apoya en lo que el cliente ya tiene conectado.** En lugar de integrar el correo, la interfaz pide "manda esto" y el cliente lo enruta por las capacidades que el usuario ya autorizó.
+
+:::{.callout-warning}
+# Ese HTML lo escribió un tercero
+
+Vale todo lo dicho en [herramientas](herramientas.qmd) sobre los servidores MCP ajenos, y sube un escalón: ahora el tercero no solo aporta texto al contexto del modelo, aporta **código que se ejecuta en el navegador de vuestro usuario**.
+
+La especificación lo trata en serio, y por eso el `iframe` está aislado del documento padre, no llega a las cookies ni al almacenamiento local, y el recurso tiene que declarar en `_meta.ui.csp` a qué dominios puede conectarse y en `permissions` qué capacidades del navegador pide (cámara, micrófono, ubicación, portapapeles).
+
+Ese aislamiento es real y está bien diseñado, y aun así la pregunta de antes sigue en pie: **¿le daríais a la persona que publicó ese servidor permiso para poner código en vuestra página?** Porque eso es lo que estáis haciendo.
+:::
+
+## AG-UI: el flujo entre el agente y la aplicación
+
+El otro problema es distinto. Un agente no produce una respuesta: produce un proceso. Piensa, llama a una herramienta, recibe algo, cambia de idea, vuelve a llamar y al final contesta. Si la aplicación solo ve el resultado, el usuario mira una ruleta durante veinte segundos sin saber si el sistema está trabajando o colgado.
+
+**AG-UI** estandariza ese chorro. La aplicación manda una petición HTTP con lo que el usuario ha escrito y el estado actual, y se queda escuchando un flujo de eventos por SSE: mensajes que se van escribiendo, llamadas a herramientas que empiezan y terminan, cambios de estado y elementos de interfaz que el agente quiere mostrar.
+
+La pieza que más cambia el diseño es el **estado compartido**: agente y aplicación sincronizan un mismo estado en los dos sentidos, en lugar de que la aplicación reconstruya lo que cree que está pasando a partir de los mensajes. Lo llevan LangGraph, Mastra y Pydantic AI, entre otros, lo cual quiere decir que si vuestro agente vive en uno de esos, la parte de la aplicación es casi configuración.
+
+Merece una mención **A2UI**, la especificación de interfaz generativa que impulsa Google: en lugar de HTML, el agente devuelve una descripción declarativa de los componentes que quiere mostrar y la aplicación decide cómo pintarlos. AG-UI la transporta, igual que transporta otras.
+
+:::{.callout-important}
+# La interfaz generativa es una superficie nueva
+
+Si el modelo decide qué se muestra, el modelo puede ser convencido de mostrar cualquier cosa. Un documento envenenado que consigue que el agente pinte un formulario de acceso pidiendo la contraseña de la universidad no es ciencia ficción: es [inyección de prompt](../seguridad/retos.qmd#inyección-de-prompt) con una superficie de salida mucho más persuasiva que un párrafo de texto.
+
+Que el agente elija **entre componentes que vosotros habéis definido** es una cosa. Que el agente escriba el HTML que se va a renderizar es otra bastante distinta, y solo la primera es defendible sin una revisión seria.
+:::
+
+## Lo que la interfaz tiene que enseñar
+
+Aquí es donde esta parte del manual se cruza con [la normativa](../normativa/leyes.qmd), y conviene verlo como requisito de diseño y no como una capa de avisos legales pegada al final.
+
+**Que es una máquina.** El deber de transparencia no se cumple con una nota en los términos de uso: se cumple al inicio de la interacción y de forma visible. Es barato si se piensa al diseñar y muy molesto si hay que meterlo cuando ya hay usuarios acostumbrados a otra cosa.
+
+**De dónde sale la respuesta.** Un sistema que cita el artículo del que sale lo que dice permite al usuario ir a comprobarlo. Uno que no, obliga a creerle. Es la diferencia entre una herramienta de consulta y un oráculo, y la [recuperación](../contexto/rag.qmd) no sirve de nada si el resultado no llega hasta la pantalla.
+
+**Qué va a pasar si confirma.** Lo [irreversible](queesunagente.qmd#los-límites-no-son-un-detalle) se aprueba en la interfaz, con el contenido delante, no en el prompt ni en la buena voluntad del modelo.
+
+**Cómo llegar a una persona.** Siempre, y sin tener que pelearse. Es además la única salida honesta cuando el sistema no está seguro, que es algo que sabe medir.
+
+## El cuaderno
+
+Monta las dos cosas de este capítulo sobre el agente de la secretaría. Primero una interfaz de chat convencional, para tener la referencia y ver qué se queda fuera de ella. Después un servidor MCP que declara un recurso `ui://` con su HTML y una herramienta que lo referencia, y comprueba contra el protocolo que el cliente recibe las dos piezas.
+
+La parte de MCP Apps se ejecuta hasta donde puede ejecutarse en un cuaderno: el `iframe` real lo pinta un cliente compatible, pero todo lo que viaja por el protocolo se puede ver y comprobar sin salir de aquí.
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/agentes/interfaz.ipynb)
+
+Con esto se cierra la parte de construcción. Lo siguiente es lo que hace falta para que esto viva en una empresa: [producción](../produccion/ecosistema.qmd).

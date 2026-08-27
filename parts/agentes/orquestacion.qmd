@@ -50,6 +50,16 @@ Antes de dibujar la arquitectura con seis agentes conviene tener presente el pre
 La regla que aplico: **un agente bien construido antes que tres mal repartidos**. La complejidad se añade cuando se ha demostrado que hace falta, no cuando se sospecha.
 :::
 
+:::{.callout-tip}
+# Los tres precios, medidos
+
+El [primer cuaderno de este capítulo](#los-cuadernos) monta las dos arquitecturas sobre el mismo caso y las mide. El reparto ahorra contexto de verdad, en torno a un tercio de los tokens, y ese ahorro se multiplica por el número de vueltas del bucle. Hasta ahí, lo esperado.
+
+Lo que no se espera es el resto. El acierto sube muy poco, y al medir por separado cada pieza aparece el motivo: el sistema se queda clavado en la fiabilidad de su enrutador, muy por debajo de lo que dan los especialistas cuando se les manda lo suyo. Un sistema en cadena no puede superar a su peor eslabón, y aquí toda la ganancia del reparto se la come el que decide.
+
+De propina, el cuaderno enseña una votación en la que los tres votantes se equivocan igual y en la que votar solo multiplica por tres el precio del mismo error.
+:::
+
 ## Frameworks
 
 El mercado se ha estabilizado en unas pocas familias con filosofías distintas. Lo importante no es cuál gana, es entender qué asume cada una y cuánto acoplamiento acepta uno a cambio.
@@ -78,9 +88,21 @@ El coste real de un framework no es aprenderlo, es abandonarlo. Antes de comprom
 3. **¿Cuánto código habría que reescribir para cambiar de modelo o de framework?** Si la lógica de negocio vive dentro de las abstracciones del framework, la respuesta es "todo".
 :::
 
+:::{.callout-warning}
+# La tercera pregunta, respondida por las malas
+
+El [segundo cuaderno de este capítulo](#los-cuadernos) monta el mismo agente tres veces, y la comparación acaba en otro sitio del previsto. Al enchufar un modelo local al atajo que trae el framework para montar agentes, no salta ninguna excepción: la lista de llamadas a herramientas llega vacía y el modelo contesta de memoria, con los marcadores de la plantilla dentro de la respuesta.
+
+Un agente montado así parece funcionar. Contesta, suena razonable y nunca consulta nada. Nadie se entera hasta que alguien comprueba una fecha.
+
+La lección que deja es la que no aparece en ningún tutorial: **el acoplamiento de un framework no está en su API, sino en qué modelos ha probado de verdad**. Mientras se use un proveedor grande todo encaja; en cuanto se sale de ahí aparece el trabajo que la abstracción prometía ahorrar.
+
+Declarando el grafo a mano y metiendo dentro la propia función de llamada al modelo, el mismo framework sí aporta lo que se le pide: estado persistente, historial recorrible y flujo explícito. Que es, exactamente, la lista de "lo que sí conviene no reescribir" de más arriba.
+:::
+
 ## Cuando los agentes son de otros: A2A
 
-MCP resuelve cómo un agente habla con **herramientas**. Queda la otra mitad: cómo un agente habla con **otro agente** que no controlamos, hecho por otro equipo o por otra empresa, con otro framework.
+MCP resuelve cómo un agente habla con **herramientas**. Queda cómo habla con **otro agente** que no controlamos, hecho por otro equipo o por otra empresa, con otro framework. (Y queda una tercera frontera, la de cómo habla con la **persona**, que tiene [capítulo propio](interfaz.qmd) porque da para más de lo que parece.)
 
 Ese es el hueco que ocupa **A2A** (_Agent2Agent_), donado a la Linux Foundation y con adopción amplia. Su pieza central es la _agent card_: un documento donde un agente declara qué sabe hacer, cómo se le invoca y cómo se autentica. Con eso, un agente puede descubrir a otro y delegarle una tarea sin que ninguno sepa nada de las tripas del otro.
 
@@ -105,4 +127,16 @@ En 2026 esto es más promesa que realidad cotidiana: la interoperabilidad entre 
 Nótese el color del diagrama: el agente de un tercero es **gris**. No controlamos su modelo, ni sus instrucciones, ni lo que le hayan inyectado. Todo lo que devuelva es contenido no confiable que entra en nuestro contexto, con las implicaciones que veremos en [seguridad](../seguridad/retos.qmd).
 :::
 
-Con esto se cierra la parte de construcción. Lo siguiente es lo que hace falta para que esto viva en una empresa: [producción](../produccion/ecosistema.qmd).
+## Los cuadernos
+
+Este capítulo tiene dos, uno por cada mitad.
+
+**El de orquestación** coge el problema que dejó abierto el capítulo anterior, el agente con doce herramientas que se atragantaba, y prueba a repartirlas entre tres especialistas con un enrutador delante. Mide las dos arquitecturas y además el **techo** de la segunda: qué daría si el enrutador nunca se equivocase. Esa tercera medida es la que enseña dónde está el problema de verdad.
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/agentes/orquestacion.ipynb)
+
+**El de frameworks** monta el mismo agente tres veces: a mano, con el atajo que trae el framework y con el grafo declarado explícitamente. Termina contestando las tres preguntas del recuadro de más arriba con código delante en lugar de con impresiones, y con una respuesta a la tercera que no esperaba encontrar.
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/agentes/frameworks.ipynb)
+
+Quedan las herramientas, los agentes ajenos... y la persona, que es la frontera de la que todavía no hemos dicho nada: [la interfaz del agente](interfaz.qmd).

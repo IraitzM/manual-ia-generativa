@@ -107,4 +107,16 @@ Una heurística que ha ganado tracción y que resume bien el asunto: un agente q
 Cuando el caso de uso exige las tres, la respuesta correcta no es un prompt más cuidadoso: es una persona aprobando la acción de salida.
 :::
 
+## El cuaderno
+
+Monta un servidor MCP de la secretaría y lo enchufa al agente del capítulo anterior, que no nota la diferencia. Pero lo que mide no es MCP, sino las dos afirmaciones de más arriba que suenan a consejo y resultan ser aritmética.
+
+**Menos herramientas de las que pensáis.** Con tres bien descritas el agente acierta ocho de nueve. Añadiendo nueve más, todas plausibles y del mismo dominio, sin tocar las tres originales, el acierto se hunde a tres de nueve y el coste fijo de las definiciones se triplica. Ese coste se paga en cada vuelta del bucle.
+
+**La descripción es el contrato.** Las mismas tres herramientas, con los nombres internos del sistema y descripciones vagas, pierden la mitad del acierto al mismo precio en tokens.
+
+De propina enseña, en cinco líneas, que la descripción de un servidor de terceros acaba literalmente dentro de vuestro prompt de sistema, con la misma autoridad que vuestras propias instrucciones.
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/agentes/herramientas-y-mcp.ipynb)
+
 Un agente con buenas herramientas ya resuelve mucho. Cuando no basta, la pregunta es cómo repartir el trabajo: [orquestación](orquestacion.qmd).

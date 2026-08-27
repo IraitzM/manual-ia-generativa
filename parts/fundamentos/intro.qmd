@@ -49,7 +49,7 @@ Aun así, hay dos secciones que merecen una lectura aunque el resto sobre: [cuá
 
 ## Con las manos
 
-Esta es la parte del manual con más código, y no por casualidad: son conceptos que se entienden ejecutándolos. Los tres cuadernos que la acompañan viven en [`notebooks/`](https://github.com/IraitzM/manual-ia-generativa/tree/main/notebooks) y están descritos en [el apéndice correspondiente](../apendices/cuadernos.qmd).
+Esta es la parte del manual con más código, y no por casualidad: son conceptos que se entienden ejecutándolos. Los tres cuadernos que la acompañan viven en [`notebooks/`](https://github.com/IraitzM/manual-ia-generativa/tree/main/notebooks) y se abren en Colab desde el final de [su capítulo](nlp.qmd#el-cuaderno-un-problema-cuatro-épocas).
 
 Los fragmentos que aparecen en los capítulos no se ejecutan al construir el libro, para que renderizarlo no exija descargar media biblioteca de aprendizaje profundo. Están ahí para leerse, y sus salidas están pegadas a mano tal como salieron. Si queréis verlos correr, ese es el sitio de los cuadernos.
 

@@ -66,6 +66,14 @@ Para la recuperación basta con lo de siempre en recuperación de información: 
 
 : Diagnóstico rápido
 
+:::{.callout-tip}
+# Hay un cuaderno que hace exactamente esto
+
+El [cuaderno de este capítulo](#el-cuaderno) monta el sistema completo sobre la normativa de la secretaría y lo mide con diez preguntas escritas como las escribiría un alumno. Los números que salen son elocuentes: la búsqueda vectorial acierta 6 de 10, la léxica otras 6, y la combinación de ambas 8. Es la misma mejora de la que habla la sección siguiente, pero medida en lugar de afirmada.
+
+De propina enseña dos cosas que cuesta creerse sin verlas. Que al preguntar por el artículo 21 la búsqueda vectorial devuelve el artículo 1. Y que el troceado, sobre el que se escribe muchísimo, apenas mueve la aguja comparado con la búsqueda híbrida, que son cinco líneas de código.
+:::
+
 ## Las variantes que importan
 
 Sobre el esquema básico hay una fauna considerable de siglas. Tres merecen atención por resolver problemas que el pipeline simple no resuelve:
@@ -95,5 +103,13 @@ Un índice vectorial construido volcando "todo el SharePoint" es una fuga de dat
 
 El filtrado por permisos tiene que aplicarse **en la consulta al índice**, con los metadatos de cada fragmento y la identidad de quien pregunta. Filtrar después, o pedírselo al modelo en el prompt, no es un control de acceso. Volveremos sobre ello en [seguridad](../seguridad/defensas.qmd).
 :::
+
+## El cuaderno
+
+Es el más largo del manual y el que más se parece a un problema real. Su gracia no es montar un RAG, que se hace en veinte líneas, sino **medirlo**: al final hay una tabla con qué preguntas acierta cada tipo de búsqueda, y en ella se ve que la vectorial y la léxica fallan en cosas distintas y que combinarlas las arregla casi todas. También se ve, sin adornos, que quedan preguntas que no acierta ninguna.
+
+Por el camino guarda los vectores en un índice que es solo un fichero, sin servidor ni cuenta que crear, y se detiene en algo que casi nunca se cuenta: que con los vectores sin normalizar el coseno y el producto escalar ordenan distinto, y uno de los dos se equivoca.
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/contexto/rag.ipynb)
 
 Hasta aquí, el modelo lee. En la siguiente parte empieza a actuar: [los agentes](../agentes/queesunagente.qmd).

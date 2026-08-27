@@ -121,7 +121,7 @@ La consecuencia práctica es la que sostiene buena parte del manual: desde enton
 
 ## El gato con plumas
 
-Hay un experimento que enseña la diferencia entre las dos familias mejor que cualquier tabla, y es el que monta [el cuaderno de visión](../apendices/cuadernos.qmd). Consiste en fabricar una imagen quimérica, un gato con plumaje de periquito, y pedirle a las dos arquitecturas que la clasifiquen.
+Hay un experimento que enseña la diferencia entre las dos familias mejor que cualquier tabla, y es el que monta [el cuaderno de visión](#los-cuadernos). Consiste en fabricar una imagen quimérica, un gato con plumaje de periquito, y pedirle a las dos arquitecturas que la clasifiquen.
 
 ```{python}
 from transformers import AutoImageProcessor, AutoModelForImageClassification
@@ -158,12 +158,24 @@ La quinta, la mezcla de expertos, es la que explica una cifra que confunde a muc
 
 Conviene saber que la lista no se cierra ahí. Las cinco piezas de la tabla siguen dando por buena la atención del artículo original, y desde 2025 hay modelos que ni eso: sustituyen la mayoría de sus capas de atención por un estado recurrente de tamaño fijo para que la caché deje de crecer. Eso ya no es historia sino presente, así que se cuenta donde toca, en [esquivar el cuadrado](../modelos/transformers.qmd#esquivar-el-cuadrado).
 
-[El cuaderno de arquitectura](../apendices/cuadernos.qmd) monta esas cinco piezas en unas doscientas líneas de PyTorch, sin entrenar nada, y mide lo que ocupa cada una. Ver la caché KV crecer en pantalla al alargar el contexto explica el resto del manual mejor que cualquier párrafo.
+[El cuaderno de arquitectura](#los-cuadernos) monta esas cinco piezas en unas doscientas líneas de PyTorch, sin entrenar nada, y mide lo que ocupa cada una. Ver la caché KV crecer en pantalla al alargar el contexto explica el resto del manual mejor que cualquier párrafo.
 
 :::{.callout-tip}
 # La comparación que merece la pena hacer
 
 Si solo hacéis un experimento de este capítulo, que sea calcular el tamaño de la caché KV con atención normal y con atención agrupada para el mismo modelo y el mismo contexto. Es una división, cabe en tres líneas, y es la razón por la que hoy se puede servir un contexto de 128.000 tokens sin arruinarse.
 :::
+
+## Los cuadernos
+
+Este capítulo tiene dos, y son bastante distintos entre sí.
+
+**El de visión** es el más visual de todo el manual. Fabrica la imagen con la forma de una cosa y la textura de otra, se la enseña a las dos arquitecturas y compara cómo se equivocan. De propina dibuja los mapas de atención del transformer, que es la forma más directa de ver qué significa "atender" sin una sola ecuación.
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/modelos/vision-y-atencion.ipynb)
+
+**El de arquitectura** no entrena nada y aun así es el que más cambia la perspectiva, porque pone números a lo que en el texto son adjetivos. Ver la caché KV pasar de 24 a 3 gigabytes al agrupar las cabezas explica de golpe por qué los modelos actuales están hechos como están.
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/modelos/qwen-desde-cero.ipynb)
 
 Con esto ya está el terreno preparado. Sabemos cómo se representa el texto y por qué la arquitectura es la que es; toca ver qué ocurre cuando esa arquitectura se entrena para generar, que es [donde empieza la parte de modelos generativos](../modelos/mlgenerativa.qmd).

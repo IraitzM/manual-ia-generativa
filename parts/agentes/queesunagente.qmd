@@ -123,4 +123,14 @@ No suele ser el modelo. Suele ser que nadie definió qué significaba que funcio
 De ahí que la mitad de este manual hable de [evaluación](../produccion/evaluacion.qmd), [observabilidad](../produccion/observabilidad.qmd) y [gobierno](../normativa/leyes.qmd). No por prudencia, sino porque es ahí donde se decide.
 :::
 
+## El cuaderno
+
+Escribe el bucle de arriba entero, sin ninguna librería de agentes, en cuarenta líneas. La razón de hacerlo a mano no es el ascetismo: es que cuando aparezcan los frameworks conviene saber exactamente qué están haciendo por vosotros, porque lo que abstraen es justo eso.
+
+Sobre esas cuarenta líneas comprueba tres cosas que este capítulo afirma. Que el modelo no ejecuta nada, contando las filas de la tabla antes y después. Que el coste crece con el cuadrado de las vueltas, sumando los tokens de entrada de cada una. Y que los límites no son un refinamiento, viendo qué pasa cuando se quitan.
+
+Termina con un experimento que conviene hacer antes de poner un agente delante de nadie: suavizar una frase del prompt de sistema, de una forma que parece inocua y hasta más completa, y ver cómo el agente **deja de usar las herramientas** y empieza a contestar de memoria.
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/agentes/bucle-a-mano.ipynb)
+
 Empecemos por lo que le da capacidad de actuar: [las herramientas](herramientas.qmd).

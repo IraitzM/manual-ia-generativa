@@ -11,12 +11,12 @@ book:
   cover-image: logo-noback.png
   favicon: cover-removebg-preview.png
   site-url: https://iraitzm.github.io/manual-ia-generativa/
-  repo-url: https://github.com/IraitzM/manual-ia-generativa
+  #repo-url: https://github.com/IraitzM/manual-ia-generativa
   author: "Iraitz Montalbán"
   date: today
   page-navigation: true
   search: true
-  sharing: [linkedin]
+  #sharing: [linkedin]
   sidebar:
     collapse-level: 1
     content: auto
@@ -58,6 +58,7 @@ book:
       - parts/agentes/queesunagente.qmd
       - parts/agentes/herramientas.qmd
       - parts/agentes/orquestacion.qmd
+      - parts/agentes/interfaz.qmd
 
     - part: "Producción"
       chapters:
@@ -75,7 +76,6 @@ book:
     - parts/referencias.qmd
 
   appendices:
-    - parts/apendices/cuadernos.qmd
     - parts/apendices/copilotos.qmd
     - parts/apendices/glosario.qmd
 

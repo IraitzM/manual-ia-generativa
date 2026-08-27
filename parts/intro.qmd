@@ -64,4 +64,12 @@ Si venís del mundo del dato o del desarrollo y lo que queréis es construir, la
 
 Y si el interés es entender de verdad qué está pasando, entonces sí: empezad por [los fundamentos](fundamentos/intro.qmd), que es donde se cuenta de dónde viene cada pieza, y seguid por [los modelos generativos](modelos/mlgenerativa.qmd), donde se explica por qué un sistema que no sabe nada de nada resulta ser tan útil.
 
-La primera parte es además la única con [cuadernos](apendices/cuadernos.qmd) pensados para ejecutarse de principio a fin. Quien prefiera empezar tocando puede ir directamente a ellos y volver al texto cuando algo no encaje.
+Sea cual sea la ruta, varios capítulos terminan con un **cuaderno** que se abre en Colab de un clic y ejecuta lo que el capítulo acaba de explicar. No son ilustraciones: montan la cosa y luego la miden contra un conjunto de casos, y unas cuantas veces el resultado contradice lo que uno esperaba. Quien prefiera empezar tocando puede ir directamente al final del capítulo que le interese y volver al texto cuando algo no encaje.
+
+:::{.callout-note}
+# Qué esperar de los cuadernos
+
+Usan modelos pequeños a propósito, para que quepan en la memoria gratuita de Colab y no hagan falta credenciales de ningún proveedor. Sus respuestas son mediocres comparadas con las de cualquier asistente comercial, y eso es deliberado: con un modelo grande casi todo funciona a la primera y no se aprende nada. **Si algo sale peor de lo que esperabais, probablemente esté funcionando bien.**
+
+Conviene saber también que los cuadernos envejecen antes que el texto. Un capítulo que explica por qué existe la caché KV seguirá siendo válido dentro de tres años; una celda que llama a una librería con unos parámetros concretos puede romperse en tres meses. Si algo falla, mirad la versión de la librería antes que la lógica del ejemplo.
+:::

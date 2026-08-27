@@ -66,6 +66,16 @@ flowchart LR
     class ev,ok,prod control
 ```
 
+:::{.callout-tip}
+# Todo esto está medido en un cuaderno
+
+El [cuaderno de este capítulo](#el-cuaderno) coge la tarea del recuadro de arriba, la de clasificar la consulta del alumno, y le pasa veinte casos etiquetados a cuatro versiones del prompt. Los resultados confirman unas cosas y matizan otras.
+
+Confirman que el formato explícito es la mejora más barata que existe: sin él, ninguna de las veinte salidas es siquiera una categoría válida. Confirman que los ejemplos equilibrados suben mucho el acierto y que los desequilibrados lo bajan, tal y como se acaba de decir arriba.
+
+Y añaden dos cosas que cuesta creerse sin verlas. La primera es que conviene mirar el reparto de las respuestas y no solo el porcentaje de acierto: un prompt correcto puede tener un acierto decente y no estar clasificando nada, porque responde casi siempre lo mismo. La segunda es que **invertir el orden de las categorías en el prompt cambia por completo cuál es esa respuesta por defecto**, sin tocar una coma del resto. Es un experimento de dos minutos que conviene hacer sobre los prompts propios.
+:::
+
 :::{.callout-warning}
 # El bucle de la desesperación
 
@@ -88,4 +98,12 @@ Vale la pena reconocer el techo. Un prompt, por bueno que sea, no puede aportar 
 
 : Cuándo dejar de retocar y cambiar de herramienta
 
-La primera fila es la más común con diferencia, y lleva directamente al [siguiente capítulo](rag.qmd).
+## El cuaderno
+
+Es el que más incomoda de los del manual, porque casi todo lo que mide sale peor de lo esperado. Un prompt razonable, con su rol y su formato y sus límites, clasifica mal doce de veinte consultas. Y al mirar el reparto de las respuestas resulta que ni siquiera está clasificando: contesta casi siempre lo mismo y acierta cuando toca.
+
+Sobre esa base compara cuatro versiones del prompt, mide qué aporta cada ingrediente y termina enchufando el clasificador a las herramientas que responderían de verdad. El experimento que más rinde es el más corto: invertir el orden de las categorías y ver cómo cambia el reparto entero sin tocar una coma del resto.
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/contexto/prompting.ipynb)
+
+La primera fila de la tabla es la más común con diferencia, y lleva directamente al [siguiente capítulo](rag.qmd).

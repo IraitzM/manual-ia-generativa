@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "Manual de referencias sobre IA generativa"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "duckdb>=1.5.5",
+]
 
 [dependency-groups]
 dev = [
@@ -29,7 +31,7 @@ words = [
   "experts", "framework", "frameworks", "gated", "gateway", "gateways",
   "generation", "guide", "info", "instruct", "judge", "learning", "linter",
   "loop", "lost", "machine", "middle", "model", "next", "omnibus", "open",
-  "prompt", "prompting", "prompts", "protocol", "proxy", "ranking",
+  "apps", "prompt", "prompting", "prompts", "protocol", "proxy", "ranking",
   "rankings", "reasoning", "recall", "reranker", "retrieval", "sandbox",
   "schema", "script", "sentence", "spam", "stemming", "stopwords",
   "supervised", "system", "systems", "tests", "the", "thinking",
@@ -47,14 +49,15 @@ words = [
   "infraentrenados", "interoperabilidad", "invarianza", "megabytes",
   "multiagente", "multimodal", "multimodales", "percentil",
   "preentrenado", "preentrenamiento", "prototipar", "reentrenar",
-  "reevaluar", "refactoriza", "refactorización", "reinstrumentar",
-  "renderizarlo", "retropropagación", "rotable", "subagente",
+  "cookies", "enruta", "recorrible", "reevaluar", "refactoriza", "refactorización",
+  "reinstrumentar", "renderiza", "renderizar", "renderizarlo",
+  "retropropagación", "rotable", "serializar", "subagente",
   "subagentes", "tipada", "tokenización", "tokenizadores", "tokenizando",
   "tokenizar", "triaje", "troceador", "ventanita",
 
   # -- Nombres propios -------------------------------------------------
   "anthropic", "apigee", "claude", "cloudflare", "colab", "face",
   "firth", "foundation", "gemma", "git", "gradio", "grootendorst",
-  "hugging", "iraitz", "kimi", "maarten", "markdown", "ollama",
+  "hugging", "iraitz", "kimi", "maarten", "markdown", "mastra", "ollama",
   "portkey", "pydantic", "python", "qwen", "raschka", "willison",
 ]

@@ -4,6 +4,8 @@ cfgv==3.5.0
     # via pre-commit
 distlib==0.4.0
     # via virtualenv
+duckdb==1.5.5
+    # via manual-ia-gen
 filelock==3.24.3
     # via virtualenv
 identify==2.6.16

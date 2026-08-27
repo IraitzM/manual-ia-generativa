@@ -8,8 +8,9 @@ Publicado en [iraitzm.github.io/manual-ia-generativa](https://iraitzm.github.io/
 
 | Componente | Qué es | Por dónde empezar |
 |---|---|---|
-| **El manual** | El libro en sí, cinco partes y tres apéndices | [`index.qmd`](index.qmd) o el [sitio publicado](https://iraitzm.github.io/manual-ia-generativa/) |
-| **Los cuadernos** | Material de formación ejecutable en Colab | [`notebooks/`](notebooks/) y el [apéndice que los describe](parts/apendices/cuadernos.qmd) |
+| **El manual** | El libro en sí, seis partes y dos apéndices | [`index.qmd`](index.qmd) o el [sitio publicado](https://iraitzm.github.io/manual-ia-generativa/) |
+| **Los cuadernos** | Ejecutables en Colab, uno o dos al final de cada capítulo que los tiene | [`notebooks/`](notebooks/) |
+| **El dominio** | El caso que recorre el manual: la secretaría académica | [`data/secretaria/`](data/secretaria/README.md) |
 
 El contenido vive en [`parts/`](parts/) y el índice de capítulos está en [`_quarto.yaml`](_quarto.yaml):
 
@@ -21,7 +22,7 @@ El contenido vive en [`parts/`](parts/) y el índice de capítulos está en [`_q
 | Agentes | [`parts/agentes/`](parts/agentes/) | Bucle de agente, herramientas y MCP, orquestación y frameworks |
 | Producción | [`parts/produccion/`](parts/produccion/) | Ecosistema, gateways, evaluación y observabilidad |
 | Normativa y seguridad | [`parts/seguridad/`](parts/seguridad/), [`parts/normativa/`](parts/normativa/) | Inyección de prompt, defensas y AI Act |
-| Apéndices | [`parts/apendices/`](parts/apendices/) | Cuadernos, copilotos y método, glosario |
+| Apéndices | [`parts/apendices/`](parts/apendices/) | Copilotos y método, glosario |
 
 ## Convenciones
 
@@ -31,9 +32,33 @@ Dos cosas que conviene respetar al escribir un capítulo nuevo:
 
 **Las citas van al `.bib`.** Los trabajos citados están en [`parts/references.bib`](parts/references.bib) y se referencian con `[@clave]`. Los estándares y marcos que cambian de versión (OWASP, MCP, AI Act) se enlazan a su documentación, no se citan.
 
-**Los cuadernos se versionan sin salidas.** Los `.ipynb` de [`notebooks/`](notebooks/) se confirman con las celdas sin ejecutar, para que no crezcan hasta pesar megabytes ni ensucien los diffs. Cada uno se abre en Colab desde el badge del [apéndice de cuadernos](parts/apendices/cuadernos.qmd).
+**Los cuadernos van al final de su capítulo.** Cada uno se enlaza desde una sección `## El cuaderno` al cierre del capítulo que lo usa, justo antes de la línea que lleva al siguiente. No hay un índice central: el cuaderno pertenece a su capítulo.
+
+**Los cuadernos se versionan sin salidas.** Los `.ipynb` de [`notebooks/`](notebooks/) se confirman con las celdas sin ejecutar, para que no crezcan hasta pesar megabytes ni ensucien los diffs.
 
 **El código de los capítulos no se ejecuta.** Los dos capítulos con código llevan `execute: enabled: false` en su cabecera y sus salidas están pegadas a mano, para que renderizar el libro no exija descargar `torch` ni modelos. Lo ejecutable vive en los cuadernos.
+
+## Los cuadernos
+
+La vía recomendada es **Google Colab**, y para eso está el badge al final de cada capítulo: abre el cuaderno directamente desde el repositorio, sin instalar nada. Se ejecuta la primera celda, que trae las dependencias y el dominio, y a partir de ahí va todo seguido.
+
+Los cuadernos descargan modelos de Hugging Face, así que la primera ejecución tarda unos minutos. Ninguno exige GPU.
+
+En local, sin tocar las dependencias del libro:
+
+```bash
+uv run --with jupyter jupyter lab
+```
+
+Al contribuir un cambio, hay que limpiar las salidas antes de confirmarlo:
+
+```bash
+uv run --with nbstripout nbstripout notebooks/**/*.ipynb
+```
+
+Los modelos que usan son pequeños a propósito, para que quepan en la memoria gratuita de Colab. Sus salidas son mediocres comparadas con las de cualquier asistente comercial, y eso es deliberado: se trata de ver el mecanismo, no de obtener la mejor respuesta.
+
+Un aviso de mantenimiento: **los cuadernos envejecen antes que el texto**. Un capítulo que explica por qué existe la caché KV seguirá siendo válido dentro de tres años; una celda que llama a una librería con unos parámetros concretos puede romperse en tres meses. Si algo falla, mirad primero la versión de la librería y la firma de la función antes que la lógica del ejemplo.
 
 ## Renderizarlo en local
 

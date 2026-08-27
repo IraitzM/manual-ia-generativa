@@ -179,12 +179,16 @@ Donde el generativo gana de calle es en lo contrario: tareas que no se pueden en
 
 Hay un matiz que conviene anotar aquí porque reaparece en [recuperación](../contexto/rag.qmd): la búsqueda por palabras y la semántica **no compiten, se suman**. Los sistemas serios combinan las dos, porque la semántica falla justo donde la léxica brilla, que es con nombres propios, códigos y números de expediente que el modelo nunca vio.
 
-## Un problema, cuatro épocas
+## El cuaderno: un problema, cuatro épocas
 
-El [cuaderno de este capítulo](../apendices/cuadernos.qmd) monta el experimento entero sobre el mismo conjunto de consultas: reglas, TF-IDF con una regresión logística encima, embeddings con un clasificador y un modelo generativo con instrucciones. Mide el acierto y la latencia de las cuatro.
+El cuaderno de este capítulo monta el experimento entero sobre el mismo conjunto de consultas: reglas, TF-IDF con una regresión logística encima, embeddings con un clasificador y un modelo generativo con instrucciones. Mide el acierto y la latencia de las cuatro.
 
 No pongo aquí los números porque dependen del conjunto de datos y envejecerían mal, pero sí la forma del resultado, que es estable y llamativa: **la curva de acierto se aplana mucho antes que la de coste**. Del primer al segundo enfoque el salto es grande. Del tercero al cuarto el acierto sube poco o nada y la latencia se multiplica por cientos, que en una API se traduce directamente en factura.
 
 Esa forma es el argumento de fondo de esta parte del manual. Saber de dónde viene cada pieza sirve, sobre todo, para no pagar por la última cuando la penúltima resolvía el problema.
+
+De propina, el cuaderno desmonta dos ideas bastante extendidas. La primera, que todo esto empezó en 2022: buena parte de la maquinaria (vectorizar texto, medir similitud, clasificar) lleva décadas funcionando. La segunda, que un modelo grande es siempre la respuesta. Al ver los cuatro enfoques medidos sobre las mismas consultas se entiende de otra manera [la tabla de qué compensa según el problema](#lo-que-no-ha-muerto).
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/nlp/evolucion-lenguaje.ipynb)
 
 Con el texto ya convertido en vectores, queda entender por qué la arquitectura que los calcula acabó siendo la que es. Eso es [el siguiente capítulo](redes.qmd).
