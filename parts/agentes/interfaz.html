@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Apéndice A — Cuadernos – Manual de IA Generativa</title>
+<title>12&nbsp; La interfaz del agente – Manual de IA Generativa</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,41 +26,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -71,8 +36,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../parts/apendices/copilotos.html" rel="next">
-<link href="../../parts/referencias.html" rel="prev">
+<link href="../../parts/produccion/ecosistema.html" rel="next">
+<link href="../../parts/agentes/orquestacion.html" rel="prev">
 <link href="../../cover-removebg-preview.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -111,9 +76,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Buscar"
   }
 }</script>
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
-<meta property="og:title" content="Apéndice A — Cuadernos – Manual de IA Generativa">
+<meta property="og:title" content="12&nbsp; La interfaz del agente – Manual de IA Generativa">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/manual-ia-generativa/logo-noback.png">
 <meta property="og:site_name" content="Manual de IA Generativa">
@@ -130,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/apendices/cuadernos.html">Apéndices</a></li><li class="breadcrumb-item"><a href="../../parts/apendices/cuadernos.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Cuadernos</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/agentes/queesunagente.html">Agentes</a></li><li class="breadcrumb-item"><a href="../../parts/agentes/interfaz.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">La interfaz del agente</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -146,10 +114,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../../">Manual de IA Generativa</a> 
-        <div class="sidebar-tools-main">
-    <a href="https://github.com/IraitzM/manual-ia-generativa" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
-    <a href="https://www.linkedin.com/sharing/share-offsite/?url=|url|" title="LinkedIn" class="quarto-navigation-tool px-1" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-</div>
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -254,13 +218,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
  <span class="menu-text">Agentes</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../parts/agentes/queesunagente.html" class="sidebar-item-text sidebar-link">
@@ -279,6 +243,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Orquestación y frameworks</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../parts/agentes/interfaz.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">La interfaz del agente</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -293,25 +263,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../parts/produccion/ecosistema.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Ecosistema productivo</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Ecosistema productivo</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../parts/produccion/gateways.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Gateways</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Gateways</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../parts/produccion/evaluacion.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Evaluación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Evaluación</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../parts/produccion/observabilidad.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Observabilidad y coste</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Observabilidad y coste</span></span></a>
   </div>
 </li>
       </ul>
@@ -328,19 +298,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../parts/seguridad/retos.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Seguridad</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Seguridad</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../parts/seguridad/defensas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Defensas</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Defensas</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../parts/normativa/leyes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normativa</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Normativa</span></span></a>
   </div>
 </li>
       </ul>
@@ -353,29 +323,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
  <span class="menu-text">Apéndices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../parts/apendices/cuadernos.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Cuadernos</span></span></a>
-  </div>
-</li>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../parts/apendices/copilotos.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Copilotos y método</span></span></a>
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Copilotos y método</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../parts/apendices/glosario.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Glosario</span></span></a>
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Glosario</span></span></a>
   </div>
 </li>
       </ul>
@@ -390,18 +354,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#qué-hay" id="toc-qué-hay" class="nav-link active" data-scroll-target="#qué-hay"><span class="header-section-number">A.1</span> Qué hay</a></li>
-  <li><a href="#por-qué-merecen-el-rato" id="toc-por-qué-merecen-el-rato" class="nav-link" data-scroll-target="#por-qué-merecen-el-rato"><span class="header-section-number">A.2</span> Por qué merecen el rato</a></li>
-  <li><a href="#cómo-ejecutarlos" id="toc-cómo-ejecutarlos" class="nav-link" data-scroll-target="#cómo-ejecutarlos"><span class="header-section-number">A.3</span> Cómo ejecutarlos</a></li>
+  <li><a href="#el-chat-es-una-interfaz-no-la-interfaz" id="toc-el-chat-es-una-interfaz-no-la-interfaz" class="nav-link active" data-scroll-target="#el-chat-es-una-interfaz-no-la-interfaz"><span class="header-section-number">12.1</span> El chat es una interfaz, no <em>la</em> interfaz</a></li>
+  <li><a href="#los-tres-protocolos" id="toc-los-tres-protocolos" class="nav-link" data-scroll-target="#los-tres-protocolos"><span class="header-section-number">12.2</span> Los tres protocolos</a></li>
+  <li><a href="#mcp-apps-la-interfaz-la-sirve-la-herramienta" id="toc-mcp-apps-la-interfaz-la-sirve-la-herramienta" class="nav-link" data-scroll-target="#mcp-apps-la-interfaz-la-sirve-la-herramienta"><span class="header-section-number">12.3</span> MCP Apps: la interfaz la sirve la herramienta</a></li>
+  <li><a href="#ag-ui-el-flujo-entre-el-agente-y-la-aplicación" id="toc-ag-ui-el-flujo-entre-el-agente-y-la-aplicación" class="nav-link" data-scroll-target="#ag-ui-el-flujo-entre-el-agente-y-la-aplicación"><span class="header-section-number">12.4</span> AG-UI: el flujo entre el agente y la aplicación</a></li>
+  <li><a href="#lo-que-la-interfaz-tiene-que-enseñar" id="toc-lo-que-la-interfaz-tiene-que-enseñar" class="nav-link" data-scroll-target="#lo-que-la-interfaz-tiene-que-enseñar"><span class="header-section-number">12.5</span> Lo que la interfaz tiene que enseñar</a></li>
+  <li><a href="#el-cuaderno" id="toc-el-cuaderno" class="nav-link" data-scroll-target="#el-cuaderno"><span class="header-section-number">12.6</span> El cuaderno</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/apendices/cuadernos.html">Apéndices</a></li><li class="breadcrumb-item"><a href="../../parts/apendices/cuadernos.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Cuadernos</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/agentes/queesunagente.html">Agentes</a></li><li class="breadcrumb-item"><a href="../../parts/agentes/interfaz.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">La interfaz del agente</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Apéndice A — Cuadernos</h1>
+<h1 class="title"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">La interfaz del agente</span></h1>
 </div>
 
 
@@ -418,98 +385,180 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>El manual explica conceptos; los cuadernos los tocan. Viven en <a href="https://github.com/IraitzM/manual-ia-generativa/tree/main/notebooks"><code>notebooks/</code></a> del repositorio, están pensados para ejecutarse en Google Colab sin instalar nada y provienen de material de formación, así que dejan cosas a medias a propósito: unos con ejercicios numerados y otros con preguntas sueltas por el camino.</p>
-<p>No hace falta seguirlos en orden ni hacerlos todos. Lo que sí conviene es hacer alguno, porque hay cosas (lo que cambia la temperatura, lo que ocupa de verdad una caché KV) que se entienden en cinco minutos de ejecución y no en cinco páginas de explicación.</p>
-<section id="qué-hay" class="level2" data-number="A.1">
-<h2 data-number="A.1" class="anchored" data-anchor-id="qué-hay"><span class="header-section-number">A.1</span> Qué hay</h2>
+<p>Hasta aquí hemos visto cómo un agente habla con sus <a href="../../parts/agentes/herramientas.html">herramientas</a> y cómo habla con <a href="../../parts/agentes/orquestacion.html#cuando-los-agentes-son-de-otros-a2a">otros agentes</a>. Falta la conversación que decide si el sistema se usa o se abandona: la que tiene con <strong>la persona</strong>.</p>
+<p>Es un hueco curioso, porque es donde se juega casi todo. Un agente con una recuperación excelente y unas herramientas impecables no sirve de nada si el alumno no entiende de dónde sale la respuesta, no puede confirmar un trámite sin escribir tres frases o no sabe que está hablando con una máquina.</p>
+<section id="el-chat-es-una-interfaz-no-la-interfaz" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="el-chat-es-una-interfaz-no-la-interfaz"><span class="header-section-number">12.1</span> El chat es una interfaz, no <em>la</em> interfaz</h2>
+<p>Que estos sistemas nacieran en una ventana de chat ha hecho que el chat parezca la forma natural de usarlos. No lo es: es la forma más barata de empezar y una de las peores para bastantes tareas.</p>
+<p>La conversación obliga a <strong>serializar en texto</strong> cosas que no son texto. Elegir entre dieciocho asignaturas, comparar dos calendarios, revisar una lista de solicitudes o confirmar un importe son tareas que en una pantalla se resuelven de un vistazo y en un chat se convierten en un interrogatorio por turnos.</p>
 <table class="caption-top table">
-<caption>Los cuadernos y por dónde entran en el manual</caption>
+<caption>Cuándo el chat sobra y cuándo falta</caption>
 <thead>
 <tr class="header">
-<th>Cuaderno</th>
-<th>De qué va</th>
-<th>Capítulo</th>
-<th>Abrir</th>
+<th>La tarea es</th>
+<th>En chat</th>
+<th>Con interfaz</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>nlp/evolucion-lenguaje</code></td>
-<td>El mismo problema de clasificación resuelto cuatro veces: reglas, TF-IDF, embeddings y un modelo generativo, midiendo acierto y latencia de los cuatro</td>
-<td><a href="../../parts/fundamentos/nlp.html">Del texto a los vectores</a></td>
-<td><a href="https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/nlp/evolucion-lenguaje.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid" alt="Abrir en Colab"></a></td>
+<td>Contestar un dato puntual</td>
+<td>Perfecto</td>
+<td>Innecesario</td>
 </tr>
 <tr class="even">
-<td><code>modelos/vision-y-atencion</code></td>
-<td>Una convolucional y un transformer de visión mirando la misma imagen, y qué pasa al separar la forma de la textura</td>
-<td><a href="../../parts/fundamentos/redes.html">De la convolución a la atención</a></td>
-<td><a href="https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/modelos/vision-y-atencion.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid" alt="Abrir en Colab"></a></td>
+<td>Elegir entre muchas opciones</td>
+<td>Un interrogatorio</td>
+<td>Un formulario</td>
 </tr>
 <tr class="odd">
-<td><code>modelos/qwen-desde-cero</code></td>
-<td>Las cinco piezas de un transformer actual montadas en PyTorch, con las cuentas de memoria que las justifican</td>
-<td><a href="../../parts/fundamentos/redes.html#qué-queda-del-transformer-original">De la convolución a la atención</a></td>
-<td><a href="https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/modelos/qwen-desde-cero.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid" alt="Abrir en Colab"></a></td>
+<td>Explorar datos</td>
+<td>Imposible sin ver</td>
+<td>Una tabla o un mapa</td>
+</tr>
+<tr class="even">
+<td>Confirmar algo irreversible</td>
+<td>Ambiguo</td>
+<td>Un botón y sus consecuencias</td>
+</tr>
+<tr class="odd">
+<td>Corregir al agente a medias</td>
+<td>Volver a empezar</td>
+<td>Editar y seguir</td>
 </tr>
 </tbody>
 </table>
-<p>Los tres acompañan a <a href="../../parts/fundamentos/intro.html">la primera parte</a>, que es la que más se beneficia de ejecutar. El resto del manual trata de decisiones de diseño y de gobierno, donde un cuaderno aporta menos que un buen ejemplo comentado.</p>
+<p>La cuarta fila es la que más importa y la que conecta con <a href="../../parts/agentes/queesunagente.html#los-límites-no-son-un-detalle">los límites de un agente</a>. “¿Confirmas que quieres presentar la solicitud?” respondido con un “sí” en medio de una conversación es una base endeble para un acto administrativo. Un botón con el texto de la solicitud delante, no.</p>
 </section>
-<section id="por-qué-merecen-el-rato" class="level2" data-number="A.2">
-<h2 data-number="A.2" class="anchored" data-anchor-id="por-qué-merecen-el-rato"><span class="header-section-number">A.2</span> Por qué merecen el rato</h2>
-<p><strong>El de NLP</strong> desmonta dos ideas equivocadas y bastante extendidas. La primera, que todo esto empezó en 2022: buena parte de la maquinaria (vectorizar texto, medir similitud, clasificar) lleva décadas funcionando. La segunda, que un modelo grande es siempre la respuesta. Al ver los cuatro enfoques medidos sobre las mismas consultas se entiende de otra manera <a href="../../parts/fundamentos/nlp.html#lo-que-no-ha-muerto">la tabla de qué compensa según el problema</a>.</p>
-<p><strong>El de visión</strong> es el más visual de los tres. Fabrica una imagen con la forma de una cosa y la textura de otra, se la enseña a las dos arquitecturas y compara cómo se equivocan. De propina dibuja los mapas de atención del transformer, que es la forma más directa de ver qué significa “atender” sin una sola ecuación.</p>
-<p><strong>El de arquitectura</strong> no entrena nada y aun así es el que más cambia la perspectiva, porque pone números a lo que en el texto son adjetivos. Ver la caché KV pasar de 24 a 3 gigabytes al agrupar las cabezas explica de golpe por qué los modelos actuales están hechos como están.</p>
+<section id="los-tres-protocolos" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="los-tres-protocolos"><span class="header-section-number">12.2</span> Los tres protocolos</h2>
+<p>En 2026 el asunto se ha estandarizado en tres capas, y ayuda verlas juntas porque cada una resuelve una frontera distinta del mismo sistema.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    p["Persona"] --&gt;|AG-UI| a["Agente"]
+    a --&gt;|MCP| h["Herramientas"]
+    a --&gt;|A2A| o["Agente&lt;br/&gt;de un tercero"]
+    h --&gt;|MCP Apps| p
+
+    classDef externo fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef contexto fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    classDef herramienta fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    class p contexto
+    class a modelo
+    class h herramienta
+    class o externo
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<table class="caption-top table">
+<caption>Las cuatro fronteras y quién las estandariza</caption>
+<thead>
+<tr class="header">
+<th>Protocolo</th>
+<th>Frontera</th>
+<th>Quién lo lleva</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../../parts/agentes/herramientas.html#mcp-el-conector-estándar">MCP</a></td>
+<td>Agente y herramientas</td>
+<td>Anthropic, adoptado por el sector</td>
+</tr>
+<tr class="even">
+<td><a href="../../parts/agentes/orquestacion.html#cuando-los-agentes-son-de-otros-a2a">A2A</a></td>
+<td>Agente y otro agente</td>
+<td>Linux Foundation</td>
+</tr>
+<tr class="odd">
+<td><strong>MCP Apps</strong></td>
+<td>Herramienta y persona</td>
+<td>Extensión oficial de MCP</td>
+</tr>
+<tr class="even">
+<td><strong>AG-UI</strong></td>
+<td>Agente y aplicación</td>
+<td>CopilotKit y socios</td>
+</tr>
+</tbody>
+</table>
+<p>Las dos últimas son las nuevas y resuelven problemas distintos, aunque se confundan a menudo. <strong>MCP Apps</strong> deja que un servidor MCP entregue una interfaz junto con su herramienta. <strong>AG-UI</strong> estandariza el flujo continuo entre un agente y la aplicación que lo muestra. Se pueden usar juntas y ninguna implica la otra.</p>
 </section>
-<section id="cómo-ejecutarlos" class="level2" data-number="A.3">
-<h2 data-number="A.3" class="anchored" data-anchor-id="cómo-ejecutarlos"><span class="header-section-number">A.3</span> Cómo ejecutarlos</h2>
-<p>La vía recomendada es <strong>Google Colab</strong>, y para eso está el botón de la última columna: abre el cuaderno directamente desde el repositorio, sin descargar ni instalar nada. Se ejecuta la primera celda, que trae las dependencias, y a partir de ahí va todo seguido.</p>
-<p>Los cuadernos descargan modelos de Hugging Face, así que la primera ejecución tarda unos minutos. Solo el de NLP se beneficia de tener GPU, y tampoco la exige.</p>
-<p>En local, sin tocar las dependencias del libro:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run <span class="at">--with</span> jupyter jupyter lab</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div id="sin-salidas" class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Se versionan sin salidas
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Los <code>.ipynb</code> del repositorio están guardados con las celdas sin ejecutar. Es a propósito: un cuaderno con salidas dentro crece hasta pesar megabytes, produce diffs ilegibles y arrastra resultados de una ejecución concreta que puede no reproducirse.</p>
-<p>Si contribuís con un cambio, limpiad las salidas antes de confirmarlo:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run <span class="at">--with</span> nbstripout nbstripout notebooks/<span class="pp">**</span>/<span class="pp">*</span>.ipynb</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Qué esperar de los resultados
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Los modelos que usan los cuadernos son pequeños a propósito, para que quepan en la memoria gratuita de Colab. Sus salidas son mediocres comparadas con las de cualquier asistente comercial, y eso es deliberado: se trata de ver el mecanismo, no de obtener la mejor respuesta.</p>
-<p>Si algo sale peor de lo que esperabais, probablemente esté funcionando bien.</p>
-</div>
-</div>
+<section id="mcp-apps-la-interfaz-la-sirve-la-herramienta" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="mcp-apps-la-interfaz-la-sirve-la-herramienta"><span class="header-section-number">12.3</span> MCP Apps: la interfaz la sirve la herramienta</h2>
+<p>La idea es tan simple como incómoda al principio: una herramienta MCP puede declarar, además de su esquema, <strong>una interfaz propia</strong> que el cliente renderiza en la conversación.</p>
+<p>El mecanismo son dos piezas. Un <strong>recurso</strong> con esquema <code>ui://</code> cuyo <code>mimeType</code> es <code>text/html;profile=mcp-app</code> y que devuelve una página HTML. Y una <strong>herramienta</strong> que apunta a ese recurso con <code>_meta.ui.resourceUri</code>. Cuando el modelo llama a la herramienta, el cliente busca el recurso, lo mete en un <code>iframe</code> aislado y le entrega el resultado.</p>
+<p>A partir de ahí, la interfaz y el cliente hablan por un dialecto de JSON-RPC sobre <code>postMessage</code>, con métodos propios del prefijo <code>ui/</code>. La interfaz puede pedir <code>ui/initialize</code> al arrancar, mandar <code>ui/message</code> a la conversación o <code>ui/update-model-context</code> para que el modelo se entere de lo que el usuario acaba de hacer con ella. El cliente le empuja <code>ui/notifications/tool-result</code> cuando hay datos nuevos.</p>
+<p>Lo interesante es lo que compra frente a la alternativa obvia, que sería servir una web aparte y mandar un enlace:</p>
+<ul>
+<li><strong>No se pierde el contexto.</strong> La interfaz vive dentro de la conversación que la ha provocado, en lugar de en una pestaña que el usuario tendrá que relacionar mentalmente con lo que estaba haciendo.</li>
+<li><strong>Los datos van en los dos sentidos.</strong> La interfaz puede llamar a las herramientas del servidor y el cliente le empuja resultados frescos, sin montar una API propia con su autenticación y su estado.</li>
+<li><strong>Se apoya en lo que el cliente ya tiene conectado.</strong> En lugar de integrar el correo, la interfaz pide “manda esto” y el cliente lo enruta por las capacidades que el usuario ya autorizó.</li>
+</ul>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Advertencia</span>Los cuadernos envejecen antes que el texto
+<span class="screen-reader-only">Advertencia</span>Ese HTML lo escribió un tercero
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Un capítulo que explica por qué existe la caché KV seguirá siendo válido dentro de tres años. Una celda que llama a una API con unos parámetros concretos puede romperse en tres meses.</p>
-<p>Si algo falla, mirad primero la versión de la librería y la firma de la función antes que la lógica del ejemplo. Y si arregláis alguno, <a href="https://github.com/IraitzM/manual-ia-generativa">las contribuciones son bienvenidas</a>.</p>
+<p>Vale todo lo dicho en <a href="../../parts/agentes/herramientas.html">herramientas</a> sobre los servidores MCP ajenos, y sube un escalón: ahora el tercero no solo aporta texto al contexto del modelo, aporta <strong>código que se ejecuta en el navegador de vuestro usuario</strong>.</p>
+<p>La especificación lo trata en serio, y por eso el <code>iframe</code> está aislado del documento padre, no llega a las cookies ni al almacenamiento local, y el recurso tiene que declarar en <code>_meta.ui.csp</code> a qué dominios puede conectarse y en <code>permissions</code> qué capacidades del navegador pide (cámara, micrófono, ubicación, portapapeles).</p>
+<p>Ese aislamiento es real y está bien diseñado, y aun así la pregunta de antes sigue en pie: <strong>¿le daríais a la persona que publicó ese servidor permiso para poner código en vuestra página?</strong> Porque eso es lo que estáis haciendo.</p>
 </div>
 </div>
+</section>
+<section id="ag-ui-el-flujo-entre-el-agente-y-la-aplicación" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="ag-ui-el-flujo-entre-el-agente-y-la-aplicación"><span class="header-section-number">12.4</span> AG-UI: el flujo entre el agente y la aplicación</h2>
+<p>El otro problema es distinto. Un agente no produce una respuesta: produce un proceso. Piensa, llama a una herramienta, recibe algo, cambia de idea, vuelve a llamar y al final contesta. Si la aplicación solo ve el resultado, el usuario mira una ruleta durante veinte segundos sin saber si el sistema está trabajando o colgado.</p>
+<p><strong>AG-UI</strong> estandariza ese chorro. La aplicación manda una petición HTTP con lo que el usuario ha escrito y el estado actual, y se queda escuchando un flujo de eventos por SSE: mensajes que se van escribiendo, llamadas a herramientas que empiezan y terminan, cambios de estado y elementos de interfaz que el agente quiere mostrar.</p>
+<p>La pieza que más cambia el diseño es el <strong>estado compartido</strong>: agente y aplicación sincronizan un mismo estado en los dos sentidos, en lugar de que la aplicación reconstruya lo que cree que está pasando a partir de los mensajes. Lo llevan LangGraph, Mastra y Pydantic AI, entre otros, lo cual quiere decir que si vuestro agente vive en uno de esos, la parte de la aplicación es casi configuración.</p>
+<p>Merece una mención <strong>A2UI</strong>, la especificación de interfaz generativa que impulsa Google: en lugar de HTML, el agente devuelve una descripción declarativa de los componentes que quiere mostrar y la aplicación decide cómo pintarlos. AG-UI la transporta, igual que transporta otras.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Importante</span>La interfaz generativa es una superficie nueva
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Si el modelo decide qué se muestra, el modelo puede ser convencido de mostrar cualquier cosa. Un documento envenenado que consigue que el agente pinte un formulario de acceso pidiendo la contraseña de la universidad no es ciencia ficción: es <a href="../../parts/seguridad/retos.html#inyección-de-prompt">inyección de prompt</a> con una superficie de salida mucho más persuasiva que un párrafo de texto.</p>
+<p>Que el agente elija <strong>entre componentes que vosotros habéis definido</strong> es una cosa. Que el agente escriba el HTML que se va a renderizar es otra bastante distinta, y solo la primera es defendible sin una revisión seria.</p>
+</div>
+</div>
+</section>
+<section id="lo-que-la-interfaz-tiene-que-enseñar" class="level2" data-number="12.5">
+<h2 data-number="12.5" class="anchored" data-anchor-id="lo-que-la-interfaz-tiene-que-enseñar"><span class="header-section-number">12.5</span> Lo que la interfaz tiene que enseñar</h2>
+<p>Aquí es donde esta parte del manual se cruza con <a href="../../parts/normativa/leyes.html">la normativa</a>, y conviene verlo como requisito de diseño y no como una capa de avisos legales pegada al final.</p>
+<p><strong>Que es una máquina.</strong> El deber de transparencia no se cumple con una nota en los términos de uso: se cumple al inicio de la interacción y de forma visible. Es barato si se piensa al diseñar y muy molesto si hay que meterlo cuando ya hay usuarios acostumbrados a otra cosa.</p>
+<p><strong>De dónde sale la respuesta.</strong> Un sistema que cita el artículo del que sale lo que dice permite al usuario ir a comprobarlo. Uno que no, obliga a creerle. Es la diferencia entre una herramienta de consulta y un oráculo, y la <a href="../../parts/contexto/rag.html">recuperación</a> no sirve de nada si el resultado no llega hasta la pantalla.</p>
+<p><strong>Qué va a pasar si confirma.</strong> Lo <a href="../../parts/agentes/queesunagente.html#los-límites-no-son-un-detalle">irreversible</a> se aprueba en la interfaz, con el contenido delante, no en el prompt ni en la buena voluntad del modelo.</p>
+<p><strong>Cómo llegar a una persona.</strong> Siempre, y sin tener que pelearse. Es además la única salida honesta cuando el sistema no está seguro, que es algo que sabe medir.</p>
+</section>
+<section id="el-cuaderno" class="level2" data-number="12.6">
+<h2 data-number="12.6" class="anchored" data-anchor-id="el-cuaderno"><span class="header-section-number">12.6</span> El cuaderno</h2>
+<p>Monta las dos cosas de este capítulo sobre el agente de la secretaría. Primero una interfaz de chat convencional, para tener la referencia y ver qué se queda fuera de ella. Después un servidor MCP que declara un recurso <code>ui://</code> con su HTML y una herramienta que lo referencia, y comprueba contra el protocolo que el cliente recibe las dos piezas.</p>
+<p>La parte de MCP Apps se ejecuta hasta donde puede ejecutarse en un cuaderno: el <code>iframe</code> real lo pinta un cliente compatible, pero todo lo que viaja por el protocolo se puede ver y comprobar sin salir de aquí.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/agentes/interfaz.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid figure-img"></a></p>
+<figcaption>Abrir en Colab</figcaption>
+</figure>
+</div>
+<p>Con esto se cierra la parte de construcción. Lo siguiente es lo que hace falta para que esto viva en una empresa: <a href="../../parts/produccion/ecosistema.html">producción</a>.</p>
 
 
 </section>
@@ -917,13 +966,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../parts/referencias.html" class="pagination-link" aria-label="Referencias">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Referencias</span>
+      <a href="../../parts/agentes/orquestacion.html" class="pagination-link" aria-label="Orquestación y frameworks">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Orquestación y frameworks</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../parts/apendices/copilotos.html" class="pagination-link" aria-label="Copilotos y método">
-        <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Copilotos y método</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../parts/produccion/ecosistema.html" class="pagination-link" aria-label="Ecosistema productivo">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Ecosistema productivo</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
