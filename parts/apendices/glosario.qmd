@@ -64,6 +64,8 @@ Términos que aparecen en el manual, con la traducción al uso y el capítulo do
 
 **Agente**: Sistema donde el modelo decide los pasos usando herramientas en un bucle. Si los pasos los fijamos nosotros, es un **flujo de trabajo** [@anthropic2024agents].
 
+**Flujo de trabajo** (_workflow_): Sistema donde el camino está escrito de antemano y el modelo solo rellena huecos. Fija el camino, no la redacción de la salida. Ver [Flujos de trabajo](../agentes/flujos.qmd).
+
 **Herramienta** (_tool_): Función que el modelo puede pedir que se ejecute. El modelo nunca la ejecuta: la pide.
 
 **ReAct**: Patrón de alternar razonamiento y acción [@yao2023react].

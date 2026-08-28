@@ -50,7 +50,7 @@ Antes de dibujar la arquitectura con seis agentes conviene tener presente el pre
 La regla que aplico: **un agente bien construido antes que tres mal repartidos**. La complejidad se añade cuando se ha demostrado que hace falta, no cuando se sospecha.
 :::
 
-:::{.callout-tip}
+:::{#los-tres-precios-medidos .callout-tip}
 # Los tres precios, medidos
 
 El [primer cuaderno de este capítulo](#los-cuadernos) monta las dos arquitecturas sobre el mismo caso y las mide. El reparto ahorra contexto de verdad, en torno a un tercio de los tokens, y ese ahorro se multiplica por el número de vueltas del bucle. Hasta ahí, lo esperado.
@@ -152,4 +152,4 @@ Este capítulo tiene dos, uno por cada mitad.
 
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/agentes/frameworks.ipynb)
 
-Quedan las herramientas, los agentes ajenos... y la persona, que es la frontera de la que todavía no hemos dicho nada: [la interfaz del agente](interfaz.qmd).
+Y queda por desarrollar el primero de los cinco patrones, el encadenado, que se despachó arriba en dos líneas y da para bastante más: [los flujos de trabajo](flujos.qmd).

@@ -19,7 +19,7 @@ El contenido vive en [`parts/`](parts/) y el índice de capítulos está en [`_q
 | Fundamentos | [`parts/fundamentos/`](parts/fundamentos/) | Del NLP clásico a los embeddings, y de la convolución a la atención |
 | Modelos generativos | [`parts/modelos/`](parts/modelos/) | Qué es un modelo generativo, transformers, inferencia, panorama y ajuste fino |
 | Contexto | [`parts/contexto/`](parts/contexto/) | Ingeniería de contexto, prompting y recuperación |
-| Agentes | [`parts/agentes/`](parts/agentes/) | Bucle de agente, herramientas y MCP, memoria, orquestación y frameworks, interfaz |
+| Agentes | [`parts/agentes/`](parts/agentes/) | Bucle de agente, herramientas y MCP, memoria, orquestación, flujos de trabajo e interfaz |
 | Producción | [`parts/produccion/`](parts/produccion/) | Ecosistema, gateways, evaluación y observabilidad |
 | Normativa y seguridad | [`parts/seguridad/`](parts/seguridad/), [`parts/normativa/`](parts/normativa/) | Inyección de prompt, defensas y AI Act |
 | Apéndices | [`parts/apendices/`](parts/apendices/) | Copilotos y método, glosario |

@@ -1,0 +1,234 @@
+# Flujos de trabajo
+
+[Qué es un agente](queesunagente.qmd) abrió con una distinción y después se dedicó entero a uno de los dos lados. [Orquestación](orquestacion.qmd) mencionó el otro de pasada, en una frase que merece bastante más espacio del que tuvo: *"no es un sistema multiagente, es un flujo de trabajo, y es la opción correcta muchas más veces de las que se admite"*.
+
+Este capítulo va de eso. De qué se compra exactamente al fijar el camino en lugar de dejar que lo decida el modelo, y de las dos familias de herramientas que hay para hacerlo. Porque la decisión no termina en "flujo o agente": sigue en "escrito en código o dibujado en una plataforma", y esa segunda pregunta decide **quién puede mantener el sistema**, que a los seis meses importa más que la primera.
+
+## Lo que compra fijar el camino
+
+La respuesta corta es que se compra poder decir qué va a pasar antes de que pase. Desarrollada, son varias cosas distintas y conviene separarlas porque no todas valen lo mismo.
+
+| | Agente | Flujo de trabajo |
+|---|---|---|
+| Quién decide el camino | El modelo, en cada vuelta | Nosotros, al escribirlo |
+| Coste por petición | Variable, y crece con el cuadrado de las vueltas | Fijo y conocido de antemano |
+| Latencia | Variable | Acotada |
+| Qué pasa con un caso imprevisto | Lo intenta | Hace lo de siempre |
+| Cómo se prueba | Contra un conjunto de casos, midiendo distribuciones | Paso a paso, como cualquier software |
+| Cómo se explica lo que hizo | Reconstruyendo la traza | Leyendo el dibujo |
+
+: La misma tabla de decisión, con las consecuencias delante
+
+Las dos últimas filas son las que casi nunca aparecen en la conversación y son las que más pesan cuando el sistema pasa de la demostración a la producción. Un flujo se prueba como se prueba cualquier programa: cada paso por separado, con sus entradas y sus salidas. Un agente exige montar el aparato de [evaluación](../produccion/evaluacion.qmd) entero antes de poder afirmar nada, porque su comportamiento solo existe en agregado.
+
+Y la última conecta con [la normativa](../normativa/leyes.qmd) de una forma muy concreta. Explicar por qué el sistema hizo lo que hizo es, en un flujo, enseñar el diagrama. En un agente hay que ir a buscar la traza de aquella ejecución y confiar en haberla guardado.
+
+:::{#determinista .callout-important}
+# Un flujo no hace determinista la salida, hace determinista el camino
+
+Es la confusión más habitual y conviene deshacerla pronto, porque de ella salen expectativas que después no se cumplen.
+
+Fijar los pasos no convierte el sistema en una función pura. Si en alguno de esos pasos hay una llamada a un modelo generativo, la **redacción** de la respuesta seguirá cambiando entre ejecuciones, y con temperatura por encima de cero cambiará siempre. Lo que queda fijo es otra cosa: **qué fuentes se consultan, en qué orden y cuántas veces**.
+
+Resulta que eso es justo lo que se audita y lo que se factura. A nadie le preocupa que la frase cambie de una vez a otra; preocupa que la respuesta salga de la tabla de plazos unas veces y de la memoria del modelo otras.
+:::
+
+## Y lo que cuesta
+
+El precio del flujo tiene un nombre y no es "rigidez", que es lo que se suele decir. Es que **no degrada bien**.
+
+Un agente que se topa con una pregunta que no encaja en lo previsto **puede** dar vueltas, consultar otra herramienta y llegar o no llegar. Un flujo hace exactamente los pasos que le escribimos, obtiene datos parciales y **redacta una respuesta con la misma seguridad de siempre**. No falla: acierta a medias sin avisar, que es peor, porque un error visible se corrige y uno silencioso se propaga.
+
+Ese "puede" del agente conviene leerlo como lo que es, una posibilidad estructural y no una garantía. El cuaderno de este capítulo le pone delante cuatro consultas que necesitan dos fuentes y el agente se conforma con una, exactamente igual que el flujo. La diferencia que queda es de naturaleza y no de resultado: en el agente eso es una decisión, y las decisiones se mejoran con el prompt; en el flujo es la forma del dibujo, y solo se arregla dibujando otro.
+
+De ahí que la pregunta útil al diseñar no sea "¿puedo dibujar el camino?" sino esta otra, bastante más incómoda: **¿qué fracción de las peticiones reales cabe en el dibujo, y qué pasa con el resto?**
+
+## El híbrido y su letra pequeña
+
+La forma de quedarse con lo bueno de los dos lados es vieja y aburrida: el flujo por defecto, y una **salida de emergencia** hacia el agente cuando el propio flujo detecta que el caso no es suyo.
+
+```{mermaid}
+flowchart TD
+    q["Consulta"] --> c["Clasificar"]
+    c -->|confianza alta| f["Flujo fijo:<br/>consultar y redactar"]
+    c -->|confianza baja| a["Agente<br/>con herramientas"]
+    f --> r["Respuesta"]
+    a --> r
+
+    classDef contexto fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef control fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class q,r contexto
+    class c,f control
+    class a modelo
+```
+
+La pieza que lo hace posible es que el clasificador del primer paso **devuelva su confianza** y no solo su veredicto. Es la misma lección del [cuaderno de evaluación](../produccion/evaluacion.qmd#el-cuaderno), donde un modelo pequeño usado como juez acertaba la mitad de las veces en su veredicto y tenía la señal buena escondida en la probabilidad.
+
+Lo que busca el híbrido no es acierto, es **reparto del gasto**: que el grueso del tráfico, que suele ser rutinario, se resuelva por el camino barato y predecible, y que el bucle caro quede reservado para la cola de casos raros que es la que lo justifica.
+
+:::{.callout-warning}
+# La salida de emergencia tiene que dar a un sitio mejor
+
+El patrón suena tan razonable que se adopta sin comprobarlo. [El cuaderno](#el-cuaderno) lo comprueba y sale mal.
+
+Al subir el umbral, el sistema manda más consultas al agente, gasta más del doble de tokens y **acierta menos**. No porque el híbrido sea mala idea en abstracto, sino porque en ese montaje concreto el agente era peor que el flujo del que se escapaba, y derivar hacia él solo podía empeorar las cosas.
+
+La conclusión no es que no haya que usarlo. Es que un patrón que compensa sobre el papel se convierte en un impuesto en cuanto la pieza cara no es mejor que la barata, y eso solo se sabe **midiendo las dos por separado** antes de conectarlas. Es la lección del enrutador del [capítulo anterior](orquestacion.qmd#los-tres-precios-medidos), vista desde el otro lado.
+:::
+
+## La vía del código
+
+Dentro del código, el mismo asunto se ha resuelto dos veces con intenciones muy distintas.
+
+### Agno: el flujo como estructura de control
+
+[Agno](https://docs.agno.com/) aparecía en la [tabla de frameworks](orquestacion.qmd#frameworks) por su ligereza, y trae además una capa de flujos que es un buen ejemplo de la categoría. Un `Workflow` es una lista de pasos, y cada paso envuelve exactamente un ejecutor: un agente, un equipo, **una función de Python normal** o un flujo anidado. Alrededor de eso hay cuatro construcciones: `Loop`, `Parallel`, `Condition` y `Router`.
+
+```python
+from agno.workflow.step import Step, StepInput, StepOutput
+from agno.workflow.router import Router
+from agno.workflow.workflow import Workflow
+
+def clasificar(paso: StepInput) -> StepOutput:
+    categoria = enrutar(paso.input)          # una pasada del modelo
+    return StepOutput(content=categoria)
+
+plazos = Step(name="plazos", executor=responder_plazos)
+expediente = Step(name="expediente", executor=responder_expediente)
+
+def derivar(paso: StepInput):
+    return [plazos] if paso.previous_step_content == "plazo" else [expediente]
+
+flujo = Workflow(
+    name="triaje de secretaría",
+    steps=[
+        Step(name="clasificar", executor=clasificar),
+        Router(name="derivar", selector=derivar, choices=[plazos, expediente]),
+    ],
+)
+flujo.run(input="¿cuándo empieza el plazo de matrícula?")
+```
+
+Mirando esas cuatro construcciones con algo de mala idea, son el `for`, el `asyncio.gather`, el `if` y el `match` de toda la vida, con otro nombre y bastante más ceremonia. La objeción es legítima y merece respuesta, porque es la misma que el capítulo anterior dejó planteada.
+
+Lo que se gana no está en el flujo, que efectivamente ya sabíamos escribir. Está en la lista de [lo que no conviene reescribir](orquestacion.qmd#frameworks): estado que sobrevive al proceso, ejecución que se reanuda donde se quedó, [trazas](../produccion/observabilidad.qmd) por paso y un punto donde detener el proceso para que lo apruebe una persona. Declarar los pasos es el precio que se paga por que el framework pueda meterse entre ellos.
+
+La regla, entonces, es la de siempre: si vuestro flujo son tres funciones que se llaman una detrás de otra y termina en el mismo proceso en el que empezó, escribidlo con `if` y ahorraos la dependencia. En cuanto haya que persistirlo, reanudarlo o pararlo a mitad para que alguien firme, la declaración empieza a pagarse sola.
+
+### Gradio: el flujo como interfaz
+
+`gr.Workflow` es otra cosa, y es interesante precisamente porque resuelve un problema que este manual ya había abierto en el [capítulo de interfaz](interfaz.qmd). En lugar de organizar la ejecución, **convierte el proceso en la pantalla**.
+
+Se describen los pasos como un grafo de nodos con puertos tipados y Gradio sirve un lienzo donde cada nodo se puede ejecutar por separado y cada resultado intermedio se ve. Las funciones propias entran por `bind=` y Gradio deduce los puertos de la firma; las conexiones se pueden declarar en código o trazar con el ratón, y en ese caso se guardan solas en un `workflow.json`.
+
+```python
+import gradio as gr
+
+def clasificar(consulta: str) -> str: ...
+def consultar(categoria: str) -> str: ...
+def redactar(datos: str) -> str: ...
+
+gr.Workflow(
+    bind=[clasificar, consultar, redactar],
+    edges=[("clasificar", "consultar"), ("consultar", "redactar")],
+).launch()
+```
+
+De propina, cada flujo es también una API: cada nodo de salida se publica como un punto de acceso con el nombre de su etiqueta, sin escribir nada más.
+
+Lo que esto compra de verdad no es la demostración bonita. Es que **la persona del dominio puede recablear el proceso sin tocar Python** y, sobre todo, que los resultados intermedios están a la vista. En un sistema generativo, ver qué se recuperó antes de redactar es la mitad de la depuración, y es exactamente lo que un `print` en un cuaderno acaba haciendo peor.
+
+:::{.callout-tip}
+# La persona del dominio, otra vez
+
+El [capítulo de ecosistema](../produccion/ecosistema.qmd#el-equipo-y-el-proceso) insiste en que quien sabe distinguir una respuesta correcta de una plausible es quien lleva quince años haciendo ese trabajo, y en que su criterio es literalmente el conjunto de evaluación.
+
+Un flujo visible y editable es la forma más barata de meterla en el bucle de verdad, en lugar de consultarla al principio y enseñarle el resultado al final. Que pueda cambiar el orden de dos pasos y ver qué pasa vale más que cualquier reunión de validación.
+:::
+
+## La vía de la plataforma
+
+Fuera del código está la otra mitad del mercado, y llega desde un sitio distinto: la automatización empresarial, que existía mucho antes que todo esto. Un lienzo, nodos, disparadores y conectores a unos cuantos cientos de sistemas.
+
+El malentendido habitual es pensar que lo que venden es programar sin programar. No es eso, o no principalmente. Lo que venden es **la parte aburrida ya resuelta**: autenticarse contra un servicio corporativo, reintentar cuando falla, ejecutar a las tres de la mañana, guardar el historial de ejecuciones y no tener que desplegar nada.
+
+```{mermaid}
+flowchart LR
+    t["Disparador:<br/>webhook, hora,<br/>correo"] --> n1["Nodo:<br/>consultar"]
+    n1 --> n2["Nodo:<br/>modelo"]
+    n2 --> n3["Nodo:<br/>actuar"]
+    cred[("Credenciales<br/>de todo")] -.-> n1
+    cred -.-> n3
+
+    classDef contexto fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef control fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    classDef riesgo fill:#f7d9d9,stroke:#b05252,stroke-width:1.5px,color:#5e1f1f
+    class t contexto
+    class n1,n3 control
+    class n2 modelo
+    class cred riesgo
+```
+
+Dos representantes con filosofías y licencias distintas, que es por donde conviene mirarlos:
+
+| | [n8n](https://github.com/n8n-io/n8n) | [Sim](https://github.com/simstudioai/sim) |
+|---|---|---|
+| De dónde viene | Automatización, con la IA añadida después | Nació para agentes |
+| Licencia | *Fair-code*, Sustainable Use License | Apache 2.0 |
+| Qué permite la licencia | Auto-alojar y modificar para uso interno; no revenderlo como servicio | Lo que quieras |
+| Fuerte en | Cientos de conectores maduros | Bases de conocimiento y recuperación de serie |
+| Modelos locales | Nodo de agente contra Ollama o vLLM | Ollama y vLLM |
+| Auto-alojamiento | Docker, npm | Docker Compose, Kubernetes |
+
+: Dos plataformas, y la fila de la licencia no es un detalle
+
+La distinción de la licencia merece la pena porque se malinterpreta a menudo. **n8n no es software libre** en el sentido de la OSI: su Sustainable Use License permite usarlo, modificarlo y alojarlo uno mismo para su propio negocio, y prohíbe venderlo como servicio a terceros. Para la inmensa mayoría de las empresas eso da igual. Para una consultora que quiera montar flujos a sus clientes sobre una instalación propia, no da nada igual, y es una conversación que hay que tener con el departamento jurídico antes y no después. De forma similar, Apache 2.0, no plantea esa pregunta.
+
+Lo que ha cambiado en estas plataformas con la IA generativa es que el nodo del modelo dejó de ser un conector más. Cuando ese nodo lleva un agente con herramientas, la plataforma ha pasado de ejecutar un flujo que nosotros dibujamos a ejecutar un flujo donde **hay un tramo que decide solo**, con todo lo que este manual lleva diciendo al respecto. Y lo apuntan directamente a los sistemas de la casa.
+
+:::{.callout-warning}
+# La plataforma también es una decisión de arquitectura
+
+Se adoptan por lo fácil que es empezar y se pagan por lo difícil que es gobernarlas después. Cuatro precios concretos:
+
+* **La lógica de negocio se convierte en un JSON.** Se puede versionar, sí. Revisarlo es otra cosa: el `diff` de un lienzo no se lee, y ahí se acabó la revisión de cambios que el [apéndice de copilotos](../apendices/copilotos.qmd) defiende para el código.
+* **No hay dónde poner las pruebas.** Los ganchos de evaluación existen a medias o no existen, así que el conjunto de casos etiquetados, que es lo único que dice si el sistema ha empeorado, se queda fuera.
+* **Concentra las credenciales.** Una instalación con acceso al correo, al CRM y a la base de datos es el objetivo de mayor valor de la red. Y un flujo que lee correo, se lo pasa a un modelo y puede enviar correo reúne la [trifecta letal](../seguridad/retos.qmd#la-trifecta-letal) sin que nadie lo haya decidido conscientemente.
+* **Aparecen flujos que nadie sabe que existen.** Es la vieja historia de las macros de la hoja de cálculo, con permisos de producción y un modelo generativo dentro. El coste no se ve hasta que alguien se va de la empresa.
+
+Ninguno de los cuatro es motivo para descartarlas. Son motivo para decidir **qué clase de proceso vive ahí** en lugar de dejar que lo decida quien llegue primero.
+:::
+
+## Cómo elegir
+
+Tres preguntas, por orden, y ninguna es sobre funcionalidades.
+
+**¿Puedo dibujar el camino completo?** Si la respuesta es sí, dibujadlo. Es la [recomendación menos comercial del sector](queesunagente.qmd#el-bucle) y sigue siendo la que más dinero ahorra. El agente solo se justifica cuando el número de pasos depende de lo que se vaya encontrando.
+
+**¿Quién va a mantener esto dentro de un año?** Si la respuesta es una persona del dominio, plataforma o lienzo. Si es el equipo de plataforma, código. Elegir contra esta respuesta produce sistemas que funcionan y que nadie toca porque nadie se atreve.
+
+**¿Esto nos diferencia?** Es el criterio de [comprar o construir](../produccion/ecosistema.qmd#comprar-o-construir) aplicado aquí, y reparte bastante bien: la integración con los sistemas de la casa es infraestructura y se compra; la lógica del dominio y el conjunto de evaluación son vuestros y se escriben.
+
+Lo que sale de cruzar las tres, en la práctica, es un reparto y no una elección única. La plataforma conectando sistemas y disparando procesos, el código llevando la parte que hay que probar en serio, y el agente reservado para la cola de casos que no cabía en el dibujo.
+
+## El cuaderno
+
+Coge el triage de la secretaría y lo monta dos veces sobre los mismos dieciocho casos etiquetados: como **agente**, con tres herramientas y el modelo decidiendo, y como **flujo**, con los pasos de clasificar, consultar y redactar fijados a mano. Las herramientas son las mismas en los dos montajes, para que lo único que cambie sea quién decide.
+
+Esa primera tabla sale más rotunda de lo que este capítulo se atrevía a prometer: el flujo acierta la fuente en **17 de 18** casos frente a **11** del agente, y con la tercera parte de los tokens. El motivo es la aritmética del [capítulo anterior](orquestacion.qmd#los-tres-precios-medidos) vista desde el otro lado: elegir entre tres etiquetas con la decodificación restringida es un problema bastante más fácil que emitir un JSON bien formado eligiendo entre tres esquemas. Con un matiz que conviene no saltarse, porque es el que baja los humos: en **acertar el trámite concreto** las dos arquitecturas empatan a 4 de 7. Fijar el camino no arregla el paso que extrae los argumentos.
+
+Después van las tres afirmaciones que no se ven en esa tabla, y dos salen incómodas.
+
+La de la reproducibilidad sale **a medias**. El camino del flujo es único por construcción, y el del agente resultó ser único también en los casos que se le probaron. La diferencia acaba estando donde de verdad importa: una de las dos propiedades se demuestra leyendo el código y la otra hay que medirla, caso por caso, cada vez que algo cambia.
+
+La de los casos compuestos sale peor de lo previsto, y para los dos. Ninguna de las dos arquitecturas pide la segunda fuente y ninguna avisa de que le falta. El flujo llega a afirmar que un trabajo de fin de grado se defiende "el 25 de octubre", fecha que no aparece en ninguna tabla, después de haber consultado únicamente el expediente.
+
+Y el híbrido sale directamente en contra, por el motivo del recuadro de arriba.
+
+De propina, declara el mismo flujo con `Workflow` y `Router` de Agno y compara lo que aporta el framework con lo que ya hacía el `if`.
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/agentes/flujos.ipynb)
+
+Queda la frontera de la que todavía no hemos dicho nada, la que decide si el sistema se usa o se abandona: [la interfaz del agente](interfaz.qmd).

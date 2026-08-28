@@ -108,7 +108,7 @@ Después de tanta advertencia, conviene decir dónde está funcionando de verdad
 
 * **Programación asistida.** El código compila, los tests pasan o no pasan. El agente tiene una señal objetiva para corregirse. No es casualidad que sea el caso de uso más maduro con diferencia.
 * **Investigación y síntesis.** Buscar en muchas fuentes, cruzar y redactar con citas. El número de búsquedas no se puede saber de antemano, así que aquí el bucle es genuinamente necesario.
-* **Triaje y enrutado.** Leer una incidencia, consultar sistemas, clasificar y proponer. Con la actuación final supervisada.
+* **Triage y enrutado.** Leer una incidencia, consultar sistemas, clasificar y proponer. Con la actuación final supervisada.
 * **Operaciones sobre datos.** Explorar un esquema, escribir consultas, comprobar los resultados y afinar.
 
 Y donde sale mal, con la misma regularidad: tareas largas sin señal de verificación intermedia, con muchos pasos irreversibles, o donde un error silencioso cuesta caro. Ahí el bucle amplifica el error en lugar de corregirlo, porque cada paso construye sobre el anterior sin nada que le diga que va mal.

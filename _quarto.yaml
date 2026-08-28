@@ -60,6 +60,7 @@ book:
       - parts/agentes/herramientas.qmd
       - parts/agentes/memoria.qmd
       - parts/agentes/orquestacion.qmd
+      - parts/agentes/flujos.qmd
       - parts/agentes/interfaz.qmd
 
     - part: "Producción"
