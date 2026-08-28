@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3&nbsp; Inteligencia Artificial – Manual de IA Generativa</title>
+<title>14&nbsp; Flujos de trabajo – Manual de IA Generativa</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,26 +26,42 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
 }
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -55,8 +71,8 @@ div.csl-indent {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../parts/modelos/transformers.html" rel="next">
-<link href="../../parts/fundamentos/redes.html" rel="prev">
+<link href="../../parts/agentes/interfaz.html" rel="next">
+<link href="../../parts/agentes/orquestacion.html" rel="prev">
 <link href="../../cover-removebg-preview.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -99,37 +115,8 @@ div.csl-indent {
 <script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
 <link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<meta property="og:title" content="3&nbsp; Inteligencia Artificial – Manual de IA Generativa">
+<meta property="og:title" content="14&nbsp; Flujos de trabajo – Manual de IA Generativa">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/manual-ia-generativa/logo-noback.png">
 <meta property="og:site_name" content="Manual de IA Generativa">
@@ -146,7 +133,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/modelos/mlgenerativa.html">Modelos generativos</a></li><li class="breadcrumb-item"><a href="../../parts/modelos/mlgenerativa.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Inteligencia Artificial</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/agentes/queesunagente.html">Agentes</a></li><li class="breadcrumb-item"><a href="../../parts/agentes/flujos.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Flujos de trabajo</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -208,16 +195,16 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
  <span class="menu-text">Modelos generativos</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../parts/modelos/mlgenerativa.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../parts/modelos/mlgenerativa.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Inteligencia Artificial</span></span></a>
   </div>
 </li>
@@ -272,13 +259,13 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
  <span class="menu-text">Agentes</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../parts/agentes/queesunagente.html" class="sidebar-item-text sidebar-link">
@@ -305,7 +292,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../parts/agentes/flujos.html" class="sidebar-item-text sidebar-link">
+  <a href="../../parts/agentes/flujos.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Flujos de trabajo</span></span></a>
   </div>
 </li>
@@ -420,20 +407,26 @@ window.Quarto = {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#modelos-generativos" id="toc-modelos-generativos" class="nav-link active" data-scroll-target="#modelos-generativos"><span class="header-section-number">3.1</span> Modelos generativos</a></li>
-  <li><a href="#el-truco-de-la-predicción-de-la-siguiente-palabra" id="toc-el-truco-de-la-predicción-de-la-siguiente-palabra" class="nav-link" data-scroll-target="#el-truco-de-la-predicción-de-la-siguiente-palabra"><span class="header-section-number">3.2</span> El truco de la predicción de la siguiente palabra</a></li>
-  <li><a href="#escala-y-emergencia" id="toc-escala-y-emergencia" class="nav-link" data-scroll-target="#escala-y-emergencia"><span class="header-section-number">3.3</span> Escala y emergencia</a></li>
-  <li><a href="#de-completar-texto-a-obedecer" id="toc-de-completar-texto-a-obedecer" class="nav-link" data-scroll-target="#de-completar-texto-a-obedecer"><span class="header-section-number">3.4</span> De completar texto a obedecer</a></li>
-  <li><a href="#más-allá-del-texto" id="toc-más-allá-del-texto" class="nav-link" data-scroll-target="#más-allá-del-texto"><span class="header-section-number">3.5</span> Más allá del texto</a></li>
+  <li><a href="#lo-que-compra-fijar-el-camino" id="toc-lo-que-compra-fijar-el-camino" class="nav-link active" data-scroll-target="#lo-que-compra-fijar-el-camino"><span class="header-section-number">14.1</span> Lo que compra fijar el camino</a></li>
+  <li><a href="#y-lo-que-cuesta" id="toc-y-lo-que-cuesta" class="nav-link" data-scroll-target="#y-lo-que-cuesta"><span class="header-section-number">14.2</span> Y lo que cuesta</a></li>
+  <li><a href="#el-híbrido-y-su-letra-pequeña" id="toc-el-híbrido-y-su-letra-pequeña" class="nav-link" data-scroll-target="#el-híbrido-y-su-letra-pequeña"><span class="header-section-number">14.3</span> El híbrido y su letra pequeña</a></li>
+  <li><a href="#la-vía-del-código" id="toc-la-vía-del-código" class="nav-link" data-scroll-target="#la-vía-del-código"><span class="header-section-number">14.4</span> La vía del código</a>
+  <ul class="collapse">
+  <li><a href="#agno-el-flujo-como-estructura-de-control" id="toc-agno-el-flujo-como-estructura-de-control" class="nav-link" data-scroll-target="#agno-el-flujo-como-estructura-de-control">Agno: el flujo como estructura de control</a></li>
+  <li><a href="#gradio-el-flujo-como-interfaz" id="toc-gradio-el-flujo-como-interfaz" class="nav-link" data-scroll-target="#gradio-el-flujo-como-interfaz">Gradio: el flujo como interfaz</a></li>
+  </ul></li>
+  <li><a href="#la-vía-de-la-plataforma" id="toc-la-vía-de-la-plataforma" class="nav-link" data-scroll-target="#la-vía-de-la-plataforma"><span class="header-section-number">14.5</span> La vía de la plataforma</a></li>
+  <li><a href="#cómo-elegir" id="toc-cómo-elegir" class="nav-link" data-scroll-target="#cómo-elegir"><span class="header-section-number">14.6</span> Cómo elegir</a></li>
+  <li><a href="#el-cuaderno" id="toc-el-cuaderno" class="nav-link" data-scroll-target="#el-cuaderno"><span class="header-section-number">14.7</span> El cuaderno</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/modelos/mlgenerativa.html">Modelos generativos</a></li><li class="breadcrumb-item"><a href="../../parts/modelos/mlgenerativa.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Inteligencia Artificial</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/agentes/queesunagente.html">Agentes</a></li><li class="breadcrumb-item"><a href="../../parts/agentes/flujos.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Flujos de trabajo</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Inteligencia Artificial</span></h1>
+<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Flujos de trabajo</span></h1>
 </div>
 
 
@@ -450,15 +443,13 @@ window.Quarto = {
 </header>
 
 
-<p>La Inteligencia Artificial es un campo multidisciplinar que pretende arrojar luz sobre cómo los entes inteligentes “hacen lo que hacen”. Crear modelos y simular su funcionamiento es un mecanismo base para la ciencia y de aquí se deriva el nombre de los sistemas que empleamos en la actualidad para emular comportamientos inteligentes.</p>
-<p>Las recetas que permiten construir estos modelos basados en meras evidencias son los algoritmos. Partiendo de un conjunto de datos pueden aprender a estimar (regresión), etiquetar (clasificación) o generar ejemplos del mismo tipo (generación).</p>
-<section id="modelos-generativos" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="modelos-generativos"><span class="header-section-number">3.1</span> Modelos generativos</h2>
-<p>La distinción entre las dos primeras tareas y la tercera no es de grado, es de naturaleza, y conviene fijarla bien porque de ella se derivan casi todas las rarezas de los sistemas actuales.</p>
-<p>Un modelo <strong>discriminativo</strong> aprende a separar. Dado un correo, decide si es spam o no; dada una radiografía, si hay fractura. Formalmente aprende <span class="math inline">\(P(y \mid x)\)</span>: la probabilidad de una etiqueta dada una evidencia. Es un modelo que responde preguntas cerradas y cuyo error es fácil de medir, porque para cada entrada existe una respuesta correcta contra la que comparar.</p>
-<p>Un modelo <strong>generativo</strong> aprende a producir. En lugar de la frontera entre clases, modela cómo se distribuyen los propios datos, <span class="math inline">\(P(x)\)</span>, y una vez la conoce puede muestrear de ella ejemplos nuevos que se parecen a los que vio sin ser ninguno de ellos. Es la diferencia entre saber distinguir un cuadro falso de uno auténtico y saber pintar.</p>
+<p><a href="../../parts/agentes/queesunagente.html">Qué es un agente</a> abrió con una distinción y después se dedicó entero a uno de los dos lados. <a href="../../parts/agentes/orquestacion.html">Orquestación</a> mencionó el otro de pasada, en una frase que merece bastante más espacio del que tuvo: <em>“no es un sistema multiagente, es un flujo de trabajo, y es la opción correcta muchas más veces de las que se admite”</em>.</p>
+<p>Este capítulo va de eso. De qué se compra exactamente al fijar el camino en lugar de dejar que lo decida el modelo, y de las dos familias de herramientas que hay para hacerlo. Porque la decisión no termina en “flujo o agente”: sigue en “escrito en código o dibujado en una plataforma”, y esa segunda pregunta decide <strong>quién puede mantener el sistema</strong>, que a los seis meses importa más que la primera.</p>
+<section id="lo-que-compra-fijar-el-camino" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="lo-que-compra-fijar-el-camino"><span class="header-section-number">14.1</span> Lo que compra fijar el camino</h2>
+<p>La respuesta corta es que se compra poder decir qué va a pasar antes de que pase. Desarrollada, son varias cosas distintas y conviene separarlas porque no todas valen lo mismo.</p>
 <table class="caption-top table">
-<caption>Dos formas distintas de aprender de los mismos datos</caption>
+<caption>La misma tabla de decisión, con las consecuencias delante</caption>
 <colgroup>
 <col style="width: 33%">
 <col style="width: 33%">
@@ -467,133 +458,299 @@ window.Quarto = {
 <thead>
 <tr class="header">
 <th></th>
-<th>Discriminativo</th>
-<th>Generativo</th>
+<th>Agente</th>
+<th>Flujo de trabajo</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Qué aprende</td>
-<td>La frontera entre clases</td>
-<td>La distribución de los datos</td>
+<td>Quién decide el camino</td>
+<td>El modelo, en cada vuelta</td>
+<td>Nosotros, al escribirlo</td>
 </tr>
 <tr class="even">
-<td>Qué devuelve</td>
-<td>Una etiqueta o un número</td>
-<td>Un ejemplo nuevo</td>
+<td>Coste por petición</td>
+<td>Variable, y crece con el cuadrado de las vueltas</td>
+<td>Fijo y conocido de antemano</td>
 </tr>
 <tr class="odd">
-<td>Cuándo acierta</td>
-<td>Cuando coincide con la etiqueta</td>
-<td>No hay etiqueta con la que comparar</td>
+<td>Latencia</td>
+<td>Variable</td>
+<td>Acotada</td>
 </tr>
 <tr class="even">
-<td>Cómo se evalúa</td>
-<td>Precisión, recall, error</td>
-<td>Aquí empieza el problema</td>
+<td>Qué pasa con un caso imprevisto</td>
+<td>Lo intenta</td>
+<td>Hace lo de siempre</td>
+</tr>
+<tr class="odd">
+<td>Cómo se prueba</td>
+<td>Contra un conjunto de casos, midiendo distribuciones</td>
+<td>Paso a paso, como cualquier software</td>
+</tr>
+<tr class="even">
+<td>Cómo se explica lo que hizo</td>
+<td>Reconstruyendo la traza</td>
+<td>Leyendo el dibujo</td>
 </tr>
 </tbody>
 </table>
-<p>Esa última fila es el origen de buena parte de <a href="../../parts/produccion/ecosistema.html">Producción</a>. Cuando no existe una respuesta correcta única, la pregunta “¿funciona?” deja de tener una respuesta objetiva y hay que construirla, que es de lo que trata el capítulo de <a href="../../parts/produccion/evaluacion.html">evaluación</a>.</p>
-</section>
-<section id="el-truco-de-la-predicción-de-la-siguiente-palabra" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="el-truco-de-la-predicción-de-la-siguiente-palabra"><span class="header-section-number">3.2</span> El truco de la predicción de la siguiente palabra</h2>
-<p>Los modelos de lenguaje que hoy usamos aprenden una versión muy concreta y muy modesta de esa distribución: dada una secuencia de texto, cuál es la probabilidad de cada posible continuación. Nada más. Se entrenan tapando la siguiente palabra de un texto real, pidiendo al modelo que la adivine y corrigiéndole cuando falla, repetido sobre una cantidad de texto que ninguna persona podría leer en muchas vidas.</p>
-<p>Lo llamativo es que resolver bien esa tarea tan tonta obliga a aprender cosas que no son nada tontas. Para completar “la capital de Francia es” hace falta un hecho. Para completar “el resultado de 17 por 23 es” hace falta un procedimiento. Para completar “el asesino resultó ser” al final de una novela policíaca hace falta haber seguido la trama. La predicción de la siguiente palabra no es el objetivo, es la excusa: es la tarea que fuerza al modelo a construir representaciones útiles del mundo por el camino <span class="citation" data-cites="radford2019language">(<a href="../referencias.html#ref-radford2019language" role="doc-biblioref">Radford et&nbsp;al. 2019</a>)</span>.</p>
-<div class="callout callout-style-default callout-important callout-titled">
+<p>Las dos últimas filas son las que casi nunca aparecen en la conversación y son las que más pesan cuando el sistema pasa de la demostración a la producción. Un flujo se prueba como se prueba cualquier programa: cada paso por separado, con sus entradas y sus salidas. Un agente exige montar el aparato de <a href="../../parts/produccion/evaluacion.html">evaluación</a> entero antes de poder afirmar nada, porque su comportamiento solo existe en agregado.</p>
+<p>Y la última conecta con <a href="../../parts/normativa/leyes.html">la normativa</a> de una forma muy concreta. Explicar por qué el sistema hizo lo que hizo es, en un flujo, enseñar el diagrama. En un agente hay que ir a buscar la traza de aquella ejecución y confiar en haberla guardado.</p>
+<div id="determinista" class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Importante</span>La consecuencia incómoda
+<span class="screen-reader-only">Importante</span>Un flujo no hace determinista la salida, hace determinista el camino
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Si el objetivo de entrenamiento es producir la continuación más plausible, entonces <strong>una continuación falsa pero plausible es un éxito según ese objetivo</strong>. El modelo no tiene ningún mecanismo interno que distinga “esto lo sé” de “esto encaja bien aquí”.</p>
-<p>Lo que llamamos alucinación no es un fallo del sistema. Es exactamente lo que le pedimos que hiciera, aplicado a un caso en el que no nos conviene. Cualquier solución tendrá que venir de fuera del modelo: del <a href="../../parts/contexto/rag.html">contexto</a> que le demos, de las <a href="../../parts/agentes/herramientas.html">herramientas</a> con las que pueda comprobar, o de la <a href="../../parts/produccion/evaluacion.html">evaluación</a> con la que le vigilemos.</p>
+<p>Es la confusión más habitual y conviene deshacerla pronto, porque de ella salen expectativas que después no se cumplen.</p>
+<p>Fijar los pasos no convierte el sistema en una función pura. Si en alguno de esos pasos hay una llamada a un modelo generativo, la <strong>redacción</strong> de la respuesta seguirá cambiando entre ejecuciones, y con temperatura por encima de cero cambiará siempre. Lo que queda fijo es otra cosa: <strong>qué fuentes se consultan, en qué orden y cuántas veces</strong>.</p>
+<p>Resulta que eso es justo lo que se audita y lo que se factura. A nadie le preocupa que la frase cambie de una vez a otra; preocupa que la respuesta salga de la tabla de plazos unas veces y de la memoria del modelo otras.</p>
 </div>
 </div>
 </section>
-<section id="escala-y-emergencia" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="escala-y-emergencia"><span class="header-section-number">3.3</span> Escala y emergencia</h2>
-<p>Durante años se asumió que un modelo de lenguaje era un modelo de lenguaje: útil para autocompletar, poco más. Lo que cambió el panorama fue descubrir que el rendimiento mejora de forma sorprendentemente regular al aumentar tres cosas a la vez (parámetros, datos y cómputo) y que esa mejora sigue una ley de potencias razonablemente predecible <span class="citation" data-cites="kaplan2020scaling">(<a href="../referencias.html#ref-kaplan2020scaling" role="doc-biblioref">Kaplan et&nbsp;al. 2020</a>)</span>.</p>
-<p>Predecible en la pérdida, eso sí. Lo que no era predecible es que, a partir de ciertos tamaños, aparecieran capacidades que los modelos pequeños sencillamente no tenían: seguir instrucciones, razonar en varios pasos, traducir entre idiomas que nadie emparejó explícitamente. Se popularizó llamarlas capacidades <em>emergentes</em>, aunque conviene tomar el término con pinzas: buena parte de esa aparente brusquedad se debe a que las métricas con las que las medimos son de todo o nada.</p>
-<p>El trabajo posterior corrigió además una idea muy extendida. Durante un tiempo la carrera fue por el número de parámetros, hasta que se comprobó que los modelos de aquella época estaban <strong>infraentrenados</strong>: para un presupuesto de cómputo dado, convenía un modelo más pequeño alimentado con muchos más datos <span class="citation" data-cites="hoffmann2022training">(<a href="../referencias.html#ref-hoffmann2022training" role="doc-biblioref"><span class="nocase">Hoffmann et&nbsp;al.</span> 2022</a>)</span>. De ahí viene que en 2026 un modelo de 30.000 millones de parámetros pueda superar a uno de 175.000 millones de hace cuatro años.</p>
+<section id="y-lo-que-cuesta" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="y-lo-que-cuesta"><span class="header-section-number">14.2</span> Y lo que cuesta</h2>
+<p>El precio del flujo tiene un nombre y no es “rigidez”, que es lo que se suele decir. Es que <strong>no degrada bien</strong>.</p>
+<p>Un agente que se topa con una pregunta que no encaja en lo previsto <strong>puede</strong> dar vueltas, consultar otra herramienta y llegar o no llegar. Un flujo hace exactamente los pasos que le escribimos, obtiene datos parciales y <strong>redacta una respuesta con la misma seguridad de siempre</strong>. No falla: acierta a medias sin avisar, que es peor, porque un error visible se corrige y uno silencioso se propaga.</p>
+<p>Ese “puede” del agente conviene leerlo como lo que es, una posibilidad estructural y no una garantía. El cuaderno de este capítulo le pone delante cuatro consultas que necesitan dos fuentes y el agente se conforma con una, exactamente igual que el flujo. La diferencia que queda es de naturaleza y no de resultado: en el agente eso es una decisión, y las decisiones se mejoran con el prompt; en el flujo es la forma del dibujo, y solo se arregla dibujando otro.</p>
+<p>De ahí que la pregunta útil al diseñar no sea “¿puedo dibujar el camino?” sino esta otra, bastante más incómoda: <strong>¿qué fracción de las peticiones reales cabe en el dibujo, y qué pasa con el resto?</strong></p>
 </section>
-<section id="de-completar-texto-a-obedecer" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="de-completar-texto-a-obedecer"><span class="header-section-number">3.4</span> De completar texto a obedecer</h2>
-<p>Un modelo entrenado solo con predicción de la siguiente palabra es incómodo de usar. Si le escribes una pregunta, su continuación estadísticamente más plausible puede ser otra pregunta, porque en internet las preguntas suelen venir en listas. Hace falta un segundo paso que lo convierta de <em>modelo de lenguaje</em> en <em>asistente</em>.</p>
+<section id="el-híbrido-y-su-letra-pequeña" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="el-híbrido-y-su-letra-pequeña"><span class="header-section-number">14.3</span> El híbrido y su letra pequeña</h2>
+<p>La forma de quedarse con lo bueno de los dos lados es vieja y aburrida: el flujo por defecto, y una <strong>salida de emergencia</strong> hacia el agente cuando el propio flujo detecta que el caso no es suyo.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
-<pre class="mermaid mermaid-js">flowchart LR
-    d["Texto de internet"] --&gt; pre["Preentrenamiento"]
-    pre --&gt; base["Modelo base"]
-    base --&gt; sft["Ajuste con instrucciones"]
-    sft --&gt; rl["Ajuste con preferencias"]
-    rl --&gt; chat["Modelo asistente"]
+<pre class="mermaid mermaid-js">flowchart TD
+    q["Consulta"] --&gt; c["Clasificar"]
+    c --&gt;|confianza alta| f["Flujo fijo:&lt;br/&gt;consultar y redactar"]
+    c --&gt;|confianza baja| a["Agente&lt;br/&gt;con herramientas"]
+    f --&gt; r["Respuesta"]
+    a --&gt; r
 
-    classDef externo fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
-    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    classDef contexto fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
     classDef control fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
-    class d externo
-    class base,chat modelo
-    class pre,sft,rl control
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class q,r contexto
+    class c,f control
+    class a modelo
 </pre>
 </div>
 <p></p></figure><p></p>
 </div>
 </div>
 </div>
-<p>El <strong>ajuste con instrucciones</strong> (<em>supervised fine-tuning</em>) le enseña el formato: esto es una petición, esto es una respuesta. El <strong>ajuste con preferencias</strong> le enseña el criterio: entre dos respuestas, cuál prefieren las personas. La receta original usaba aprendizaje por refuerzo sobre un modelo de recompensa entrenado con comparaciones humanas <span class="citation" data-cites="ouyang2022training">(<a href="../referencias.html#ref-ouyang2022training" role="doc-biblioref"><span class="nocase">Ouyang et&nbsp;al.</span> 2022</a>)</span> y hoy conviven variantes más baratas, pero la idea es la misma.</p>
-<p>Esta fase es la que produce el tono servicial, la que instala las negativas ante peticiones problemáticas y la que hace que el modelo diga “como modelo de lenguaje, no puedo”. También es la responsable de la <strong>adulación</strong>: si las personas puntúan mejor las respuestas que les dan la razón, el modelo aprende a dar la razón. Es un sesgo introducido por el método, no un defecto de carácter.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<p>La pieza que lo hace posible es que el clasificador del primer paso <strong>devuelva su confianza</strong> y no solo su veredicto. Es la misma lección del <a href="../../parts/produccion/evaluacion.html#el-cuaderno">cuaderno de evaluación</a>, donde un modelo pequeño usado como juez acertaba la mitad de las veces en su veredicto y tenía la señal buena escondida en la probabilidad.</p>
+<p>Lo que busca el híbrido no es acierto, es <strong>reparto del gasto</strong>: que el grueso del tráfico, que suele ser rutinario, se resuelva por el camino barato y predecible, y que el bucle caro quede reservado para la cola de casos raros que es la que lo justifica.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Base, instruct, thinking
+<span class="screen-reader-only">Advertencia</span>La salida de emergencia tiene que dar a un sitio mejor
 </div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Cuando un proveedor publica pesos abiertos suele ofrecer varias variantes del mismo modelo y no son intercambiables:</p>
-<ul>
-<li><strong>Base</strong>: solo preentrenamiento. Útil para ajustar sobre él, incómodo para conversar.</li>
-<li><strong>Instruct</strong> o <strong>chat</strong>: el anterior más las dos fases de ajuste. Es el que se usa el 95% de las veces.</li>
-<li><strong>Thinking</strong> o <strong>reasoning</strong>: además entrenado para producir una cadena de razonamiento antes de responder, cambiando cómputo en inferencia por precisión. Lo veremos al hablar de <a href="../../parts/modelos/inferencia.html#razonar-gastando-más">inferencia</a>.</li>
-</ul>
-<p>Descargar el base pensando que es el de chat es un error de principiante habitual y produce resultados desconcertantes.</p>
-</div>
+<p>El patrón suena tan razonable que se adopta sin comprobarlo. <a href="#el-cuaderno">El cuaderno</a> lo comprueba y sale mal.</p>
+<p>Al subir el umbral, el sistema manda más consultas al agente, gasta más del doble de tokens y <strong>acierta menos</strong>. No porque el híbrido sea mala idea en abstracto, sino porque en ese montaje concreto el agente era peor que el flujo del que se escapaba, y derivar hacia él solo podía empeorar las cosas.</p>
+<p>La conclusión no es que no haya que usarlo. Es que un patrón que compensa sobre el papel se convierte en un impuesto en cuanto la pieza cara no es mejor que la barata, y eso solo se sabe <strong>midiendo las dos por separado</strong> antes de conectarlas. Es la lección del enrutador del <a href="../../parts/agentes/orquestacion.html#los-tres-precios-medidos">capítulo anterior</a>, vista desde el otro lado.</p>
 </div>
 </div>
 </section>
-<section id="más-allá-del-texto" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="más-allá-del-texto"><span class="header-section-number">3.5</span> Más allá del texto</h2>
-<p>Aunque este manual gira en torno al lenguaje, la misma idea de aprender una distribución y muestrear de ella sostiene la generación de imagen, audio y vídeo, con arquitecturas distintas (los modelos de difusión, principalmente) y con un detalle que merece atención: los modelos multimodales actuales proyectan imágenes, audio y texto a un mismo espacio de representación, de modo que una imagen puede ocupar el lugar de una instrucción.</p>
-<p>Eso tiene una lectura práctica y otra de seguridad. La práctica es que se puede pedir a un modelo que lea una factura escaneada. La de seguridad es que <strong>una instrucción puede venir escondida en un píxel</strong>, y a eso volveremos en <a href="../../parts/seguridad/retos.html">los retos de seguridad</a>.</p>
-<p>Antes de eso conviene abrir la caja y ver qué hay dentro, que es lo que hace <a href="../../parts/modelos/transformers.html">el siguiente capítulo</a>.</p>
+<section id="la-vía-del-código" class="level2" data-number="14.4">
+<h2 data-number="14.4" class="anchored" data-anchor-id="la-vía-del-código"><span class="header-section-number">14.4</span> La vía del código</h2>
+<p>Dentro del código, el mismo asunto se ha resuelto dos veces con intenciones muy distintas.</p>
+<section id="agno-el-flujo-como-estructura-de-control" class="level3">
+<h3 class="anchored" data-anchor-id="agno-el-flujo-como-estructura-de-control">Agno: el flujo como estructura de control</h3>
+<p><a href="https://docs.agno.com/">Agno</a> aparecía en la <a href="../../parts/agentes/orquestacion.html#frameworks">tabla de frameworks</a> por su ligereza, y trae además una capa de flujos que es un buen ejemplo de la categoría. Un <code>Workflow</code> es una lista de pasos, y cada paso envuelve exactamente un ejecutor: un agente, un equipo, <strong>una función de Python normal</strong> o un flujo anidado. Alrededor de eso hay cuatro construcciones: <code>Loop</code>, <code>Parallel</code>, <code>Condition</code> y <code>Router</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> agno.workflow.step <span class="im">import</span> Step, StepInput, StepOutput</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> agno.workflow.router <span class="im">import</span> Router</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> agno.workflow.workflow <span class="im">import</span> Workflow</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> clasificar(paso: StepInput) <span class="op">-&gt;</span> StepOutput:</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    categoria <span class="op">=</span> enrutar(paso.<span class="bu">input</span>)          <span class="co"># una pasada del modelo</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> StepOutput(content<span class="op">=</span>categoria)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>plazos <span class="op">=</span> Step(name<span class="op">=</span><span class="st">"plazos"</span>, executor<span class="op">=</span>responder_plazos)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>expediente <span class="op">=</span> Step(name<span class="op">=</span><span class="st">"expediente"</span>, executor<span class="op">=</span>responder_expediente)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> derivar(paso: StepInput):</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [plazos] <span class="cf">if</span> paso.previous_step_content <span class="op">==</span> <span class="st">"plazo"</span> <span class="cf">else</span> [expediente]</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>flujo <span class="op">=</span> Workflow(</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">"triaje de secretaría"</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    steps<span class="op">=</span>[</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        Step(name<span class="op">=</span><span class="st">"clasificar"</span>, executor<span class="op">=</span>clasificar),</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        Router(name<span class="op">=</span><span class="st">"derivar"</span>, selector<span class="op">=</span>derivar, choices<span class="op">=</span>[plazos, expediente]),</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>flujo.run(<span class="bu">input</span><span class="op">=</span><span class="st">"¿cuándo empieza el plazo de matrícula?"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Mirando esas cuatro construcciones con algo de mala idea, son el <code>for</code>, el <code>asyncio.gather</code>, el <code>if</code> y el <code>match</code> de toda la vida, con otro nombre y bastante más ceremonia. La objeción es legítima y merece respuesta, porque es la misma que el capítulo anterior dejó planteada.</p>
+<p>Lo que se gana no está en el flujo, que efectivamente ya sabíamos escribir. Está en la lista de <a href="../../parts/agentes/orquestacion.html#frameworks">lo que no conviene reescribir</a>: estado que sobrevive al proceso, ejecución que se reanuda donde se quedó, <a href="../../parts/produccion/observabilidad.html">trazas</a> por paso y un punto donde detener el proceso para que lo apruebe una persona. Declarar los pasos es el precio que se paga por que el framework pueda meterse entre ellos.</p>
+<p>La regla, entonces, es la de siempre: si vuestro flujo son tres funciones que se llaman una detrás de otra y termina en el mismo proceso en el que empezó, escribidlo con <code>if</code> y ahorraos la dependencia. En cuanto haya que persistirlo, reanudarlo o pararlo a mitad para que alguien firme, la declaración empieza a pagarse sola.</p>
+</section>
+<section id="gradio-el-flujo-como-interfaz" class="level3">
+<h3 class="anchored" data-anchor-id="gradio-el-flujo-como-interfaz">Gradio: el flujo como interfaz</h3>
+<p><code>gr.Workflow</code> es otra cosa, y es interesante precisamente porque resuelve un problema que este manual ya había abierto en el <a href="../../parts/agentes/interfaz.html">capítulo de interfaz</a>. En lugar de organizar la ejecución, <strong>convierte el proceso en la pantalla</strong>.</p>
+<p>Se describen los pasos como un grafo de nodos con puertos tipados y Gradio sirve un lienzo donde cada nodo se puede ejecutar por separado y cada resultado intermedio se ve. Las funciones propias entran por <code>bind=</code> y Gradio deduce los puertos de la firma; las conexiones se pueden declarar en código o trazar con el ratón, y en ese caso se guardan solas en un <code>workflow.json</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gradio <span class="im">as</span> gr</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> clasificar(consulta: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>: ...</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> consultar(categoria: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>: ...</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> redactar(datos: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>: ...</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>gr.Workflow(</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    bind<span class="op">=</span>[clasificar, consultar, redactar],</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    edges<span class="op">=</span>[(<span class="st">"clasificar"</span>, <span class="st">"consultar"</span>), (<span class="st">"consultar"</span>, <span class="st">"redactar"</span>)],</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>).launch()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>De propina, cada flujo es también una API: cada nodo de salida se publica como un punto de acceso con el nombre de su etiqueta, sin escribir nada más.</p>
+<p>Lo que esto compra de verdad no es la demostración bonita. Es que <strong>la persona del dominio puede recablear el proceso sin tocar Python</strong> y, sobre todo, que los resultados intermedios están a la vista. En un sistema generativo, ver qué se recuperó antes de redactar es la mitad de la depuración, y es exactamente lo que un <code>print</code> en un cuaderno acaba haciendo peor.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>La persona del dominio, otra vez
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>El <a href="../../parts/produccion/ecosistema.html#el-equipo-y-el-proceso">capítulo de ecosistema</a> insiste en que quien sabe distinguir una respuesta correcta de una plausible es quien lleva quince años haciendo ese trabajo, y en que su criterio es literalmente el conjunto de evaluación.</p>
+<p>Un flujo visible y editable es la forma más barata de meterla en el bucle de verdad, en lugar de consultarla al principio y enseñarle el resultado al final. Que pueda cambiar el orden de dos pasos y ver qué pasa vale más que cualquier reunión de validación.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="la-vía-de-la-plataforma" class="level2" data-number="14.5">
+<h2 data-number="14.5" class="anchored" data-anchor-id="la-vía-de-la-plataforma"><span class="header-section-number">14.5</span> La vía de la plataforma</h2>
+<p>Fuera del código está la otra mitad del mercado, y llega desde un sitio distinto: la automatización empresarial, que existía mucho antes que todo esto. Un lienzo, nodos, disparadores y conectores a unos cuantos cientos de sistemas.</p>
+<p>El malentendido habitual es pensar que lo que venden es programar sin programar. No es eso, o no principalmente. Lo que venden es <strong>la parte aburrida ya resuelta</strong>: autenticarse contra un servicio corporativo, reintentar cuando falla, ejecutar a las tres de la mañana, guardar el historial de ejecuciones y no tener que desplegar nada.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    t["Disparador:&lt;br/&gt;webhook, hora,&lt;br/&gt;correo"] --&gt; n1["Nodo:&lt;br/&gt;consultar"]
+    n1 --&gt; n2["Nodo:&lt;br/&gt;modelo"]
+    n2 --&gt; n3["Nodo:&lt;br/&gt;actuar"]
+    cred[("Credenciales&lt;br/&gt;de todo")] -.-&gt; n1
+    cred -.-&gt; n3
+
+    classDef contexto fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef control fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef modelo fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    classDef riesgo fill:#f7d9d9,stroke:#b05252,stroke-width:1.5px,color:#5e1f1f
+    class t contexto
+    class n1,n3 control
+    class n2 modelo
+    class cred riesgo
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Dos representantes con filosofías y licencias distintas, que es por donde conviene mirarlos:</p>
+<table class="caption-top table">
+<caption>Dos plataformas, y la fila de la licencia no es un detalle</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th><a href="https://github.com/n8n-io/n8n">n8n</a></th>
+<th><a href="https://github.com/simstudioai/sim">Sim</a></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>De dónde viene</td>
+<td>Automatización, con la IA añadida después</td>
+<td>Nació para agentes</td>
+</tr>
+<tr class="even">
+<td>Licencia</td>
+<td><em>Fair-code</em>, Sustainable Use License</td>
+<td>Apache 2.0</td>
+</tr>
+<tr class="odd">
+<td>Qué permite la licencia</td>
+<td>Auto-alojar y modificar para uso interno; no revenderlo como servicio</td>
+<td>Lo que quieras</td>
+</tr>
+<tr class="even">
+<td>Fuerte en</td>
+<td>Cientos de conectores maduros</td>
+<td>Bases de conocimiento y recuperación de serie</td>
+</tr>
+<tr class="odd">
+<td>Modelos locales</td>
+<td>Nodo de agente contra Ollama o vLLM</td>
+<td>Ollama y vLLM</td>
+</tr>
+<tr class="even">
+<td>Auto-alojamiento</td>
+<td>Docker, npm</td>
+<td>Docker Compose, Kubernetes</td>
+</tr>
+</tbody>
+</table>
+<p>La distinción de la licencia merece la pena porque se malinterpreta a menudo. <strong>n8n no es software libre</strong> en el sentido de la OSI: su Sustainable Use License permite usarlo, modificarlo y alojarlo uno mismo para su propio negocio, y prohíbe venderlo como servicio a terceros. Para la inmensa mayoría de las empresas eso da igual. Para una consultora que quiera montar flujos a sus clientes sobre una instalación propia, no da nada igual, y es una conversación que hay que tener con el departamento jurídico antes y no después. De forma similar, Apache 2.0, no plantea esa pregunta.</p>
+<p>Lo que ha cambiado en estas plataformas con la IA generativa es que el nodo del modelo dejó de ser un conector más. Cuando ese nodo lleva un agente con herramientas, la plataforma ha pasado de ejecutar un flujo que nosotros dibujamos a ejecutar un flujo donde <strong>hay un tramo que decide solo</strong>, con todo lo que este manual lleva diciendo al respecto. Y lo apuntan directamente a los sistemas de la casa.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Advertencia</span>La plataforma también es una decisión de arquitectura
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Se adoptan por lo fácil que es empezar y se pagan por lo difícil que es gobernarlas después. Cuatro precios concretos:</p>
+<ul>
+<li><strong>La lógica de negocio se convierte en un JSON.</strong> Se puede versionar, sí. Revisarlo es otra cosa: el <code>diff</code> de un lienzo no se lee, y ahí se acabó la revisión de cambios que el <a href="../../parts/apendices/copilotos.html">apéndice de copilotos</a> defiende para el código.</li>
+<li><strong>No hay dónde poner las pruebas.</strong> Los ganchos de evaluación existen a medias o no existen, así que el conjunto de casos etiquetados, que es lo único que dice si el sistema ha empeorado, se queda fuera.</li>
+<li><strong>Concentra las credenciales.</strong> Una instalación con acceso al correo, al CRM y a la base de datos es el objetivo de mayor valor de la red. Y un flujo que lee correo, se lo pasa a un modelo y puede enviar correo reúne la <a href="../../parts/seguridad/retos.html#la-trifecta-letal">trifecta letal</a> sin que nadie lo haya decidido conscientemente.</li>
+<li><strong>Aparecen flujos que nadie sabe que existen.</strong> Es la vieja historia de las macros de la hoja de cálculo, con permisos de producción y un modelo generativo dentro. El coste no se ve hasta que alguien se va de la empresa.</li>
+</ul>
+<p>Ninguno de los cuatro es motivo para descartarlas. Son motivo para decidir <strong>qué clase de proceso vive ahí</strong> en lugar de dejar que lo decida quien llegue primero.</p>
+</div>
+</div>
+</section>
+<section id="cómo-elegir" class="level2" data-number="14.6">
+<h2 data-number="14.6" class="anchored" data-anchor-id="cómo-elegir"><span class="header-section-number">14.6</span> Cómo elegir</h2>
+<p>Tres preguntas, por orden, y ninguna es sobre funcionalidades.</p>
+<p><strong>¿Puedo dibujar el camino completo?</strong> Si la respuesta es sí, dibujadlo. Es la <a href="../../parts/agentes/queesunagente.html#el-bucle">recomendación menos comercial del sector</a> y sigue siendo la que más dinero ahorra. El agente solo se justifica cuando el número de pasos depende de lo que se vaya encontrando.</p>
+<p><strong>¿Quién va a mantener esto dentro de un año?</strong> Si la respuesta es una persona del dominio, plataforma o lienzo. Si es el equipo de plataforma, código. Elegir contra esta respuesta produce sistemas que funcionan y que nadie toca porque nadie se atreve.</p>
+<p><strong>¿Esto nos diferencia?</strong> Es el criterio de <a href="../../parts/produccion/ecosistema.html#comprar-o-construir">comprar o construir</a> aplicado aquí, y reparte bastante bien: la integración con los sistemas de la casa es infraestructura y se compra; la lógica del dominio y el conjunto de evaluación son vuestros y se escriben.</p>
+<p>Lo que sale de cruzar las tres, en la práctica, es un reparto y no una elección única. La plataforma conectando sistemas y disparando procesos, el código llevando la parte que hay que probar en serio, y el agente reservado para la cola de casos que no cabía en el dibujo.</p>
+</section>
+<section id="el-cuaderno" class="level2" data-number="14.7">
+<h2 data-number="14.7" class="anchored" data-anchor-id="el-cuaderno"><span class="header-section-number">14.7</span> El cuaderno</h2>
+<p>Coge el triage de la secretaría y lo monta dos veces sobre los mismos dieciocho casos etiquetados: como <strong>agente</strong>, con tres herramientas y el modelo decidiendo, y como <strong>flujo</strong>, con los pasos de clasificar, consultar y redactar fijados a mano. Las herramientas son las mismas en los dos montajes, para que lo único que cambie sea quién decide.</p>
+<p>Esa primera tabla sale más rotunda de lo que este capítulo se atrevía a prometer: el flujo acierta la fuente en <strong>17 de 18</strong> casos frente a <strong>11</strong> del agente, y con la tercera parte de los tokens. El motivo es la aritmética del <a href="../../parts/agentes/orquestacion.html#los-tres-precios-medidos">capítulo anterior</a> vista desde el otro lado: elegir entre tres etiquetas con la decodificación restringida es un problema bastante más fácil que emitir un JSON bien formado eligiendo entre tres esquemas. Con un matiz que conviene no saltarse, porque es el que baja los humos: en <strong>acertar el trámite concreto</strong> las dos arquitecturas empatan a 4 de 7. Fijar el camino no arregla el paso que extrae los argumentos.</p>
+<p>Después van las tres afirmaciones que no se ven en esa tabla, y dos salen incómodas.</p>
+<p>La de la reproducibilidad sale <strong>a medias</strong>. El camino del flujo es único por construcción, y el del agente resultó ser único también en los casos que se le probaron. La diferencia acaba estando donde de verdad importa: una de las dos propiedades se demuestra leyendo el código y la otra hay que medirla, caso por caso, cada vez que algo cambia.</p>
+<p>La de los casos compuestos sale peor de lo previsto, y para los dos. Ninguna de las dos arquitecturas pide la segunda fuente y ninguna avisa de que le falta. El flujo llega a afirmar que un trabajo de fin de grado se defiende “el 25 de octubre”, fecha que no aparece en ninguna tabla, después de haber consultado únicamente el expediente.</p>
+<p>Y el híbrido sale directamente en contra, por el motivo del recuadro de arriba.</p>
+<p>De propina, declara el mismo flujo con <code>Workflow</code> y <code>Router</code> de Agno y compara lo que aporta el framework con lo que ya hacía el <code>if</code>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/agentes/flujos.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid figure-img"></a></p>
+<figcaption>Abrir en Colab</figcaption>
+</figure>
+</div>
+<p>Queda la frontera de la que todavía no hemos dicho nada, la que decide si el sistema se usa o se abandona: <a href="../../parts/agentes/interfaz.html">la interfaz del agente</a>.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
-<div id="ref-hoffmann2022training" class="csl-entry" role="listitem">
-<span class="nocase">Hoffmann, Jordan, Sebastian Borgeaud, Arthur Mensch, et&nbsp;al.</span> 2022. <span>«Training Compute-Optimal Large Language Models»</span>. <em>Advances in Neural Information Processing Systems</em> 35.
-</div>
-<div id="ref-kaplan2020scaling" class="csl-entry" role="listitem">
-Kaplan, Jared, Sam McCandlish, Tom Henighan, et&nbsp;al. 2020. <span>«Scaling Laws for Neural Language Models»</span>. <em>arXiv preprint arXiv:2001.08361</em>.
-</div>
-<div id="ref-ouyang2022training" class="csl-entry" role="listitem">
-<span class="nocase">Ouyang, Long, Jeffrey Wu, Xu Jiang, et&nbsp;al.</span> 2022. <span>«Training language models to follow instructions with human feedback»</span>. <em>Advances in Neural Information Processing Systems</em> 35.
-</div>
-<div id="ref-radford2019language" class="csl-entry" role="listitem">
-Radford, Alec, Jeffrey Wu, Rewon Child, David Luan, Dario Amodei, y Ilya Sutskever. 2019. <em>Language Models are Unsupervised Multitask Learners</em>. OpenAI.
-</div>
-</div>
 </section>
 
 </main> <!-- /main -->
@@ -999,13 +1156,13 @@ Radford, Alec, Jeffrey Wu, Rewon Child, David Luan, Dario Amodei, y Ilya Sutskev
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../parts/fundamentos/redes.html" class="pagination-link" aria-label="De la convolución a la atención">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">De la convolución a la atención</span></span>
+      <a href="../../parts/agentes/orquestacion.html" class="pagination-link" aria-label="Orquestación y frameworks">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Orquestación y frameworks</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../parts/modelos/transformers.html" class="pagination-link" aria-label="Qué hay dentro">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Qué hay dentro</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../parts/agentes/interfaz.html" class="pagination-link" aria-label="La interfaz del agente">
+        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La interfaz del agente</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
