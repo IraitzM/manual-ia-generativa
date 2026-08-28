@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>8&nbsp; Prompting – Manual de IA Generativa</title>
+<title>7&nbsp; Ajuste fino y destilación – Manual de IA Generativa</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -25,41 +25,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 /* CSS for citations */
 div.csl-bib-body { }
@@ -90,8 +55,8 @@ div.csl-indent {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../parts/contexto/rag.html" rel="next">
-<link href="../../parts/contexto/intro.html" rel="prev">
+<link href="../../parts/contexto/intro.html" rel="next">
+<link href="../../parts/modelos/panorama.html" rel="prev">
 <link href="../../cover-removebg-preview.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -130,12 +95,38 @@ div.csl-indent {
     "search-label": "Buscar"
   }
 }</script>
-<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
-<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
-<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
-<meta property="og:title" content="8&nbsp; Prompting – Manual de IA Generativa">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="7&nbsp; Ajuste fino y destilación – Manual de IA Generativa">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/manual-ia-generativa/logo-noback.png">
 <meta property="og:site_name" content="Manual de IA Generativa">
@@ -152,7 +143,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/contexto/intro.html">Contexto</a></li><li class="breadcrumb-item"><a href="../../parts/contexto/prompting.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Prompting</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/modelos/mlgenerativa.html">Modelos generativos</a></li><li class="breadcrumb-item"><a href="../../parts/modelos/ajustefino.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Ajuste fino y destilación</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -214,13 +205,13 @@ div.csl-indent {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text">Modelos generativos</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../parts/modelos/mlgenerativa.html" class="sidebar-item-text sidebar-link">
@@ -247,7 +238,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../parts/modelos/ajustefino.html" class="sidebar-item-text sidebar-link">
+  <a href="../../parts/modelos/ajustefino.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Ajuste fino y destilación</span></span></a>
   </div>
 </li>
@@ -257,14 +248,14 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="../../parts/contexto/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Contexto</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../parts/contexto/prompting.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../parts/contexto/prompting.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Prompting</span></span></a>
   </div>
 </li>
@@ -420,20 +411,21 @@ div.csl-indent {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#lo-que-de-verdad-se-sostiene" id="toc-lo-que-de-verdad-se-sostiene" class="nav-link active" data-scroll-target="#lo-que-de-verdad-se-sostiene"><span class="header-section-number">8.1</span> Lo que de verdad se sostiene</a></li>
-  <li><a href="#el-prompt-de-sistema-no-es-un-contrato" id="toc-el-prompt-de-sistema-no-es-un-contrato" class="nav-link" data-scroll-target="#el-prompt-de-sistema-no-es-un-contrato"><span class="header-section-number">8.2</span> El prompt de sistema no es un contrato</a></li>
-  <li><a href="#el-prompt-es-código" id="toc-el-prompt-es-código" class="nav-link" data-scroll-target="#el-prompt-es-código"><span class="header-section-number">8.3</span> El prompt es código</a></li>
-  <li><a href="#cuándo-el-prompt-ya-no-da-más-de-sí" id="toc-cuándo-el-prompt-ya-no-da-más-de-sí" class="nav-link" data-scroll-target="#cuándo-el-prompt-ya-no-da-más-de-sí"><span class="header-section-number">8.4</span> Cuándo el prompt ya no da más de sí</a></li>
-  <li><a href="#el-cuaderno" id="toc-el-cuaderno" class="nav-link" data-scroll-target="#el-cuaderno"><span class="header-section-number">8.5</span> El cuaderno</a></li>
+  <li><a href="#qué-enseña-y-qué-no" id="toc-qué-enseña-y-qué-no" class="nav-link active" data-scroll-target="#qué-enseña-y-qué-no"><span class="header-section-number">7.1</span> Qué enseña y qué no</a></li>
+  <li><a href="#lora-o-por-qué-esto-se-ha-vuelto-accesible" id="toc-lora-o-por-qué-esto-se-ha-vuelto-accesible" class="nav-link" data-scroll-target="#lora-o-por-qué-esto-se-ha-vuelto-accesible"><span class="header-section-number">7.2</span> LoRA, o por qué esto se ha vuelto accesible</a></li>
+  <li><a href="#los-datos-son-el-trabajo" id="toc-los-datos-son-el-trabajo" class="nav-link" data-scroll-target="#los-datos-son-el-trabajo"><span class="header-section-number">7.3</span> Los datos son el trabajo</a></li>
+  <li><a href="#destilación" id="toc-destilación" class="nav-link" data-scroll-target="#destilación"><span class="header-section-number">7.4</span> Destilación</a></li>
+  <li><a href="#cómo-saber-si-ha-servido" id="toc-cómo-saber-si-ha-servido" class="nav-link" data-scroll-target="#cómo-saber-si-ha-servido"><span class="header-section-number">7.5</span> Cómo saber si ha servido</a></li>
+  <li><a href="#el-cuaderno" id="toc-el-cuaderno" class="nav-link" data-scroll-target="#el-cuaderno"><span class="header-section-number">7.6</span> El cuaderno</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/contexto/intro.html">Contexto</a></li><li class="breadcrumb-item"><a href="../../parts/contexto/prompting.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Prompting</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/modelos/mlgenerativa.html">Modelos generativos</a></li><li class="breadcrumb-item"><a href="../../parts/modelos/ajustefino.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Ajuste fino y destilación</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Prompting</span></h1>
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Ajuste fino y destilación</span></h1>
 </div>
 
 
@@ -450,162 +442,140 @@ div.csl-indent {
 </header>
 
 
-<p>Hay algo incómodo en dedicar un capítulo a esto. El <em>prompt engineering</em> nació con aires de disciplina, se llenó de listas de trucos y de vendedores de cursos, y una parte considerable de aquellos trucos ha ido caducando conforme los modelos mejoraban. Ofrecer una propina imaginaria al modelo, por ejemplo, tuvo su momento de gloria y hoy no hace nada.</p>
-<p>Lo que no ha caducado es lo aburrido: ser específico, dar contexto, decir en qué formato queremos la respuesta y enseñar ejemplos cuando la tarea es sutil. Eso sigue funcionando y probablemente seguirá, porque no explota ninguna rareza del modelo sino que reduce la ambigüedad de la petición.</p>
-<section id="lo-que-de-verdad-se-sostiene" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="lo-que-de-verdad-se-sostiene"><span class="header-section-number">8.1</span> Lo que de verdad se sostiene</h2>
-<p><strong>Especificidad sobre cortesía.</strong> “Resume esto” deja al modelo elegir longitud, tono, destinatario y qué es importante. “Resume esto en tres viñetas para un comité de dirección, centrándote en el riesgo económico” no deja nada de eso al azar. La mayoría de respuestas decepcionantes lo son porque la petición admitía muchas respuestas y la que salió no era la que teníamos en la cabeza.</p>
-<p><strong>Contexto antes que instrucción.</strong> El modelo no sabe que “el proyecto” es un despliegue de SAP ni que “la norma” es una circular interna. Lo que en una conversación humana se sobreentiende, aquí hay que escribirlo.</p>
-<p><strong>Formato explícito.</strong> Si la salida va a leerla un programa, hay que usar <a href="../../parts/modelos/inferencia.html#salida-estructurada">salida estructurada</a> y no pedirlo por favor. Si la va a leer una persona, describir la forma esperada ahorra la mitad de las iteraciones.</p>
-<p><strong>Ejemplos cuando la tarea es sutil.</strong> Es el <em>few-shot</em> de toda la vida y sigue siendo la herramienta más eficaz para tareas de criterio difuso: clasificar el tono de una reclamación, decidir qué es un incidente grave. Tres ejemplos bien elegidos valen más que tres párrafos de descripción. Ojo con dos vicios: que todos los ejemplos sean de la misma clase (el modelo aprende ese sesgo) y que ninguno cubra los casos límite, que es justo donde va a fallar.</p>
-<p><strong>Pedir el razonamiento, cuando el modelo no lo trae de serie.</strong> El clásico “piensa paso a paso” <span class="citation" data-cites="wei2022chain">(<a href="../referencias.html#ref-wei2022chain" role="doc-biblioref">Wei et&nbsp;al. 2022</a>)</span> sigue mejorando resultados en tareas con estructura. Con <a href="../../parts/modelos/inferencia.html#razonar-gastando-más">modelos de razonamiento</a> es innecesario y a veces contraproducente: ya lo hacen, y forzarlo dos veces empeora.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<p>El <a href="../../parts/modelos/panorama.html#el-ajuste-fino-casi-nunca-es-la-respuesta">capítulo anterior</a> despacha el ajuste fino con una advertencia, y la advertencia sigue siendo cierta: antes de ajustar hay que agotar el prompt, el contexto recuperado y las herramientas. Pero “casi nunca” no es “nunca”, y cuando toca, conviene saber qué se está haciendo.</p>
+<p>Este capítulo explica en qué consiste, cuánto cuesta de verdad y cómo saber si ha servido.</p>
+<section id="qué-enseña-y-qué-no" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="qué-enseña-y-qué-no"><span class="header-section-number">7.1</span> Qué enseña y qué no</h2>
+<p>La frase que más ahorra en este terreno es que <strong>el ajuste fino enseña forma, no hechos</strong>.</p>
+<p>Enseña forma: un formato de salida que el modelo respeta sin que haya que pedírselo, un tono, un vocabulario propio de la casa, una manera de estructurar las respuestas. Cosas que en un prompt ocuparían doscientas líneas y que aun así se cumplirían a medias.</p>
+<p>No enseña hechos, o los enseña tan mal que no compensa. Los plazos de matrícula del curso que viene no se meten con un ajuste fino: se consultan. Y no por una limitación técnica sino por una económica, porque los hechos cambian y cada cambio obligaría a reentrenar y volver a validar.</p>
+<table class="caption-top table">
+<caption>Qué arregla cada cosa, y qué no arregla ninguna</caption>
+<thead>
+<tr class="header">
+<th>Si el problema es</th>
+<th>La herramienta es</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>No respeta el formato que le pido</td>
+<td>Ajuste fino, o <a href="../../parts/modelos/inferencia.html#salida-estructurada">decodificación condicionada</a></td>
+</tr>
+<tr class="even">
+<td>No conoce nuestros datos</td>
+<td><a href="../../parts/contexto/rag.html">Recuperación</a></td>
+</tr>
+<tr class="odd">
+<td>Necesita datos que cambian</td>
+<td><a href="../../parts/agentes/herramientas.html">Herramientas</a></td>
+</tr>
+<tr class="even">
+<td>No sigue nuestro estilo</td>
+<td>Ajuste fino</td>
+</tr>
+<tr class="odd">
+<td>Se equivoca en el razonamiento</td>
+<td>Modelo mejor, no ajuste</td>
+</tr>
+<tr class="even">
+<td>Es demasiado caro o lento</td>
+<td>Destilación</td>
+</tr>
+</tbody>
+</table>
+<p>La quinta fila merece énfasis porque es la ilusión más cara del sector. Un modelo pequeño ajustado no se vuelve listo: se vuelve <strong>obediente</strong>. Si la tarea exige razonar y el modelo base no razona lo suficiente, el ajuste fino le enseñará a equivocarse en vuestro formato.</p>
+</section>
+<section id="lora-o-por-qué-esto-se-ha-vuelto-accesible" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="lora-o-por-qué-esto-se-ha-vuelto-accesible"><span class="header-section-number">7.2</span> LoRA, o por qué esto se ha vuelto accesible</h2>
+<p>Ajustar un modelo entero significa mover todos sus parámetros, con el coste de memoria que eso implica: hay que guardar los pesos, sus gradientes y el estado del optimizador, lo cual multiplica por varias veces el tamaño del modelo.</p>
+<p><strong>LoRA</strong> <span class="citation" data-cites="hu2021lora">(<a href="../referencias.html#ref-hu2021lora" role="doc-biblioref">Hu et&nbsp;al. 2022</a>)</span> evita eso con una observación sencilla. En lugar de modificar la matriz de pesos <span class="math inline">\(W\)</span>, se le suma una corrección de rango bajo:</p>
+<p><span class="math display">\[W' = W + BA\]</span></p>
+<p>donde <span class="math inline">\(B\)</span> y <span class="math inline">\(A\)</span> son dos matrices mucho más pequeñas. El modelo original <strong>se congela</strong> y solo se entrenan <span class="math inline">\(A\)</span> y <span class="math inline">\(B\)</span>, que suelen ser menos del uno por ciento de los parámetros.</p>
+<p>De ahí salen tres ventajas prácticas que cambian el cálculo por completo:</p>
+<ul>
+<li><strong>Cabe en una GPU modesta</strong>, y para modelos pequeños hasta en una CPU con paciencia.</li>
+<li><strong>El resultado es un fichero de unos pocos megabytes</strong>, no una copia del modelo. Se pueden tener veinte adaptadores para veinte tareas sobre un mismo modelo base.</li>
+<li><strong>Se puede quitar.</strong> El modelo base sigue intacto, así que revertir es borrar un fichero.</li>
+</ul>
+<p>La tercera es la que más tranquiliza a quien tiene que mantener esto.</p>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Un patrón que rinde: rol, tarea, contexto, formato, límites
+<span class="screen-reader-only">Nota</span>Los dos números que hay que declarar
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>No es magia, es un guion para no olvidarse de nada:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Eres el asistente de la secretaría académica de una universidad.  (rol)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Clasifica la consulta del alumno en una de estas categorías: ...   (tarea)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Estamos en periodo de matrícula, que termina el 30 de septiembre.  (contexto)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>Devuelve únicamente el identificador de la categoría.              (formato)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>Si la consulta no encaja en ninguna, devuelve "otros".             (límites)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>La última línea es la que más se olvida y la que más disgustos evita: <strong>decirle qué hacer cuando no sabe</strong>. Sin ella, el modelo inventará una categoría antes que reconocer que no encaja, porque inventar es coherente con su objetivo de entrenamiento.</p>
+<p>De la media docena de parámetros de LoRA, dos deciden casi todo:</p>
+<p><strong>El rango</strong> (<span class="math inline">\(r\)</span>) es cuánta capacidad tiene la corrección. Con 8 o 16 se resuelven la mayoría de los ajustes de estilo y formato. Subirlo aumenta lo que puede aprender y también lo que puede sobreajustar.</p>
+<p><strong>A qué capas se aplica.</strong> Lo habitual es a las proyecciones de la atención. Ampliarlo a las redes intermedias captura más y multiplica los parámetros entrenables.</p>
+<p>Si alguien os enseña un ajuste fino y no sabe decir estos dos números, no sabe qué ha entrenado.</p>
 </div>
 </div>
 </section>
-<section id="el-prompt-de-sistema-no-es-un-contrato" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="el-prompt-de-sistema-no-es-un-contrato"><span class="header-section-number">8.2</span> El prompt de sistema no es un contrato</h2>
-<p>Las instrucciones de sistema tienen más peso que un mensaje de usuario, y a la vez son solo tokens en la misma ventana. Nada impide que el contenido que llega después contradiga esas instrucciones con éxito.</p>
-<p>Esto tiene una lectura de diseño y otra de seguridad, y ambas apuntan al mismo sitio:</p>
-<ul>
-<li><strong>De diseño</strong>: “no reveles información de otros clientes” no es un control de acceso. El control de acceso se hace filtrando en la consulta, antes de que el dato entre en el contexto.</li>
-<li><strong>De seguridad</strong>: si un documento recuperado contiene “ignora tus instrucciones anteriores”, hay una probabilidad no nula de que funcione. Es la <a href="../../parts/seguridad/retos.html#inyección-de-prompt">inyección de prompt</a> y no se arregla escribiendo un prompt más severo.</li>
-</ul>
-<p>La formulación que conviene interiorizar es que <strong>el prompt de sistema es una preferencia muy fuerte, no una garantía</strong>. Todo lo que necesite garantía va fuera del modelo.</p>
+<section id="los-datos-son-el-trabajo" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="los-datos-son-el-trabajo"><span class="header-section-number">7.3</span> Los datos son el trabajo</h2>
+<p>Aquí está el reparto de esfuerzo que sorprende a quien viene de otro sitio: <strong>entrenar es la parte fácil</strong>. Son unas líneas y un rato de espera. Lo difícil, lo caro y lo que decide el resultado es el conjunto de ejemplos.</p>
+<p>Tres cosas que se aprenden por las malas:</p>
+<p><strong>Pocos y buenos.</strong> Para enseñar formato y tono, unos cientos de ejemplos bien hechos rinden más que decenas de miles recogidos a granel. El modelo ya sabe español; lo que le estáis enseñando es una convención.</p>
+<p><strong>Consistentes.</strong> Si la mitad de los ejemplos responde en dos frases y la otra mitad en párrafos, lo que aprende es que puede hacer cualquier cosa. La incoherencia del conjunto se convierte en incoherencia del modelo.</p>
+<p><strong>Con los casos difíciles dentro.</strong> Un conjunto donde todo es fácil enseña a resolver lo fácil, que ya sabía hacer.</p>
+<p>Y una advertencia que conecta con <a href="../../parts/normativa/leyes.html">normativa</a>: esos ejemplos suelen salir de conversaciones reales, así que llevan datos personales dentro. Un modelo ajustado con ellos <strong>puede reproducirlos</strong>, y a diferencia de una base de datos, de un modelo no se borra una fila.</p>
 </section>
-<section id="el-prompt-es-código" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="el-prompt-es-código"><span class="header-section-number">8.3</span> El prompt es código</h2>
-<p>Aquí es donde la mayoría de proyectos acumula deuda técnica sin darse cuenta. Un prompt que decide cómo se clasifican las reclamaciones de clientes es lógica de negocio, y sin embargo suele vivir como una cadena de texto embebida a mitad de un fichero, editada por quien pasaba por allí y sin ninguna forma de saber si la última edición mejoró o empeoró las cosas.</p>
-<p>El mínimo defendible:</p>
-<ul>
-<li><strong>Versionado en git</strong>, en ficheros separados si son largos, y con las variables como plantilla explícita.</li>
-<li><strong>Un identificador de versión que viaje en las trazas</strong>, para poder atribuir un cambio de comportamiento a un cambio de prompt. Sin esto, depurar es adivinar.</li>
-<li><strong>Un conjunto de casos de prueba</strong> que se ejecute al cambiarlo. No hace falta una plataforma: veinte casos en un fichero y un script bastan para pillar el 80% de las regresiones.</li>
-</ul>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-    p["Prompt&lt;br/&gt;v3"] --&gt; ev["Casos de&lt;br/&gt;evaluación"]
-    ev --&gt; ok{"¿Mejora?"}
-    ok --&gt;|sí| prod["Producción"]
-    ok --&gt;|no| p
-
-    classDef contexto fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
-    classDef control fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
-    class p contexto
-    class ev,ok,prod control
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Todo esto está medido en un cuaderno
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>El <a href="#el-cuaderno">cuaderno de este capítulo</a> coge la tarea del recuadro de arriba, la de clasificar la consulta del alumno, y le pasa veinte casos etiquetados a cuatro versiones del prompt. Los resultados confirman unas cosas y matizan otras.</p>
-<p>Confirman que el formato explícito es la mejora más barata que existe: sin él, ninguna de las veinte salidas es siquiera una categoría válida. Confirman que los ejemplos equilibrados suben mucho el acierto y que los desequilibrados lo bajan, tal y como se acaba de decir arriba.</p>
-<p>Y añaden dos cosas que cuesta creerse sin verlas. La primera es que conviene mirar el reparto de las respuestas y no solo el porcentaje de acierto: un prompt correcto puede tener un acierto decente y no estar clasificando nada, porque responde casi siempre lo mismo. La segunda es que <strong>invertir el orden de las categorías en el prompt cambia por completo cuál es esa respuesta por defecto</strong>, sin tocar una coma del resto. Es un experimento de dos minutos que conviene hacer sobre los prompts propios.</p>
-</div>
-</div>
+<section id="destilación" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="destilación"><span class="header-section-number">7.4</span> Destilación</h2>
+<p>Es el otro motivo legítimo para entrenar, y responde a una pregunta distinta: no “¿cómo lo hago mejor?” sino “¿cómo lo hago igual pero más barato?”.</p>
+<p>La idea es usar un modelo grande y caro para generar ejemplos con los que ajustar uno pequeño. El pequeño no aprende a razonar como el grande, pero sí aprende a <strong>imitar su comportamiento en un dominio acotado</strong>, que muchas veces es todo lo que hacía falta.</p>
+<p>Compensa cuando el volumen es alto y la tarea es estrecha: clasificar, extraer campos, reformular. Deja de compensar en cuanto la tarea es abierta, porque ahí el pequeño se queda sin fondo.</p>
+<p>Hay además dos asuntos que conviene mirar antes de empezar. Las <strong>condiciones de uso</strong> de muchos modelos comerciales prohíben expresamente usar sus salidas para entrenar modelos que compitan con ellos. Y la <strong>evaluación</strong> de un modelo destilado no puede hacerse contra el modelo que lo enseñó, porque heredará sus errores y parecerán aciertos.</p>
+</section>
+<section id="cómo-saber-si-ha-servido" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="cómo-saber-si-ha-servido"><span class="header-section-number">7.5</span> Cómo saber si ha servido</h2>
+<p>El ajuste fino tiene un problema de percepción particular: el resultado <strong>suena</strong> mejor casi siempre, porque suena a lo que le enseñasteis. Eso no significa que responda mejor.</p>
+<p>La única forma de saberlo es la de siempre, y es el motivo por el que este capítulo va después del de <a href="../../parts/produccion/evaluacion.html">evaluación</a> en importancia aunque vaya antes en el libro:</p>
+<ol type="1">
+<li>Un conjunto de casos que el modelo <strong>no haya visto en el entrenamiento</strong>. Si se solapan, estáis midiendo memoria.</li>
+<li>Medir el modelo base con un buen prompt, que es la alternativa a batir.</li>
+<li>Medir el modelo ajustado con el mismo conjunto y el mismo criterio.</li>
+<li>Comparar también coste y latencia, porque un adaptador que mejora un dos por ciento y complica el despliegue no ha mejorado nada.</li>
+</ol>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Advertencia</span>El bucle de la desesperación
+<span class="screen-reader-only">Advertencia</span>Lo que os deja atado
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>El patrón es siempre igual. Alguien detecta un fallo, retoca el prompt, comprueba a mano que ese caso ya funciona y despliega. A la semana aparece otro fallo, se retoca otra vez, y el prompt crece hasta las trescientas líneas llenas de reglas contradictorias escritas para casos que ya nadie recuerda.</p>
-<p>El síntoma inequívoco es que nadie se atreve a borrar una línea. La causa raíz no es el prompt: es que <strong>no hay conjunto de evaluación</strong>. Sin él, cada arreglo es una apuesta a ciegas sobre todo lo demás, y por eso <a href="../../parts/produccion/evaluacion.html">la evaluación</a> es el capítulo que sostiene todos los demás.</p>
+<p>Un modelo ajustado es una decisión que cuesta deshacer, y conviene tener presente el precio antes de tomarla.</p>
+<p><strong>Congela el modelo base.</strong> Cuando dentro de seis meses salga uno mejor, hay que rehacer el trabajo, y mientras tanto vuestro sistema corre sobre un modelo que envejece.</p>
+<p><strong>Complica el despliegue.</strong> Deja de valer cualquier proveedor: hace falta uno que sirva vuestro adaptador, lo cual choca de frente con <a href="../../parts/modelos/panorama.html#una-forma-sensata-de-decidir">aislar la decisión de modelo</a> detrás de un gateway.</p>
+<p><strong>Es difícil de explicar.</strong> Un prompt se lee. Un adaptador no, y cuando el sistema haga algo raro no habrá dónde mirar.</p>
+<p>Nada de esto lo desaconseja. Lo que aconseja es tener medido, antes de empezar, cuánto mejora respecto a un buen prompt.</p>
 </div>
 </div>
 </section>
-<section id="cuándo-el-prompt-ya-no-da-más-de-sí" class="level2" data-number="8.4">
-<h2 data-number="8.4" class="anchored" data-anchor-id="cuándo-el-prompt-ya-no-da-más-de-sí"><span class="header-section-number">8.4</span> Cuándo el prompt ya no da más de sí</h2>
-<p>Vale la pena reconocer el techo. Un prompt, por bueno que sea, no puede aportar información que el modelo no tiene ni garantizar un comportamiento que el modelo no puede cumplir.</p>
-<table class="caption-top table">
-<caption>Cuándo dejar de retocar y cambiar de herramienta</caption>
-<thead>
-<tr class="header">
-<th>Síntoma</th>
-<th>No lo arregla el prompt</th>
-<th>Lo arregla</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Se inventa datos de vuestra empresa</td>
-<td>Ninguna redacción</td>
-<td><a href="../../parts/contexto/rag.html">RAG</a></td>
-</tr>
-<tr class="even">
-<td>Da información desactualizada</td>
-<td>Ninguna redacción</td>
-<td><a href="../../parts/agentes/herramientas.html">Herramientas</a></td>
-</tr>
-<tr class="odd">
-<td>Falla en cálculos</td>
-<td>“Ten cuidado con las cuentas”</td>
-<td>Una calculadora como herramienta</td>
-</tr>
-<tr class="even">
-<td>Necesita varios pasos con decisiones</td>
-<td>Un prompt gigantesco</td>
-<td>Un <a href="../../parts/agentes/queesunagente.html">agente</a></td>
-</tr>
-<tr class="odd">
-<td>Formato inconsistente</td>
-<td>“Devuelve JSON, por favor”</td>
-<td><a href="../../parts/modelos/inferencia.html#salida-estructurada">Salida estructurada</a></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="el-cuaderno" class="level2" data-number="8.5">
-<h2 data-number="8.5" class="anchored" data-anchor-id="el-cuaderno"><span class="header-section-number">8.5</span> El cuaderno</h2>
-<p>Es el que más incomoda de los del manual, porque casi todo lo que mide sale peor de lo esperado. Un prompt razonable, con su rol y su formato y sus límites, clasifica mal doce de veinte consultas. Y al mirar el reparto de las respuestas resulta que ni siquiera está clasificando: contesta casi siempre lo mismo y acierta cuando toca.</p>
-<p>Sobre esa base compara cuatro versiones del prompt, mide qué aporta cada ingrediente y termina enchufando el clasificador a las herramientas que responderían de verdad. El experimento que más rinde es el más corto: invertir el orden de las categorías y ver cómo cambia el reparto entero sin tocar una coma del resto.</p>
+<section id="el-cuaderno" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="el-cuaderno"><span class="header-section-number">7.6</span> El cuaderno</h2>
+<p>Hace un ajuste LoRA de verdad, en CPU, sobre el modelo pequeño de siempre, para que el asistente adopte el formato de respuesta de la secretaría. Primero cuenta los parámetros entrenables, que es la cifra que explica por qué esto es viable, y luego entrena y compara.</p>
+<p>La comparación es la que pide este capítulo y casi nunca se hace: <strong>el modelo ajustado contra el modelo base con un buen prompt</strong>, sobre casos que no estaban en el entrenamiento. El resultado invita a la modestia.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/contexto/prompting.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid figure-img"></a></p>
+<p><a href="https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/modelos/ajuste-fino.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid figure-img"></a></p>
 <figcaption>Abrir en Colab</figcaption>
 </figure>
 </div>
-<p>La primera fila de la tabla es la más común con diferencia, y lleva directamente al <a href="../../parts/contexto/rag.html">siguiente capítulo</a>.</p>
+<p>Con esto cerramos la caja y lo que se le puede hacer por dentro. La siguiente parte va de lo que le metemos: <a href="../../parts/contexto/intro.html">el contexto</a>.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
-<div id="ref-wei2022chain" class="csl-entry" role="listitem">
-Wei, Jason, Xuezhi Wang, Dale Schuurmans, et&nbsp;al. 2022. <span>«Chain-of-Thought Prompting Elicits Reasoning in Large Language Models»</span>. <em>Advances in Neural Information Processing Systems</em> 35.
+<div id="ref-hu2021lora" class="csl-entry" role="listitem">
+Hu, Edward J., Yelong Shen, Phillip Wallis, et&nbsp;al. 2022. <span>«LoRA: Low-Rank Adaptation of Large Language Models»</span>. <em>International Conference on Learning Representations (ICLR)</em>. <a href="https://arxiv.org/abs/2106.09685">https://arxiv.org/abs/2106.09685</a>.
 </div>
 </div>
 </section>
@@ -1013,13 +983,13 @@ Wei, Jason, Xuezhi Wang, Dale Schuurmans, et&nbsp;al. 2022. <span>«Chain-of-Tho
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../parts/contexto/intro.html" class="pagination-link" aria-label="Contexto">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Contexto</span>
+      <a href="../../parts/modelos/panorama.html" class="pagination-link" aria-label="El panorama y la elección">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">El panorama y la elección</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../parts/contexto/rag.html" class="pagination-link" aria-label="Recuperación">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Recuperación</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../parts/contexto/intro.html" class="pagination-link" aria-label="Contexto">
+        <span class="nav-page-text">Contexto</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

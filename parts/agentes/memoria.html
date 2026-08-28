@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>8&nbsp; Prompting – Manual de IA Generativa</title>
+<title>12&nbsp; Memoria – Manual de IA Generativa</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,61 +26,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -90,8 +36,8 @@ div.csl-indent {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../parts/contexto/rag.html" rel="next">
-<link href="../../parts/contexto/intro.html" rel="prev">
+<link href="../../parts/agentes/orquestacion.html" rel="next">
+<link href="../../parts/agentes/herramientas.html" rel="prev">
 <link href="../../cover-removebg-preview.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -130,12 +76,9 @@ div.csl-indent {
     "search-label": "Buscar"
   }
 }</script>
-<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
-<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
-<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
-<meta property="og:title" content="8&nbsp; Prompting – Manual de IA Generativa">
+<meta property="og:title" content="12&nbsp; Memoria – Manual de IA Generativa">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/manual-ia-generativa/logo-noback.png">
 <meta property="og:site_name" content="Manual de IA Generativa">
@@ -152,7 +95,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/contexto/intro.html">Contexto</a></li><li class="breadcrumb-item"><a href="../../parts/contexto/prompting.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Prompting</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/agentes/queesunagente.html">Agentes</a></li><li class="breadcrumb-item"><a href="../../parts/agentes/memoria.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Memoria</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -257,14 +200,14 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="../../parts/contexto/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Contexto</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../parts/contexto/prompting.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../parts/contexto/prompting.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Prompting</span></span></a>
   </div>
 </li>
@@ -278,13 +221,13 @@ div.csl-indent {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
  <span class="menu-text">Agentes</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../parts/agentes/queesunagente.html" class="sidebar-item-text sidebar-link">
@@ -299,7 +242,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../parts/agentes/memoria.html" class="sidebar-item-text sidebar-link">
+  <a href="../../parts/agentes/memoria.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Memoria</span></span></a>
   </div>
 </li>
@@ -420,20 +363,21 @@ div.csl-indent {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#lo-que-de-verdad-se-sostiene" id="toc-lo-que-de-verdad-se-sostiene" class="nav-link active" data-scroll-target="#lo-que-de-verdad-se-sostiene"><span class="header-section-number">8.1</span> Lo que de verdad se sostiene</a></li>
-  <li><a href="#el-prompt-de-sistema-no-es-un-contrato" id="toc-el-prompt-de-sistema-no-es-un-contrato" class="nav-link" data-scroll-target="#el-prompt-de-sistema-no-es-un-contrato"><span class="header-section-number">8.2</span> El prompt de sistema no es un contrato</a></li>
-  <li><a href="#el-prompt-es-código" id="toc-el-prompt-es-código" class="nav-link" data-scroll-target="#el-prompt-es-código"><span class="header-section-number">8.3</span> El prompt es código</a></li>
-  <li><a href="#cuándo-el-prompt-ya-no-da-más-de-sí" id="toc-cuándo-el-prompt-ya-no-da-más-de-sí" class="nav-link" data-scroll-target="#cuándo-el-prompt-ya-no-da-más-de-sí"><span class="header-section-number">8.4</span> Cuándo el prompt ya no da más de sí</a></li>
-  <li><a href="#el-cuaderno" id="toc-el-cuaderno" class="nav-link" data-scroll-target="#el-cuaderno"><span class="header-section-number">8.5</span> El cuaderno</a></li>
+  <li><a href="#recordar-no-es-guardarlo-todo" id="toc-recordar-no-es-guardarlo-todo" class="nav-link active" data-scroll-target="#recordar-no-es-guardarlo-todo"><span class="header-section-number">12.1</span> Recordar no es guardarlo todo</a></li>
+  <li><a href="#tres-tipos-con-reservas" id="toc-tres-tipos-con-reservas" class="nav-link" data-scroll-target="#tres-tipos-con-reservas"><span class="header-section-number">12.2</span> Tres tipos, con reservas</a></li>
+  <li><a href="#la-decisión-difícil-es-escribir" id="toc-la-decisión-difícil-es-escribir" class="nav-link" data-scroll-target="#la-decisión-difícil-es-escribir"><span class="header-section-number">12.3</span> La decisión difícil es escribir</a></li>
+  <li><a href="#envenenamiento" id="toc-envenenamiento" class="nav-link" data-scroll-target="#envenenamiento"><span class="header-section-number">12.4</span> Envenenamiento</a></li>
+  <li><a href="#olvidar-es-un-requisito-no-un-fallo" id="toc-olvidar-es-un-requisito-no-un-fallo" class="nav-link" data-scroll-target="#olvidar-es-un-requisito-no-un-fallo"><span class="header-section-number">12.5</span> Olvidar es un requisito, no un fallo</a></li>
+  <li><a href="#el-cuaderno" id="toc-el-cuaderno" class="nav-link" data-scroll-target="#el-cuaderno"><span class="header-section-number">12.6</span> El cuaderno</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/contexto/intro.html">Contexto</a></li><li class="breadcrumb-item"><a href="../../parts/contexto/prompting.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Prompting</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../parts/agentes/queesunagente.html">Agentes</a></li><li class="breadcrumb-item"><a href="../../parts/agentes/memoria.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Memoria</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Prompting</span></h1>
+<h1 class="title"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Memoria</span></h1>
 </div>
 
 
@@ -450,164 +394,136 @@ div.csl-indent {
 </header>
 
 
-<p>Hay algo incómodo en dedicar un capítulo a esto. El <em>prompt engineering</em> nació con aires de disciplina, se llenó de listas de trucos y de vendedores de cursos, y una parte considerable de aquellos trucos ha ido caducando conforme los modelos mejoraban. Ofrecer una propina imaginaria al modelo, por ejemplo, tuvo su momento de gloria y hoy no hace nada.</p>
-<p>Lo que no ha caducado es lo aburrido: ser específico, dar contexto, decir en qué formato queremos la respuesta y enseñar ejemplos cuando la tarea es sutil. Eso sigue funcionando y probablemente seguirá, porque no explota ninguna rareza del modelo sino que reduce la ambigüedad de la petición.</p>
-<section id="lo-que-de-verdad-se-sostiene" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="lo-que-de-verdad-se-sostiene"><span class="header-section-number">8.1</span> Lo que de verdad se sostiene</h2>
-<p><strong>Especificidad sobre cortesía.</strong> “Resume esto” deja al modelo elegir longitud, tono, destinatario y qué es importante. “Resume esto en tres viñetas para un comité de dirección, centrándote en el riesgo económico” no deja nada de eso al azar. La mayoría de respuestas decepcionantes lo son porque la petición admitía muchas respuestas y la que salió no era la que teníamos en la cabeza.</p>
-<p><strong>Contexto antes que instrucción.</strong> El modelo no sabe que “el proyecto” es un despliegue de SAP ni que “la norma” es una circular interna. Lo que en una conversación humana se sobreentiende, aquí hay que escribirlo.</p>
-<p><strong>Formato explícito.</strong> Si la salida va a leerla un programa, hay que usar <a href="../../parts/modelos/inferencia.html#salida-estructurada">salida estructurada</a> y no pedirlo por favor. Si la va a leer una persona, describir la forma esperada ahorra la mitad de las iteraciones.</p>
-<p><strong>Ejemplos cuando la tarea es sutil.</strong> Es el <em>few-shot</em> de toda la vida y sigue siendo la herramienta más eficaz para tareas de criterio difuso: clasificar el tono de una reclamación, decidir qué es un incidente grave. Tres ejemplos bien elegidos valen más que tres párrafos de descripción. Ojo con dos vicios: que todos los ejemplos sean de la misma clase (el modelo aprende ese sesgo) y que ninguno cubra los casos límite, que es justo donde va a fallar.</p>
-<p><strong>Pedir el razonamiento, cuando el modelo no lo trae de serie.</strong> El clásico “piensa paso a paso” <span class="citation" data-cites="wei2022chain">(<a href="../referencias.html#ref-wei2022chain" role="doc-biblioref">Wei et&nbsp;al. 2022</a>)</span> sigue mejorando resultados en tareas con estructura. Con <a href="../../parts/modelos/inferencia.html#razonar-gastando-más">modelos de razonamiento</a> es innecesario y a veces contraproducente: ya lo hacen, y forzarlo dos veces empeora.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Un patrón que rinde: rol, tarea, contexto, formato, límites
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>No es magia, es un guion para no olvidarse de nada:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Eres el asistente de la secretaría académica de una universidad.  (rol)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Clasifica la consulta del alumno en una de estas categorías: ...   (tarea)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Estamos en periodo de matrícula, que termina el 30 de septiembre.  (contexto)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>Devuelve únicamente el identificador de la categoría.              (formato)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>Si la consulta no encaja en ninguna, devuelve "otros".             (límites)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>La última línea es la que más se olvida y la que más disgustos evita: <strong>decirle qué hacer cuando no sabe</strong>. Sin ella, el modelo inventará una categoría antes que reconocer que no encaja, porque inventar es coherente con su objetivo de entrenamiento.</p>
-</div>
-</div>
-</section>
-<section id="el-prompt-de-sistema-no-es-un-contrato" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="el-prompt-de-sistema-no-es-un-contrato"><span class="header-section-number">8.2</span> El prompt de sistema no es un contrato</h2>
-<p>Las instrucciones de sistema tienen más peso que un mensaje de usuario, y a la vez son solo tokens en la misma ventana. Nada impide que el contenido que llega después contradiga esas instrucciones con éxito.</p>
-<p>Esto tiene una lectura de diseño y otra de seguridad, y ambas apuntan al mismo sitio:</p>
+<p>De las <a href="../../parts/agentes/queesunagente.html#anatomía">cinco piezas de un agente</a>, la memoria es la que más se da por hecha. Se asume que un asistente “recuerda”, igual que se asume que un compañero recuerda lo que hablasteis ayer, y en cuanto se mira de cerca resulta que ahí no hay nada: hay una lista de mensajes que alguien decidió volver a enviar.</p>
+<p>Conviene separarla en dos problemas, porque tienen soluciones distintas y se confunden constantemente.</p>
+<p><strong>Lo que cabe en esta conversación</strong> es un problema de contexto: qué se conserva, qué se comprime y qué se tira cuando el historial no cabe. Se trata en <a href="../../parts/contexto/rag.html#la-memoria-como-caso-particular">recuperación</a> junto al resto de operaciones sobre el contexto, y no lo repetimos aquí.</p>
+<p><strong>Lo que sobrevive a esta conversación</strong> es otro asunto: qué se escribe en algún sitio para que esté disponible mañana, con otra sesión y quizá con otra persona. Eso es este capítulo, y es donde están las decisiones difíciles.</p>
+<section id="recordar-no-es-guardarlo-todo" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="recordar-no-es-guardarlo-todo"><span class="header-section-number">12.1</span> Recordar no es guardarlo todo</h2>
+<p>La tentación evidente es guardar cada conversación entera y recuperar de ahí. Funciona en la demostración y se derrumba después, por tres motivos que aparecen en este orden:</p>
 <ul>
-<li><strong>De diseño</strong>: “no reveles información de otros clientes” no es un control de acceso. El control de acceso se hace filtrando en la consulta, antes de que el dato entre en el contexto.</li>
-<li><strong>De seguridad</strong>: si un documento recuperado contiene “ignora tus instrucciones anteriores”, hay una probabilidad no nula de que funcione. Es la <a href="../../parts/seguridad/retos.html#inyección-de-prompt">inyección de prompt</a> y no se arregla escribiendo un prompt más severo.</li>
+<li><strong>Crece sin límite.</strong> Cada sesión añade material y ninguna lo quita. A los seis meses, recuperar de la memoria se parece más a bucear que a recordar.</li>
+<li><strong>Guarda el ruido junto con la señal.</strong> Un “gracias, hasta luego” ocupa lo mismo que “el alumno está haciendo el TFG con la tutora Larrañaga”.</li>
+<li><strong>Se contradice consigo misma.</strong> Si en enero dijo que iba a matricularse de Estadística y en marzo se dio de baja, la memoria tiene las dos cosas y ninguna marca de cuál vale.</li>
 </ul>
-<p>La formulación que conviene interiorizar es que <strong>el prompt de sistema es una preferencia muy fuerte, no una garantía</strong>. Todo lo que necesite garantía va fuera del modelo.</p>
+<p>Ese tercer punto es el que convierte la memoria en un problema de ingeniería y no de almacenamiento. Un sistema de memoria útil no es el que más recuerda: es el que sabe <strong>qué merece guardarse, qué lo invalida y cuándo caduca</strong>.</p>
 </section>
-<section id="el-prompt-es-código" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="el-prompt-es-código"><span class="header-section-number">8.3</span> El prompt es código</h2>
-<p>Aquí es donde la mayoría de proyectos acumula deuda técnica sin darse cuenta. Un prompt que decide cómo se clasifican las reclamaciones de clientes es lógica de negocio, y sin embargo suele vivir como una cadena de texto embebida a mitad de un fichero, editada por quien pasaba por allí y sin ninguna forma de saber si la última edición mejoró o empeoró las cosas.</p>
-<p>El mínimo defendible:</p>
-<ul>
-<li><strong>Versionado en git</strong>, en ficheros separados si son largos, y con las variables como plantilla explícita.</li>
-<li><strong>Un identificador de versión que viaje en las trazas</strong>, para poder atribuir un cambio de comportamiento a un cambio de prompt. Sin esto, depurar es adivinar.</li>
-<li><strong>Un conjunto de casos de prueba</strong> que se ejecute al cambiarlo. No hace falta una plataforma: veinte casos en un fichero y un script bastan para pillar el 80% de las regresiones.</li>
-</ul>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-    p["Prompt&lt;br/&gt;v3"] --&gt; ev["Casos de&lt;br/&gt;evaluación"]
-    ev --&gt; ok{"¿Mejora?"}
-    ok --&gt;|sí| prod["Producción"]
-    ok --&gt;|no| p
-
-    classDef contexto fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
-    classDef control fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
-    class p contexto
-    class ev,ok,prod control
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Todo esto está medido en un cuaderno
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>El <a href="#el-cuaderno">cuaderno de este capítulo</a> coge la tarea del recuadro de arriba, la de clasificar la consulta del alumno, y le pasa veinte casos etiquetados a cuatro versiones del prompt. Los resultados confirman unas cosas y matizan otras.</p>
-<p>Confirman que el formato explícito es la mejora más barata que existe: sin él, ninguna de las veinte salidas es siquiera una categoría válida. Confirman que los ejemplos equilibrados suben mucho el acierto y que los desequilibrados lo bajan, tal y como se acaba de decir arriba.</p>
-<p>Y añaden dos cosas que cuesta creerse sin verlas. La primera es que conviene mirar el reparto de las respuestas y no solo el porcentaje de acierto: un prompt correcto puede tener un acierto decente y no estar clasificando nada, porque responde casi siempre lo mismo. La segunda es que <strong>invertir el orden de las categorías en el prompt cambia por completo cuál es esa respuesta por defecto</strong>, sin tocar una coma del resto. Es un experimento de dos minutos que conviene hacer sobre los prompts propios.</p>
-</div>
-</div>
+<section id="tres-tipos-con-reservas" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="tres-tipos-con-reservas"><span class="header-section-number">12.2</span> Tres tipos, con reservas</h2>
+<p>La taxonomía que circula viene de la psicología y reparte la memoria en episódica (lo que pasó), semántica (lo que es cierto) y de procedimiento (cómo se hacen las cosas). Aplicada a un asistente académico se ve bien:</p>
+<table class="caption-top table">
+<caption>Un reparto cómodo para pensar</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tipo</th>
+<th>En la secretaría</th>
+<th>Cómo caduca</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Episódica</strong></td>
+<td>“El 3 de marzo preguntó por la beca de movilidad”</td>
+<td>No caduca, pero envejece</td>
+</tr>
+<tr class="even">
+<td><strong>Semántica</strong></td>
+<td>“Está en cuarto y le queda Cálculo”</td>
+<td>Cambia con los hechos</td>
+</tr>
+<tr class="odd">
+<td><strong>De procedimiento</strong></td>
+<td>“Prefiere respuestas cortas y sin tratamiento formal”</td>
+<td>Casi nunca</td>
+</tr>
+</tbody>
+</table>
+<p>Ahora la advertencia, que ya asomaba en <a href="../../parts/agentes/queesunagente.html#guia-visual">el capítulo de agentes</a>: esto es <strong>una taxonomía para pensar, no una arquitectura para implementar</strong>. Casi todos los sistemas que funcionan tienen bastante menos de eso, normalmente una tabla de hechos con fecha y procedencia. Montar tres subsistemas porque la lista tiene tres filas es una forma cara de no resolver el problema.</p>
+<p>Lo que sí conviene llevarse de la tabla es la tercera columna. Cada tipo de recuerdo tiene una vida útil distinta, y una memoria que no distingue entre “preguntó por la beca en marzo” y “prefiere que le tuteen” va a tratar igual dos cosas que envejecen a ritmos opuestos.</p>
+</section>
+<section id="la-decisión-difícil-es-escribir" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="la-decisión-difícil-es-escribir"><span class="header-section-number">12.3</span> La decisión difícil es escribir</h2>
+<p>Recuperar de la memoria es un problema conocido: es <a href="../../parts/contexto/rag.html">RAG</a> sobre lo que uno mismo guardó, con las mismas soluciones y los mismos fallos. Lo que no está resuelto es <strong>qué se escribe</strong>.</p>
+<p>Hay dos escuelas y ninguna gana siempre:</p>
+<p><strong>Escribir con reglas.</strong> Un código determinista decide qué se guarda: los identificadores, las preferencias declaradas, los trámites iniciados. Es predecible, auditable y se le escapa todo lo que no se previó.</p>
+<p><strong>Escribir con el modelo.</strong> Después de cada conversación, un modelo extrae los hechos que merecen recordarse. Captura lo que no se previó y, a cambio, <strong>puede inventarse un recuerdo</strong>, que es un fallo mucho peor que olvidar: un hecho falso en memoria persistente contamina todas las sesiones futuras y nadie sabe de dónde salió.</p>
+<p>En la práctica se combinan, con una asimetría que conviene respetar: las reglas para lo que tiene consecuencias (identidad, permisos, trámites) y el modelo para lo que solo mejora el trato (preferencias, contexto de la conversación). Si el modelo se equivoca sobre el tono, se nota poco. Si se equivoca sobre qué asignaturas tenéis aprobadas, es otra cosa.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Advertencia</span>El bucle de la desesperación
+<span class="screen-reader-only">Advertencia</span>Todo recuerdo necesita procedencia y fecha
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>El patrón es siempre igual. Alguien detecta un fallo, retoca el prompt, comprueba a mano que ese caso ya funciona y despliega. A la semana aparece otro fallo, se retoca otra vez, y el prompt crece hasta las trescientas líneas llenas de reglas contradictorias escritas para casos que ya nadie recuerda.</p>
-<p>El síntoma inequívoco es que nadie se atreve a borrar una línea. La causa raíz no es el prompt: es que <strong>no hay conjunto de evaluación</strong>. Sin él, cada arreglo es una apuesta a ciegas sobre todo lo demás, y por eso <a href="../../parts/produccion/evaluacion.html">la evaluación</a> es el capítulo que sostiene todos los demás.</p>
+<p>Es la única defensa práctica contra los tres problemas de esta página a la vez. Un recuerdo que sabe <strong>cuándo</strong> se escribió y <strong>de dónde salió</strong> se puede caducar, se puede invalidar cuando llega uno más nuevo que lo contradice, y se puede rastrear cuando alguien pregunta por qué el sistema cree algo raro.</p>
+<p>Sin esas dos columnas, una memoria persistente es un montón de afirmaciones sin autor sobre las que hay que decidir a ciegas.</p>
 </div>
 </div>
 </section>
-<section id="cuándo-el-prompt-ya-no-da-más-de-sí" class="level2" data-number="8.4">
-<h2 data-number="8.4" class="anchored" data-anchor-id="cuándo-el-prompt-ya-no-da-más-de-sí"><span class="header-section-number">8.4</span> Cuándo el prompt ya no da más de sí</h2>
-<p>Vale la pena reconocer el techo. Un prompt, por bueno que sea, no puede aportar información que el modelo no tiene ni garantizar un comportamiento que el modelo no puede cumplir.</p>
+<section id="envenenamiento" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="envenenamiento"><span class="header-section-number">12.4</span> Envenenamiento</h2>
+<p>Aquí es donde la memoria deja de ser una comodidad y pasa a ser superficie de ataque. El <a href="../../parts/seguridad/retos.html">envenenamiento de memoria</a> consiste en colar un hecho falso en la memoria persistente, y su gravedad no está en el hecho sino en tres propiedades que lo distinguen de una inyección normal:</p>
+<ul>
+<li><strong>Persiste.</strong> Sigue ahí cuando el documento que lo introdujo ya se borró.</li>
+<li><strong>Se propaga.</strong> Contamina sesiones futuras, y en una memoria compartida entre usuarios, las de otras personas.</li>
+<li><strong>No deja rastro.</strong> El agente presenta el recuerdo envenenado con la misma naturalidad que el resto, porque para él son lo mismo.</li>
+</ul>
+<p>Un agente que extrae hechos de los documentos que lee y los guarda para siempre está, literalmente, escribiendo en su propia memoria lo que le dicte cualquiera que consiga poner un documento delante. La defensa no es un prompt más severo: es que <strong>lo que entra en memoria persistente pase por el mismo control que cualquier escritura</strong>, con procedencia, con posibilidad de invalidarse y, para lo que tenga consecuencias, con una persona delante.</p>
+</section>
+<section id="olvidar-es-un-requisito-no-un-fallo" class="level2" data-number="12.5">
+<h2 data-number="12.5" class="anchored" data-anchor-id="olvidar-es-un-requisito-no-un-fallo"><span class="header-section-number">12.5</span> Olvidar es un requisito, no un fallo</h2>
+<p>Una memoria que solo crece es un problema técnico y también uno legal. Todo lo que un asistente recuerda de una persona son <strong>datos personales</strong>, con las obligaciones que eso trae: plazo de conservación escrito, derecho de acceso y derecho de supresión.</p>
+<p>Y “suprimir” aquí significa algo más incómodo de lo que parece. No basta con borrar una fila si ese hecho ya se copió a un resumen, se indexó en un almacén vectorial o se coló en el prompt de sistema de un asistente personalizado. Diseñar la memoria pensando en cómo se borrará es mucho más barato que descubrirlo cuando alguien lo ejerza.</p>
 <table class="caption-top table">
-<caption>Cuándo dejar de retocar y cambiar de herramienta</caption>
+<caption>Cuatro preguntas que salen gratis al diseñar y carísimas después</caption>
 <thead>
 <tr class="header">
-<th>Síntoma</th>
-<th>No lo arregla el prompt</th>
-<th>Lo arregla</th>
+<th>Decisión</th>
+<th>Preguntar antes de construir</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Se inventa datos de vuestra empresa</td>
-<td>Ninguna redacción</td>
-<td><a href="../../parts/contexto/rag.html">RAG</a></td>
+<td>Qué se guarda</td>
+<td>¿Sirve para responder mejor o solo por si acaso?</td>
 </tr>
 <tr class="even">
-<td>Da información desactualizada</td>
-<td>Ninguna redacción</td>
-<td><a href="../../parts/agentes/herramientas.html">Herramientas</a></td>
+<td>Cuánto dura</td>
+<td>¿Hay un plazo escrito o es “para siempre” por omisión?</td>
 </tr>
 <tr class="odd">
-<td>Falla en cálculos</td>
-<td>“Ten cuidado con las cuentas”</td>
-<td>Una calculadora como herramienta</td>
+<td>Quién lo ve</td>
+<td>¿La memoria es de la persona o de la organización?</td>
 </tr>
 <tr class="even">
-<td>Necesita varios pasos con decisiones</td>
-<td>Un prompt gigantesco</td>
-<td>Un <a href="../../parts/agentes/queesunagente.html">agente</a></td>
-</tr>
-<tr class="odd">
-<td>Formato inconsistente</td>
-<td>“Devuelve JSON, por favor”</td>
-<td><a href="../../parts/modelos/inferencia.html#salida-estructurada">Salida estructurada</a></td>
+<td>Cómo se borra</td>
+<td>¿Se puede quitar de todas partes donde se copió?</td>
 </tr>
 </tbody>
 </table>
+<p>La tercera merece un momento. Una memoria compartida entre usuarios es tentadora, porque el sistema aprende de todos y mejora para todos. También es la que convierte un envenenamiento en un incidente colectivo y la que hace que el expediente de una persona pueda aparecer en la conversación de otra. Si se comparte algo, que sean patrones agregados, no hechos sobre personas.</p>
 </section>
-<section id="el-cuaderno" class="level2" data-number="8.5">
-<h2 data-number="8.5" class="anchored" data-anchor-id="el-cuaderno"><span class="header-section-number">8.5</span> El cuaderno</h2>
-<p>Es el que más incomoda de los del manual, porque casi todo lo que mide sale peor de lo esperado. Un prompt razonable, con su rol y su formato y sus límites, clasifica mal doce de veinte consultas. Y al mirar el reparto de las respuestas resulta que ni siquiera está clasificando: contesta casi siempre lo mismo y acierta cuando toca.</p>
-<p>Sobre esa base compara cuatro versiones del prompt, mide qué aporta cada ingrediente y termina enchufando el clasificador a las herramientas que responderían de verdad. El experimento que más rinde es el más corto: invertir el orden de las categorías y ver cómo cambia el reparto entero sin tocar una coma del resto.</p>
+<section id="el-cuaderno" class="level2" data-number="12.6">
+<h2 data-number="12.6" class="anchored" data-anchor-id="el-cuaderno"><span class="header-section-number">12.6</span> El cuaderno</h2>
+<p>Le pone memoria al agente de la secretaría en las tres formas que se usan, y las mide sobre la misma conversación: sin memoria, con el historial completo, con ventana deslizante y con hechos extraídos y recuperados.</p>
+<p>Lo que sale es que la ingenua funciona y no escala, y que las otras dos acotan el coste perdiendo cosas distintas. Pero lo que justifica el cuaderno es el último experimento: <strong>cuela un hecho falso en la memoria y comprueba que el agente lo repite en una sesión posterior</strong>, ya sin rastro de dónde salió. Después añade procedencia y fecha, que es lo que permite encontrarlo y quitarlo.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/contexto/prompting.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid figure-img"></a></p>
+<p><a href="https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/agentes/memoria.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid figure-img"></a></p>
 <figcaption>Abrir en Colab</figcaption>
 </figure>
 </div>
-<p>La primera fila de la tabla es la más común con diferencia, y lleva directamente al <a href="../../parts/contexto/rag.html">siguiente capítulo</a>.</p>
+<p>Con el agente ya capaz de recordar, la pregunta siguiente es cómo repartir el trabajo cuando uno solo no llega: <a href="../../parts/agentes/orquestacion.html">orquestación</a>.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
-<div id="ref-wei2022chain" class="csl-entry" role="listitem">
-Wei, Jason, Xuezhi Wang, Dale Schuurmans, et&nbsp;al. 2022. <span>«Chain-of-Thought Prompting Elicits Reasoning in Large Language Models»</span>. <em>Advances in Neural Information Processing Systems</em> 35.
-</div>
-</div>
 </section>
 
 </main> <!-- /main -->
@@ -1013,13 +929,13 @@ Wei, Jason, Xuezhi Wang, Dale Schuurmans, et&nbsp;al. 2022. <span>«Chain-of-Tho
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../parts/contexto/intro.html" class="pagination-link" aria-label="Contexto">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Contexto</span>
+      <a href="../../parts/agentes/herramientas.html" class="pagination-link" aria-label="Herramientas y MCP">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Herramientas y MCP</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../parts/contexto/rag.html" class="pagination-link" aria-label="Recuperación">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Recuperación</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../parts/agentes/orquestacion.html" class="pagination-link" aria-label="Orquestación y frameworks">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Orquestación y frameworks</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
