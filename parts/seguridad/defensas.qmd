@@ -88,4 +88,14 @@ Vale la pena pensarlo antes de tenerlo encima. Cuando algo va mal, las preguntas
 * **¿Qué se cambia para que no se repita?** Y aquí la respuesta correcta rara vez es "ajustar el prompt": suele ser un caso nuevo en el [conjunto de evaluación](../produccion/evaluacion.qmd) y, si tocaba permisos, un permiso menos.
 :::
 
+## El cuaderno
+
+Monta una batería de ataques contra el agente de la secretaría, siguiendo la taxonomía de OWASP traducida a clases ejecutables, y comprueba cuáles pasan. Los ataques los genera un framework de _red teaming_, que sabe de esto bastante más que nosotros; **quien juzga si triunfaron es código**, no un modelo, porque "¿se ejecutó esta consulta sobre otro alumno?" tiene respuesta objetiva y usar un juez probabilístico para responderla sería una elección extraña.
+
+Después escribe un guardarraíl de patrones y le mide el techo por los dos lados que importan. Por arriba, con evasiones que no exigen ningún talento: un sinónimo, un espacio de más, la misma petición en otras palabras. Por abajo, con **consultas legítimas que el filtro bloquea**, que es el coste que casi nadie mide antes de desplegar uno.
+
+Y termina con el experimento que ordena la lista de esta página: quitar un parámetro de una herramienta, sin filtros y sin tocar el prompt, y comprobar qué queda vivo. La diferencia entre esas dos últimas mediciones es la diferencia entre una carrera de patrones y una categoría cerrada para siempre.
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/seguridad/defensas.ipynb)
+
 Con lo técnico acotado, queda quién responde de todo esto ante un tercero: [la normativa](../normativa/leyes.qmd).

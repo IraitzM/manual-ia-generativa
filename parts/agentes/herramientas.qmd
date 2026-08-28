@@ -119,4 +119,4 @@ De propina enseña, en cinco líneas, que la descripción de un servidor de terc
 
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/agentes/herramientas-y-mcp.ipynb)
 
-Un agente con buenas herramientas ya resuelve mucho. Cuando no basta, la pregunta es cómo repartir el trabajo: [orquestación](orquestacion.qmd).
+Un agente con buenas herramientas ya sabe actuar. Lo que todavía no sabe es recordar nada de una conversación a la siguiente: [la memoria](memoria.qmd).

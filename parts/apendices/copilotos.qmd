@@ -14,6 +14,46 @@ La evolución ha sido rápida y conviene distinguir los modos, porque no se usan
 
 El tercero es el que ha cambiado el oficio, y también el que más disciplina exige. Un agente que trabaja veinte minutos puede producir un cambio de setecientas líneas que nadie va a revisar con el cuidado que merece.
 
+## Qué hay, a día de hoy
+
+Al programa que envuelve al modelo, le da herramientas y ejecuta el bucle sobre un repositorio se le ha acabado llamando **arnés** (_harness_). Es la misma idea del [capítulo de agentes](../agentes/queesunagente.qmd#el-bucle), especializada en código.
+
+Conviene distinguirlos por quién los hace y qué implica eso, más que por su lista de funciones:
+
+| Tipo | Ejemplos | Qué implica |
+|---|---|---|
+| **De laboratorio** | Claude Code, Codex CLI, Gemini CLI | Afinados para su propio modelo, y atados a él |
+| **De editor** | Cursor, Copilot en VS Code, Kiro | El contexto sale del editor; menos fricción, menos control |
+| **Independientes** | OpenCode, Pi, Hermes, Aider, Goose | Se elige el modelo aparte; el arnés no lo decide el proveedor |
+| **Autónomos gestionados** | Devin y similares | Trabajan solos sobre un ticket; se paga por resultado |
+
+: Cuatro maneras de envolver el mismo bucle
+
+Los independientes son los que más se han movido en 2026 y merecen un par de líneas, porque sus diferencias no son de funcionalidad sino de filosofía. **OpenCode** se ha asentado como el arnés genérico por defecto, agnóstico de proveedor. **Pi** va en la dirección contraria y llama la atención por lo pequeño de su prompt de sistema, con las capacidades cargadas solo cuando hacen falta, y está pensado para bifurcarlo y recablearlo. **Hermes** lleva su propio entorno de ejecución en lugar de apoyarse en el del editor.
+
+Que un arnés sea de laboratorio no lo hace mejor ni peor, pero sí condiciona la respuesta a la pregunta que importa: **qué pasa cuando queráis cambiar de modelo**. Es la misma pregunta que el [capítulo de frameworks](../agentes/orquestacion.qmd#frameworks) hace sobre las librerías de agentes, y tiene la misma respuesta incómoda.
+
+## Meta-arneses
+
+En cuanto un equipo usa tres arneses distintos aparece el problema siguiente, y es de coordinación: cada uno tiene su sesión, su configuración, sus permisos y su factura, y no se hablan entre ellos.
+
+Eso ha dado lugar a una capa por encima, los **meta-arneses**, cuyo exponente más visible es [Omnigent](https://github.com/omnigent-ai/omnigent), publicado con licencia Apache 2.0. La idea es orquestar Claude Code, Codex, Cursor, OpenCode, Hermes, Pi y agentes propios definidos en YAML desde un único sitio, con otros accesibles a través del Agent Client Protocol.
+
+Lo que resuelve es más interesante que la lista de compatibilidades:
+
+* **Componer entre proveedores.** Que un agente escriba, otro de otra casa revise y un tercero documente, dentro de la misma sesión. La revisión cruzada entre modelos distintos es la aplicación con más sentido, porque dos modelos de la misma familia tienden a estar de acuerdo en sus propios errores, como se vio al [votar en el cuaderno de orquestación](../agentes/orquestacion.qmd#los-cuadernos).
+* **Políticas de verdad, no en el prompt.** Topes de gasto, aprobación antes de una acción arriesgada y restricción de herramientas, aplicados en la capa que ejecuta. Es exactamente lo que el manual viene repitiendo desde el [cuaderno del bucle](../agentes/queesunagente.qmd#el-cuaderno): lo irreversible se confirma en código, no pidiéndoselo al modelo.
+* **Aislamiento.** Lanzar el agente en un entorno desechable en lugar de sobre vuestro portátil, que es la medida barata contra la [trifecta letal](../seguridad/retos.qmd#la-trifecta-letal) que este apéndice menciona al final.
+* **Sesión que os sigue.** Empezar en la terminal y continuar en el navegador o en el móvil sin perder el hilo.
+
+:::{.callout-warning}
+# Una capa más es una capa más
+
+Un meta-arnés añade un intermediario entre vosotros y el modelo, con lo que eso implica: **otro sitio donde el contexto se transforma sin que lo veáis**, otra dependencia que mantener y otro proveedor con el que tener la conversación sobre qué datos salen.
+
+Merece la pena cuando de verdad hay varios arneses en juego y hace falta gobernarlos. Para una persona con un solo agente es complejidad sin contrapartida, y aplica la regla de siempre: la solución más simple que funcione.
+:::
+
 :::{.callout-important}
 # La revisión sigue siendo vuestra
 

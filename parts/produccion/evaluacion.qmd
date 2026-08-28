@@ -105,4 +105,16 @@ En software clásico, si nadie toca el código, el comportamiento no cambia. Aqu
 Un sistema que funcionaba en marzo puede haber empeorado en junio sin que nadie haya hecho nada. La única forma de enterarse antes que el usuario es medir de forma continua, y para eso hacen falta [trazas](observabilidad.qmd).
 :::
 
+## El cuaderno
+
+Monta el arnés de las tres capas sobre el agente de la secretaría, con casos sacados de las trazas del [capítulo siguiente](observabilidad.qmd) y con lo esperado escrito como afirmaciones que deben y no deben aparecer.
+
+La capa determinista sale sorprendentemente rentable, porque en este dominio la verdad está en una tabla: si el agente dice una fecha, o coincide con `dim_plazo` o no coincide, y eso no necesita juez. De paso mide el camino, que es donde se ve que una respuesta aceptable puede haberse conseguido consultando el expediente de alguien sin venir a cuento.
+
+Lo que justifica el cuaderno es la comprobación que esta página llama obligatoria. **El juez, montado como se ve en todas partes, coincide con el criterio humano la mitad de las veces**, que en una decisión binaria es azar. Publicar métricas suyas habría sido publicar decoración, y el fallo no se ve leyendo su prompt: se ve con ocho casos etiquetados a mano.
+
+Y luego el giro, que es lo interesante: el juez sí distinguía. Sus probabilidades separan perfectamente los casos buenos de los malos, solo que todas estaban por encima del 0.5 donde cortábamos. No estaba roto, estaba descalibrado, que es justo lo que hay que hacerle a un instrumento antes de fiarse de él.
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/produccion/evaluacion.ipynb)
+
 Que es exactamente el [siguiente capítulo](observabilidad.qmd).

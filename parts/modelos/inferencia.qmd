@@ -80,6 +80,50 @@ class Factura(BaseModel):
 
 Que el esquema se cumpla no significa que los datos sean correctos: garantiza que `importe` es un número, no que sea el importe. La validación sintáctica es gratis, la semántica sigue siendo cosa nuestra.
 
+### Qué significa "restringir la decodificación"
+
+Merece la pena abrir esa frase, porque debajo hay un mecanismo muy simple que explica varias cosas del resto del manual.
+
+En cada paso, el modelo produce un número por cada token del vocabulario. Lo normal es elegir entre todos. La decodificación condicionada añade un filtro antes de elegir: el esquema se compila a un **autómata** que sabe, en cada punto de la generación, qué tokens mantendrían la salida válida y cuáles la romperían. A los que la romperían se les pone la probabilidad a cero y se elige entre el resto.
+
+Si ya hemos escrito `{"numero": "F-2026-1",` el autómata sabe que lo siguiente tiene que ser una comilla abriendo el nombre del campo que falta, así que todos los demás tokens dejan de estar disponibles. No es que el modelo se porte bien: es que **no puede escribir otra cosa**.
+
+De ahí salen tres consecuencias que conviene tener claras:
+
+* **La validez está garantizada, no es probable.** No hay un porcentaje de fallo que baje con un prompt mejor: los estados inválidos no existen.
+* **En su versión más simple no hace falta ni un esquema.** Si la salida tiene que ser una de cinco etiquetas, basta con mirar los números de los cinco tokens que abren cada una y quedarse con el mayor. Es una sola pasada y sale gratis una medida de cuánto duda, cosa que [aparece en varios cuadernos](../contexto/prompting.qmd#el-cuaderno) del manual.
+* **Es exactamente lo que hay detrás de las llamadas a herramientas.** Cuando decimos que un modelo "decide" invocar una herramienta con unos argumentos, lo que ocurre por debajo es una decodificación restringida al esquema de esa herramienta. Son el mismo mecanismo contado dos veces, y verlo así ahorra bastante confusión al llegar a [la parte de agentes](../agentes/herramientas.qmd#cómo-funciona-en-realidad).
+
+:::{.callout-warning}
+# Forzar la gramática no mejora el contenido
+
+Es la contrapartida y se olvida a menudo. Restringir la decodificación garantiza la forma y **puede empeorar el fondo**, porque obliga al modelo a seguir por un camino que quizá no era el que llevaba.
+
+El caso típico: un campo obligatorio cuyo dato no está en el documento. Sin restricción, el modelo tenía la opción de decir que no lo encuentra. Con el esquema encima, tiene que escribir algo en ese campo, y escribirá lo más plausible que se le ocurra. Un `Optional` bien puesto evita más alucinaciones que media página de instrucciones.
+:::
+
+## Decodificación especulativa
+
+Queda un mando que no está en el prompt ni en los parámetros de muestreo y que explica por qué dos servicios con el mismo modelo pueden ir a velocidades muy distintas.
+
+El problema de fondo es que **generar es secuencial**. Cada token necesita el anterior, así que por muchas GPU que se pongan, la latencia de una respuesta larga está atada a ese ir y venir. No es un problema de cómputo sino de dependencia.
+
+La idea para romperla es apostar. Un modelo pequeño y rápido, el **borrador** (_drafter_), propone varios tokens de golpe. El modelo grande los verifica **todos en una sola pasada**, que es algo que sí puede hacer en paralelo, y acepta el prefijo con el que está de acuerdo. Desde el primer desacuerdo, descarta el resto y pone su propio token.
+
+Lo importante, y lo que hace que esto no sea un compromiso sino una mejora limpia: **la salida es idéntica a la que habría producido el modelo grande solo**. El pequeño no decide nada, solo adivina para ahorrar viajes. Si adivina bien, se ganan varios tokens por pasada; si adivina mal, se pierde poco.
+
+### Cómo se hace en la práctica
+
+Durante años esto exigía dos modelos entrenados por separado y compatibles entre sí, que es un requisito incómodo. La tendencia desde 2026 es publicar **el borrador junto con el modelo**, entrenado para acompañarlo.
+
+Las familias Gemma 4 son el ejemplo más claro: cada modelo se distribuye con un borrador de predicción multi-token pensado para él. El del modelo pequeño de la familia ronda los 76 millones de parámetros y cuatro capas, comparte la tabla de embeddings con el modelo grande, se apoya en las activaciones de su última capa y cruza la atención contra su caché en lugar de mantener una propia. Google habla de aceleraciones de hasta tres veces sin pérdida de calidad. Hay un [repaso visual del mecanismo](https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-gemma-4) que lo explica en viñetas, y el [anuncio](https://blog.google/innovation-and-ai/technology/developers-tools/multi-token-prediction-gemma-4/) con las cifras.
+
+Dos matices para leer bien esas cifras:
+
+**Acelera la latencia, no abarata la factura.** Se pagan los mismos tokens de entrada y de salida, solo que llegan antes. Quien busque ahorrar dinero tiene que mirar [las palancas de abajo](#lo-que-cuesta); quien busque que la respuesta empiece a aparecer antes, esto.
+
+**La ganancia depende de lo predecible que sea el texto.** Con salida muy estructurada, código o formatos fijos, el borrador acierta mucho y la aceleración es grande. Con texto creativo, acierta menos y la ganancia se encoge. Los "hasta 3x" de cualquier fabricante son el mejor caso, no la media.
+
 ## Lo que cuesta
 
 Los precios por token han caído de forma brutal y sostenida, y sin embargo las facturas de IA de las empresas no paran de crecer. No es una paradoja: al bajar el precio unitario se disparan los casos de uso y, sobre todo, se disparan los tokens por caso de uso. Un agente que da diez vueltas a un bucle con el historial completo en cada vuelta consume mucho más que un chat.

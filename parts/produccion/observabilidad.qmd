@@ -90,4 +90,14 @@ Instrumentar por instrumentar no sirve. El bucle que cierra el sistema es este:
 
 Sin el paso 2, la observabilidad es un archivo de incidentes que nadie consulta. Con él, cada fallo en producción mejora el sistema de forma permanente, que es lo más parecido a una ventaja acumulativa que se puede construir en este terreno: los modelos los tiene todo el mundo, vuestro conjunto de evaluación no.
 
+## El cuaderno
+
+Instrumenta el agente de la secretaría con OpenTelemetry y las convenciones semánticas de IA generativa, sin levantar ninguna plataforma: los tramos se recogen en memoria y se miran ahí mismo. Esa decisión es la tesis del capítulo hecha código, porque cambiar a un exportador de verdad no toca ni una línea de la instrumentación.
+
+Lo que sale es el árbol de la primera figura, generado en lugar de dibujado, y con él tres cosas que solo se ven al medir. Que la ejecución de la herramienta tarda milisegundos y el resto es el modelo, así que optimizar aquella sería tirar el tiempo. Que **el coste no lo decide la consulta sino cuántas vueltas dio el bucle**, y que como cada vuelta arrastra lo anterior, el crecimiento no es lineal. El cuaderno proyecta esa curva y a la vez enseña que su propia proyección exagera, porque el prompt de sistema y las definiciones de herramientas son un coste fijo que no crece con las vueltas. Y que en la traza acaba guardado el expediente completo del alumno, con su nota y su identificador, lo cual convierte al visor de trazas en un sitio donde vive información personal.
+
+Termina extrayendo casos de evaluación de las propias trazas, con el campo de la respuesta esperada vacío a propósito: una traza dice lo que pasó, no si estuvo bien.
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/produccion/observabilidad.ipynb)
+
 Con el sistema medido y vigilado, queda la parte que decide si puede existir: [seguridad](../seguridad/retos.qmd) y [normativa](../normativa/leyes.qmd).

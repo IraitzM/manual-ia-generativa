@@ -64,15 +64,28 @@ De propina, el cuaderno enseña una votación en la que los tres votantes se equ
 
 El mercado se ha estabilizado en unas pocas familias con filosofías distintas. Lo importante no es cuál gana, es entender qué asume cada una y cuánto acoplamiento acepta uno a cambio.
 
-| Familia | Idea central | Encaja cuando |
-|---|---|---|
-| **De grafo** (LangGraph y similares) | El flujo es un grafo explícito con estado | Hace falta control fino, ciclos y persistencia |
-| **De los proveedores** (Agents SDK de OpenAI, ADK de Google, Claude Agent SDK de Anthropic) | Abstracción ligera sobre el bucle | Se va a usar ese proveedor y se quiere lo mínimo |
-| **Tipada** (Pydantic AI y similares) | Contratos y validación en la frontera | El equipo viene de Python con tipos y quiere probar |
-| **De roles** (CrewAI, AutoGen) | Agentes con rol que conversan | Prototipos rápidos, demostraciones |
-| **Sin framework** | El bucle a mano, unas 100 líneas | Se quiere entender qué pasa y no depender de nadie |
+| Familia | Ejemplos | Idea central | Encaja cuando |
+|---|---|---|---|
+| **De grafo** | LangGraph, LangChain | El flujo es un grafo explícito con estado | Hace falta control fino, ciclos y persistencia |
+| **De los proveedores** | Agents SDK de OpenAI, ADK de Google, Claude Agent SDK de Anthropic, Strands de AWS, Microsoft Agent Framework | Abstracción ligera sobre el bucle | Se va a usar ese proveedor y se quiere lo mínimo |
+| **Tipada** | Pydantic AI | Contratos y validación en la frontera | El equipo viene de Python con tipos y quiere probar |
+| **De roles** | CrewAI, AutoGen | Agentes con rol que conversan | Prototipos rápidos, demostraciones |
+| **Ligera y multimodal** | Agno, smolagents | Poca ceremonia, arranque y memoria mínimos | Importa la latencia por agente o hay muchos a la vez |
+| **Declarativa** | DSPy | Se describe la tarea, no el prompt; un optimizador lo busca | Hay conjunto de evaluación y se quiere dejar de retocar texto a mano |
+| **De JavaScript** | Mastra, Vercel AI SDK | El agente vive donde vive la aplicación web | El equipo es de front y no quiere un servicio Python aparte |
+| **Sin framework** | Nada | El bucle a mano, unas 100 líneas | Se quiere entender qué pasa y no depender de nadie |
 
-: Cinco enfoques, no cinco productos
+: Ocho enfoques, no ocho productos
+
+La fila declarativa merece una explicación aparte porque no compite con las demás, sino que ataca otro problema. Mientras los otros frameworks organizan **el flujo**, DSPy organiza **el prompt**: se declara qué entra y qué sale, y un optimizador busca la formulación y los ejemplos que mejor rinden contra un conjunto de evaluación. Es la respuesta más seria que existe al [bucle de la desesperación](../contexto/prompting.qmd#el-prompt-es-código), y su precio de entrada es justo lo que casi nadie tiene: **el conjunto de evaluación**. Sin él no hay nada que optimizar.
+
+:::{.callout-note}
+# Esta tabla caduca antes que el resto del capítulo
+
+Los nombres de la segunda columna son los de 2026 y algunos no llegarán a 2028. Lo que sí aguanta son las familias: alguien tendrá que resolver el estado de un flujo con ciclos, alguien querrá la abstracción mínima de su proveedor y alguien preferirá escribir el bucle.
+
+Si al leer esto un nombre ya no existe, mirad qué ocupa su casilla en lugar de buscar el sustituto exacto. Y si aparece una familia nueva que no encaja en ninguna fila, esa es la señal de que algo ha cambiado de verdad.
+:::
 
 La última fila merece defensa, porque suele descartarse por prejuicio. El bucle de un agente es corto: llamar al modelo, mirar si pide una herramienta, ejecutarla, devolver el resultado, repetir. Escribirlo una vez enseña más sobre el sistema que cualquier tutorial y deja el control completo sobre lo que entra en el contexto, que es justo lo que más importa. Para casos sencillos es, a menudo, la mejor decisión de ingeniería.
 

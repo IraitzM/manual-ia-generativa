@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Comprueba que los enlaces entre capítulos del libro resuelven.
+"""Comprueba que los enlaces internos del libro resuelven.
 
-Verifica dos cosas sobre cada enlace markdown que apunta a un `.qmd`:
+Cubre dos formas de enlace:
 
-* que el fichero destino existe;
-* que el ancla, si la hay, se corresponde con una cabecera de ese fichero
-  o con un identificador explícito `{#id}`.
+* **A otro capítulo**, `](fichero.qmd)` o `](fichero.qmd#ancla)`. Verifica
+  que el fichero existe y que el ancla, si la hay, se corresponde con una
+  cabecera de ese fichero o con un identificador explícito `{#id}`.
+* **Dentro del mismo capítulo**, `](#ancla)`. Verifica el ancla contra las
+  cabeceras del propio fichero.
 
 Los títulos de los callouts (`# Título` dentro de un bloque `:::`) **no**
 generan ancla en Quarto, así que aquí tampoco cuentan. Es justo el error
@@ -23,6 +25,8 @@ ROOT = Path(__file__).resolve().parent.parent
 
 # Enlaces markdown a un .qmd, con ancla opcional: ](fichero.qmd#ancla)
 LINK = re.compile(r"\]\((?!https?:)([^)\s#]+\.qmd)(?:#([^)\s]+))?\)")
+# Enlaces a una sección del mismo fichero: ](#ancla)
+LINK_LOCAL = re.compile(r"\]\(#([^)\s]+)\)")
 FENCE = re.compile(r"^\s*(?:`{3,}|~{3,})")
 HEADING = re.compile(r"^(#{1,6})\s+(.+?)\s*$")
 EXPLICIT_ID = re.compile(r"\{#([^}\s.][^}\s]*)")
@@ -106,6 +110,15 @@ def main() -> int:
                 if ancla not in cache[destino]:
                     problemas.append(
                         f"{origen}:{numero}: {destino_rel} no tiene el ancla #{ancla}"
+                    )
+
+            for ancla in LINK_LOCAL.findall(linea):
+                if fuente not in cache:
+                    cache[fuente] = anclas(fuente)
+                if ancla not in cache[fuente]:
+                    problemas.append(
+                        f"{fuente.relative_to(ROOT)}:{numero}: "
+                        f"este capítulo no tiene el ancla #{ancla}"
                     )
 
     if problemas:

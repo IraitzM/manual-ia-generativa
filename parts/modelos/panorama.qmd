@@ -90,7 +90,7 @@ Reducido a lo esencial, y por este orden:
 3. **Bajar de gama hasta que se rompa**, midiendo con ese conjunto. Casi siempre se puede bajar más de lo que uno cree.
 4. **Aislar la decisión** detrás de un [gateway](../produccion/gateways.qmd), para que cambiar de modelo sea una línea de configuración y no un proyecto.
 
-:::{.callout-tip}
+:::{#el-ajuste-fino-casi-nunca-es-la-respuesta .callout-tip}
 # El ajuste fino casi nunca es la respuesta
 
 Ante un resultado insuficiente, la reacción habitual es proponer un _fine-tuning_. Antes de eso conviene agotar el orden natural: mejor [prompt](../contexto/prompting.qmd), luego [contexto recuperado](../contexto/rag.qmd), luego [herramientas](../agentes/herramientas.qmd), y solo entonces ajuste fino.
@@ -98,4 +98,4 @@ Ante un resultado insuficiente, la reacción habitual es proponer un _fine-tunin
 El ajuste fino enseña **forma**, no **hechos**: es la herramienta correcta para fijar un formato de salida, un tono o un vocabulario propio, y la incorrecta para meter conocimiento que cambia, porque cada cambio obliga a reentrenar. Además congela el modelo base: cuando salga uno mejor dentro de seis meses, hay que rehacer el trabajo.
 :::
 
-Con esto cerramos la caja. La siguiente parte va de lo que le metemos dentro: [el contexto](../contexto/intro.qmd).
+Y cuando, agotado ese orden, resulte que sí toca ajustar, el [capítulo siguiente](ajustefino.qmd) cuenta en qué consiste y cómo saber si ha servido.

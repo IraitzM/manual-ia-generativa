@@ -47,6 +47,7 @@ book:
       - parts/modelos/transformers.qmd
       - parts/modelos/inferencia.qmd
       - parts/modelos/panorama.qmd
+      - parts/modelos/ajustefino.qmd
 
     - part: parts/contexto/intro.qmd
       chapters:
@@ -57,6 +58,7 @@ book:
       chapters:
       - parts/agentes/queesunagente.qmd
       - parts/agentes/herramientas.qmd
+      - parts/agentes/memoria.qmd
       - parts/agentes/orquestacion.qmd
       - parts/agentes/interfaz.qmd
 

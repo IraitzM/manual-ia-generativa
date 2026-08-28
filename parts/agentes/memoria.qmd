@@ -1,0 +1,92 @@
+# Memoria
+
+De las [cinco piezas de un agente](queesunagente.qmd#anatomía), la memoria es la que más se da por hecha. Se asume que un asistente "recuerda", igual que se asume que un compañero recuerda lo que hablasteis ayer, y en cuanto se mira de cerca resulta que ahí no hay nada: hay una lista de mensajes que alguien decidió volver a enviar.
+
+Conviene separarla en dos problemas, porque tienen soluciones distintas y se confunden constantemente.
+
+**Lo que cabe en esta conversación** es un problema de contexto: qué se conserva, qué se comprime y qué se tira cuando el historial no cabe. Se trata en [recuperación](../contexto/rag.qmd#la-memoria-como-caso-particular) junto al resto de operaciones sobre el contexto, y no lo repetimos aquí.
+
+**Lo que sobrevive a esta conversación** es otro asunto: qué se escribe en algún sitio para que esté disponible mañana, con otra sesión y quizá con otra persona. Eso es este capítulo, y es donde están las decisiones difíciles.
+
+## Recordar no es guardarlo todo
+
+La tentación evidente es guardar cada conversación entera y recuperar de ahí. Funciona en la demostración y se derrumba después, por tres motivos que aparecen en este orden:
+
+* **Crece sin límite.** Cada sesión añade material y ninguna lo quita. A los seis meses, recuperar de la memoria se parece más a bucear que a recordar.
+* **Guarda el ruido junto con la señal.** Un "gracias, hasta luego" ocupa lo mismo que "el alumno está haciendo el TFG con la tutora Larrañaga".
+* **Se contradice consigo misma.** Si en enero dijo que iba a matricularse de Estadística y en marzo se dio de baja, la memoria tiene las dos cosas y ninguna marca de cuál vale.
+
+Ese tercer punto es el que convierte la memoria en un problema de ingeniería y no de almacenamiento. Un sistema de memoria útil no es el que más recuerda: es el que sabe **qué merece guardarse, qué lo invalida y cuándo caduca**.
+
+## Tres tipos, con reservas
+
+La taxonomía que circula viene de la psicología y reparte la memoria en episódica (lo que pasó), semántica (lo que es cierto) y de procedimiento (cómo se hacen las cosas). Aplicada a un asistente académico se ve bien:
+
+| Tipo | En la secretaría | Cómo caduca |
+|---|---|---|
+| **Episódica** | "El 3 de marzo preguntó por la beca de movilidad" | No caduca, pero envejece |
+| **Semántica** | "Está en cuarto y le queda Cálculo" | Cambia con los hechos |
+| **De procedimiento** | "Prefiere respuestas cortas y sin tratamiento formal" | Casi nunca |
+
+: Un reparto cómodo para pensar
+
+Ahora la advertencia, que ya asomaba en [el capítulo de agentes](queesunagente.qmd#guia-visual): esto es **una taxonomía para pensar, no una arquitectura para implementar**. Casi todos los sistemas que funcionan tienen bastante menos de eso, normalmente una tabla de hechos con fecha y procedencia. Montar tres subsistemas porque la lista tiene tres filas es una forma cara de no resolver el problema.
+
+Lo que sí conviene llevarse de la tabla es la tercera columna. Cada tipo de recuerdo tiene una vida útil distinta, y una memoria que no distingue entre "preguntó por la beca en marzo" y "prefiere que le tuteen" va a tratar igual dos cosas que envejecen a ritmos opuestos.
+
+## La decisión difícil es escribir
+
+Recuperar de la memoria es un problema conocido: es [RAG](../contexto/rag.qmd) sobre lo que uno mismo guardó, con las mismas soluciones y los mismos fallos. Lo que no está resuelto es **qué se escribe**.
+
+Hay dos escuelas y ninguna gana siempre:
+
+**Escribir con reglas.** Un código determinista decide qué se guarda: los identificadores, las preferencias declaradas, los trámites iniciados. Es predecible, auditable y se le escapa todo lo que no se previó.
+
+**Escribir con el modelo.** Después de cada conversación, un modelo extrae los hechos que merecen recordarse. Captura lo que no se previó y, a cambio, **puede inventarse un recuerdo**, que es un fallo mucho peor que olvidar: un hecho falso en memoria persistente contamina todas las sesiones futuras y nadie sabe de dónde salió.
+
+En la práctica se combinan, con una asimetría que conviene respetar: las reglas para lo que tiene consecuencias (identidad, permisos, trámites) y el modelo para lo que solo mejora el trato (preferencias, contexto de la conversación). Si el modelo se equivoca sobre el tono, se nota poco. Si se equivoca sobre qué asignaturas tenéis aprobadas, es otra cosa.
+
+:::{.callout-warning}
+# Todo recuerdo necesita procedencia y fecha
+
+Es la única defensa práctica contra los tres problemas de esta página a la vez. Un recuerdo que sabe **cuándo** se escribió y **de dónde salió** se puede caducar, se puede invalidar cuando llega uno más nuevo que lo contradice, y se puede rastrear cuando alguien pregunta por qué el sistema cree algo raro.
+
+Sin esas dos columnas, una memoria persistente es un montón de afirmaciones sin autor sobre las que hay que decidir a ciegas.
+:::
+
+## Envenenamiento
+
+Aquí es donde la memoria deja de ser una comodidad y pasa a ser superficie de ataque. El [envenenamiento de memoria](../seguridad/retos.qmd) consiste en colar un hecho falso en la memoria persistente, y su gravedad no está en el hecho sino en tres propiedades que lo distinguen de una inyección normal:
+
+* **Persiste.** Sigue ahí cuando el documento que lo introdujo ya se borró.
+* **Se propaga.** Contamina sesiones futuras, y en una memoria compartida entre usuarios, las de otras personas.
+* **No deja rastro.** El agente presenta el recuerdo envenenado con la misma naturalidad que el resto, porque para él son lo mismo.
+
+Un agente que extrae hechos de los documentos que lee y los guarda para siempre está, literalmente, escribiendo en su propia memoria lo que le dicte cualquiera que consiga poner un documento delante. La defensa no es un prompt más severo: es que **lo que entra en memoria persistente pase por el mismo control que cualquier escritura**, con procedencia, con posibilidad de invalidarse y, para lo que tenga consecuencias, con una persona delante.
+
+## Olvidar es un requisito, no un fallo
+
+Una memoria que solo crece es un problema técnico y también uno legal. Todo lo que un asistente recuerda de una persona son **datos personales**, con las obligaciones que eso trae: plazo de conservación escrito, derecho de acceso y derecho de supresión.
+
+Y "suprimir" aquí significa algo más incómodo de lo que parece. No basta con borrar una fila si ese hecho ya se copió a un resumen, se indexó en un almacén vectorial o se coló en el prompt de sistema de un asistente personalizado. Diseñar la memoria pensando en cómo se borrará es mucho más barato que descubrirlo cuando alguien lo ejerza.
+
+| Decisión | Preguntar antes de construir |
+|---|---|
+| Qué se guarda | ¿Sirve para responder mejor o solo por si acaso? |
+| Cuánto dura | ¿Hay un plazo escrito o es "para siempre" por omisión? |
+| Quién lo ve | ¿La memoria es de la persona o de la organización? |
+| Cómo se borra | ¿Se puede quitar de todas partes donde se copió? |
+
+: Cuatro preguntas que salen gratis al diseñar y carísimas después
+
+La tercera merece un momento. Una memoria compartida entre usuarios es tentadora, porque el sistema aprende de todos y mejora para todos. También es la que convierte un envenenamiento en un incidente colectivo y la que hace que el expediente de una persona pueda aparecer en la conversación de otra. Si se comparte algo, que sean patrones agregados, no hechos sobre personas.
+
+## El cuaderno
+
+Le pone memoria al agente de la secretaría en las tres formas que se usan, y las mide sobre la misma conversación: sin memoria, con el historial completo, con ventana deslizante y con hechos extraídos y recuperados.
+
+Lo que sale es que la ingenua funciona y no escala, y que las otras dos acotan el coste perdiendo cosas distintas. Pero lo que justifica el cuaderno es el último experimento: **cuela un hecho falso en la memoria y comprueba que el agente lo repite en una sesión posterior**, ya sin rastro de dónde salió. Después añade procedencia y fecha, que es lo que permite encontrarlo y quitarlo.
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/agentes/memoria.ipynb)
+
+Con el agente ya capaz de recordar, la pregunta siguiente es cómo repartir el trabajo cuando uno solo no llega: [orquestación](orquestacion.qmd).

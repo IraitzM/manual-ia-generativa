@@ -63,7 +63,7 @@ Con el bucle claro, un agente tiene cinco piezas y ninguna es opcional:
 | **Modelo** | El que decide | [Panorama](../modelos/panorama.qmd) |
 | **Instrucciones** | Objetivo, criterio y límites | [Prompting](../contexto/prompting.qmd) |
 | **Herramientas** | Lo que puede hacer | [Herramientas](herramientas.qmd) |
-| **Memoria** | Qué recuerda entre pasos y entre sesiones | [Recuperación](../contexto/rag.qmd#la-memoria-como-caso-particular) |
+| **Memoria** | Qué recuerda entre pasos y entre sesiones | [Memoria](memoria.qmd) |
 | **Límites** | Cuándo para, cuánto gasta, qué necesita aprobación | Este capítulo |
 
 : Las cinco piezas, y la que todo el mundo olvida es la última
@@ -77,7 +77,7 @@ La equivalencia con esta parte del manual es casi directa, y viene bien como map
 
 | Su pilar | Nuestro capítulo |
 |---|---|
-| Memoria, a corto y a largo plazo | [Recuperación](../contexto/rag.qmd#la-memoria-como-caso-particular) |
+| Memoria, a corto y a largo plazo | [Memoria](memoria.qmd) |
 | Herramientas y MCP | [Herramientas](herramientas.qmd) |
 | Planificación, ReAct y reflexión | [El bucle](#el-bucle), aquí arriba |
 | Sistemas multiagente | [Orquestación](orquestacion.qmd) |

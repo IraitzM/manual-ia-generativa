@@ -1,0 +1,115 @@
+# Ajuste fino y destilación
+
+El [capítulo anterior](panorama.qmd#el-ajuste-fino-casi-nunca-es-la-respuesta) despacha el ajuste fino con una advertencia, y la advertencia sigue siendo cierta: antes de ajustar hay que agotar el prompt, el contexto recuperado y las herramientas. Pero "casi nunca" no es "nunca", y cuando toca, conviene saber qué se está haciendo.
+
+Este capítulo explica en qué consiste, cuánto cuesta de verdad y cómo saber si ha servido.
+
+## Qué enseña y qué no
+
+La frase que más ahorra en este terreno es que **el ajuste fino enseña forma, no hechos**.
+
+Enseña forma: un formato de salida que el modelo respeta sin que haya que pedírselo, un tono, un vocabulario propio de la casa, una manera de estructurar las respuestas. Cosas que en un prompt ocuparían doscientas líneas y que aun así se cumplirían a medias.
+
+No enseña hechos, o los enseña tan mal que no compensa. Los plazos de matrícula del curso que viene no se meten con un ajuste fino: se consultan. Y no por una limitación técnica sino por una económica, porque los hechos cambian y cada cambio obligaría a reentrenar y volver a validar.
+
+| Si el problema es | La herramienta es |
+|---|---|
+| No respeta el formato que le pido | Ajuste fino, o [decodificación condicionada](inferencia.qmd#salida-estructurada) |
+| No conoce nuestros datos | [Recuperación](../contexto/rag.qmd) |
+| Necesita datos que cambian | [Herramientas](../agentes/herramientas.qmd) |
+| No sigue nuestro estilo | Ajuste fino |
+| Se equivoca en el razonamiento | Modelo mejor, no ajuste |
+| Es demasiado caro o lento | Destilación |
+
+: Qué arregla cada cosa, y qué no arregla ninguna
+
+La quinta fila merece énfasis porque es la ilusión más cara del sector. Un modelo pequeño ajustado no se vuelve listo: se vuelve **obediente**. Si la tarea exige razonar y el modelo base no razona lo suficiente, el ajuste fino le enseñará a equivocarse en vuestro formato.
+
+## LoRA, o por qué esto se ha vuelto accesible
+
+Ajustar un modelo entero significa mover todos sus parámetros, con el coste de memoria que eso implica: hay que guardar los pesos, sus gradientes y el estado del optimizador, lo cual multiplica por varias veces el tamaño del modelo.
+
+**LoRA** [@hu2021lora] evita eso con una observación sencilla. En lugar de modificar la matriz de pesos $W$, se le suma una corrección de rango bajo:
+
+$$W' = W + BA$$
+
+donde $B$ y $A$ son dos matrices mucho más pequeñas. El modelo original **se congela** y solo se entrenan $A$ y $B$, que suelen ser menos del uno por ciento de los parámetros.
+
+De ahí salen tres ventajas prácticas que cambian el cálculo por completo:
+
+* **Cabe en una GPU modesta**, y para modelos pequeños hasta en una CPU con paciencia.
+* **El resultado es un fichero de unos pocos megabytes**, no una copia del modelo. Se pueden tener veinte adaptadores para veinte tareas sobre un mismo modelo base.
+* **Se puede quitar.** El modelo base sigue intacto, así que revertir es borrar un fichero.
+
+La tercera es la que más tranquiliza a quien tiene que mantener esto.
+
+:::{.callout-note}
+# Los dos números que hay que declarar
+
+De la media docena de parámetros de LoRA, dos deciden casi todo:
+
+**El rango** ($r$) es cuánta capacidad tiene la corrección. Con 8 o 16 se resuelven la mayoría de los ajustes de estilo y formato. Subirlo aumenta lo que puede aprender y también lo que puede sobreajustar.
+
+**A qué capas se aplica.** Lo habitual es a las proyecciones de la atención. Ampliarlo a las redes intermedias captura más y multiplica los parámetros entrenables.
+
+Si alguien os enseña un ajuste fino y no sabe decir estos dos números, no sabe qué ha entrenado.
+:::
+
+## Los datos son el trabajo
+
+Aquí está el reparto de esfuerzo que sorprende a quien viene de otro sitio: **entrenar es la parte fácil**. Son unas líneas y un rato de espera. Lo difícil, lo caro y lo que decide el resultado es el conjunto de ejemplos.
+
+Tres cosas que se aprenden por las malas:
+
+**Pocos y buenos.** Para enseñar formato y tono, unos cientos de ejemplos bien hechos rinden más que decenas de miles recogidos a granel. El modelo ya sabe español; lo que le estáis enseñando es una convención.
+
+**Consistentes.** Si la mitad de los ejemplos responde en dos frases y la otra mitad en párrafos, lo que aprende es que puede hacer cualquier cosa. La incoherencia del conjunto se convierte en incoherencia del modelo.
+
+**Con los casos difíciles dentro.** Un conjunto donde todo es fácil enseña a resolver lo fácil, que ya sabía hacer.
+
+Y una advertencia que conecta con [normativa](../normativa/leyes.qmd): esos ejemplos suelen salir de conversaciones reales, así que llevan datos personales dentro. Un modelo ajustado con ellos **puede reproducirlos**, y a diferencia de una base de datos, de un modelo no se borra una fila.
+
+## Destilación
+
+Es el otro motivo legítimo para entrenar, y responde a una pregunta distinta: no "¿cómo lo hago mejor?" sino "¿cómo lo hago igual pero más barato?".
+
+La idea es usar un modelo grande y caro para generar ejemplos con los que ajustar uno pequeño. El pequeño no aprende a razonar como el grande, pero sí aprende a **imitar su comportamiento en un dominio acotado**, que muchas veces es todo lo que hacía falta.
+
+Compensa cuando el volumen es alto y la tarea es estrecha: clasificar, extraer campos, reformular. Deja de compensar en cuanto la tarea es abierta, porque ahí el pequeño se queda sin fondo.
+
+Hay además dos asuntos que conviene mirar antes de empezar. Las **condiciones de uso** de muchos modelos comerciales prohíben expresamente usar sus salidas para entrenar modelos que compitan con ellos. Y la **evaluación** de un modelo destilado no puede hacerse contra el modelo que lo enseñó, porque heredará sus errores y parecerán aciertos.
+
+## Cómo saber si ha servido
+
+El ajuste fino tiene un problema de percepción particular: el resultado **suena** mejor casi siempre, porque suena a lo que le enseñasteis. Eso no significa que responda mejor.
+
+La única forma de saberlo es la de siempre, y es el motivo por el que este capítulo va después del de [evaluación](../produccion/evaluacion.qmd) en importancia aunque vaya antes en el libro:
+
+1. Un conjunto de casos que el modelo **no haya visto en el entrenamiento**. Si se solapan, estáis midiendo memoria.
+2. Medir el modelo base con un buen prompt, que es la alternativa a batir.
+3. Medir el modelo ajustado con el mismo conjunto y el mismo criterio.
+4. Comparar también coste y latencia, porque un adaptador que mejora un dos por ciento y complica el despliegue no ha mejorado nada.
+
+:::{.callout-warning}
+# Lo que os deja atado
+
+Un modelo ajustado es una decisión que cuesta deshacer, y conviene tener presente el precio antes de tomarla.
+
+**Congela el modelo base.** Cuando dentro de seis meses salga uno mejor, hay que rehacer el trabajo, y mientras tanto vuestro sistema corre sobre un modelo que envejece.
+
+**Complica el despliegue.** Deja de valer cualquier proveedor: hace falta uno que sirva vuestro adaptador, lo cual choca de frente con [aislar la decisión de modelo](panorama.qmd#una-forma-sensata-de-decidir) detrás de un gateway.
+
+**Es difícil de explicar.** Un prompt se lee. Un adaptador no, y cuando el sistema haga algo raro no habrá dónde mirar.
+
+Nada de esto lo desaconseja. Lo que aconseja es tener medido, antes de empezar, cuánto mejora respecto a un buen prompt.
+:::
+
+## El cuaderno
+
+Hace un ajuste LoRA de verdad, en CPU, sobre el modelo pequeño de siempre, para que el asistente adopte el formato de respuesta de la secretaría. Primero cuenta los parámetros entrenables, que es la cifra que explica por qué esto es viable, y luego entrena y compara.
+
+La comparación es la que pide este capítulo y casi nunca se hace: **el modelo ajustado contra el modelo base con un buen prompt**, sobre casos que no estaban en el entrenamiento. El resultado invita a la modestia.
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IraitzM/manual-ia-generativa/blob/main/notebooks/modelos/ajuste-fino.ipynb)
+
+Con esto cerramos la caja y lo que se le puede hacer por dentro. La siguiente parte va de lo que le metemos: [el contexto](../contexto/intro.qmd).
